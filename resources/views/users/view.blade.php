@@ -2,7 +2,7 @@
 
 {{-- Page title --}}
 @section('title')
-{{ trans('admin/users/general.view_user', ['name' => html_entity_decode($user->present()->fullName(), ENT_QUOTES | ENT_XML1, 'UTF-8')]) }}
+{{ trans('admin/users/general.view_user', ['name' => $user->present()->fullName()]) }}
 @parent
 @stop
 
@@ -423,8 +423,10 @@
               <thead>
                 <tr>
                   <th class="col-md-5">{{ trans('general.name') }}</th>
-                  <th class="col-md-6">{{ trans('admin/hardware/form.serial') }}</th>
-                  <th class="col-md-6" data-footer-formatter="sumFormatter" data-fieldname="purchase_cost">{{ trans('general.purchase_cost') }}</th>
+                  <th>{{ trans('admin/hardware/form.serial') }}</th>
+                  <th data-footer-formatter="sumFormatter" data-fieldname="purchase_cost">{{ trans('general.purchase_cost') }}</th>
+                  <th>{{ trans('admin/licenses/form.purchase_order') }}</th>
+                  <th>{{ trans('general.order_number') }}</th>
                   <th class="col-md-1 hidden-print">{{ trans('general.action') }}</th>
                 </tr>
               </thead>
@@ -442,7 +444,13 @@
                     @endcan
                   </td>
                   <td class="col-md-2">
-                    {!! $license->purchase_cost !!}
+                    {{ $license->purchase_cost }}
+                  </td>
+                  <td>
+                    {{ $license->purchase_order }}
+                  </td>
+                  <td>
+                    {{ $license->order_number }}
                   </td>
                   <td class="hidden-print col-md-2">
                     @can('update', $license)
