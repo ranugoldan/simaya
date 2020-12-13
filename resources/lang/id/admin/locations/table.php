@@ -16,6 +16,11 @@ return array(
     'zip'                       => 'Kode Pos',
     'locations'                 => 'Lokasi',
     'parent'                    => 'Induk',
-    'currency'                  => 'Lokasi Mata Uang',
+    'currency'                  => 'Mata Uang Lokasi',
     'ldap_ou'                   => 'LDAP Cari OU',
+    'category'                  => 'Kategori',
+    'area'                      => 'Luas',
+    'purchase_cost'             => 'Biaya Pembelian',
+    'occupied'                  => 'Dipinjam?',
+    'occupied_by'               => 'Dipinjam oleh'
     );

@@ -70,7 +70,10 @@ class LocationsController extends Controller
         $location->id               = null; // This is required to make Laravels different validation work, it errors if the parameter doesn't exist (maybe a bug)?
         $location->name             = $request->input('name');
         $location->parent_id        = $request->input('parent_id', null);
+        $location->category_id      = $request->input('category_id');
+        $location->area             = $request->input('area');
         $location->currency         = $request->input('currency', '$');
+        $location->purchase_cost    = $request->input('purchase_cost');
         $location->address          = $request->input('address');
         $location->address2         = $request->input('address2');
         $location->city             = $request->input('city');
@@ -79,6 +82,8 @@ class LocationsController extends Controller
         $location->zip              = $request->input('zip');
         $location->ldap_ou          = $request->input('ldap_ou');
         $location->manager_id       = $request->input('manager_id');
+        $location->occupied         = $request->input('occupied');
+        $location->occupied_by      = $request->input('occupied_by');
         $location->user_id          = Auth::id();
 
         $location = $request->handleImages($location);
@@ -136,7 +141,10 @@ class LocationsController extends Controller
         // Update the location data
         $location->name         = $request->input('name');
         $location->parent_id    = $request->input('parent_id', null);
+        $location->category_id  = $request->input('category_id');
+        $location->area         = $request->input('area');
         $location->currency     = $request->input('currency', '$');
+        $location->purchase_cost= $request->input('purchase_cost');
         $location->address      = $request->input('address');
         $location->address2     = $request->input('address2');
         $location->city         = $request->input('city');
@@ -145,7 +153,8 @@ class LocationsController extends Controller
         $location->zip          = $request->input('zip');
         $location->ldap_ou      = $request->input('ldap_ou');
         $location->manager_id   = $request->input('manager_id');
-
+        $location->occupied     = $request->input('occupied');
+        $location->occupied_by  = $request->input('occupied_by');
         $location = $request->handleImages($location);
 
 

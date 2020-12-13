@@ -18,4 +18,9 @@ return array(
     'parent'                    => 'Parent',
     'currency'                  => 'Location Currency',
     'ldap_ou'                   => 'LDAP Search OU',
+    'category'                  => 'Category',
+    'area'                      => 'Area',
+    'purchase_cost'             => 'Purchase Cost',
+    'occupied'                  => 'Occupied?',
+    'occupied_by'               => 'Occupied by'
     );

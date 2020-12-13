@@ -101,6 +101,42 @@
       @endcan
     </div>
   </div><!-- ./col -->
+
+  {{-- <div class="col-lg-3 col-xs-6">
+    <!-- small box -->
+
+      <a href="{{ route('land.index') }}">
+    <div class="small-box bg-brown">
+      <div class="inner">
+        <h3> {{ number_format($counts['land']) }}</h3>
+          <p>{{ trans('general.total_land') }}</p>
+      </div>
+      <div class="icon" aria-hidden="true">
+        <i class="fa fa-th-large"></i>
+      </div>
+      @can('index', \App\Models\Land::class)
+        <a href="{{ route('land.index') }}" class="small-box-footer">{{ trans('general.moreinfo') }} <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
+      @endcan
+    </div>
+  </div><!-- ./col --> --}}
+
+  {{-- <div class="col-lg-3 col-xs-6">
+    <!-- small box -->
+
+      <a href="{{ route('buildings.index') }}">
+    <div class="small-box bg-cyan">
+      <div class="inner">
+        <h3> {{ number_format($counts['building']) }}</h3>
+          <p>{{ trans('general.total_buildings') }}</p>
+      </div>
+      <div class="icon" aria-hidden="true">
+        <i class="fa fa-building"></i>
+      </div>
+      @can('index', \App\Models\Building::class)
+        <a href="{{ route('buildings.index') }}" class="small-box-footer">{{ trans('general.moreinfo') }} <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
+      @endcan
+    </div>
+  </div><!-- ./col --> --}}
 </div>
 </div>
 

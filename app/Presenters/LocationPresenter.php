@@ -51,7 +51,23 @@ class LocationPresenter extends Presenter
                 "visible" => true,
                 "formatter" => "locationsLinkObjFormatter"
             ],
-
+            [
+                "field" => "category",
+                "searchable" => false,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('admin/locations/table.category'),
+                "visible" => true,
+                "formatter" => "categoriesLinkObjFormatter"
+            ],
+            [
+                "field" => "area",
+                "searchable" => true,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('admin/locations/table.area'),
+                "visible" => true,
+            ],
             [
                 "field" => "assets_count",
                 "searchable" => false,
@@ -82,6 +98,14 @@ class LocationPresenter extends Presenter
                 "sortable" => true,
                 "switchable" => true,
                 "title" =>  trans('general.currency'),
+                "visible" => true,
+            ],
+            [
+                "field" => "purchase_cost",
+                "searchable" => true,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('admin/locations/table.purchase_cost'),
                 "visible" => true,
             ],
             [
@@ -141,7 +165,22 @@ class LocationPresenter extends Presenter
                 "visible" => false,
                 "formatter" => 'usersLinkObjFormatter'
             ],
-
+            [
+                "field" => "occupied",
+                "searchable" => true,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('admin/locations/table.occupied'),
+                "visible" => true,
+            ],
+            [
+                "field" => "occupied_by",
+                "searchable" => true,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('admin/locations/table.occupied_by'),
+                "visible" => true,
+            ],
             [
                 "field" => "created_at",
                 "searchable" => true,

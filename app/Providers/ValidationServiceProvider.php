@@ -164,6 +164,47 @@ class ValidationServiceProvider extends ServiceProvider
             }
         });
 
+        Validator::extend('if_occupied', function ($attribute, $value, $parameters, $validator) {
+            $data = $validator->getData();
+
+            if ($data['occupied']) {
+                // if occupied,
+                if (strlen($value) == 0) {
+                    // cannot be empty
+                    return false;
+                } else if (strlen($value > 255)) {
+                    // cannot be more than 255 characters
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                // if not occupied,
+                if (strlen($value) > 0) {
+                    // cannot be filled
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        });
+
+        Validator::extend('if_room', function ($attribute, $value, $parameters, $validator) {
+            $data = $validator->getData();
+
+            $category_name = strtolower(\App\Models\Category::find($data['category_id'])->name);
+            
+            if (str_contains($category_name, 'room') || str_contains($category_name, 'ruang')) {
+                // if category is 'room' or 'ruang'; ok
+                return true;
+            } else {
+                // if category is not 'room' or 'ruang':
+                    // 1. ok if occupied is false
+                    // 2. not ok if occupied is true
+                return !$value;
+            }
+        });
+
 
     }
 

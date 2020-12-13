@@ -37,6 +37,11 @@ class LocationsTransformer
                 'id' => (int) $location->id,
                 'name' => e($location->name),
                 'image' =>   ($location->image) ? Storage::disk('public')->url('locations/'.e($location->image)) : null,
+                'category' => ($location->category) ? [
+                    'id' => (int) $location->category->id,
+                    'name'=> e($location->category->name)
+                ] : null,
+                'area' => ($location->area) ? e($location->area) : null,
                 'address' =>  ($location->address) ? e($location->address) : null,
                 'address2' =>  ($location->address2) ? e($location->address2) : null,
                 'city' =>  ($location->city) ? e($location->city) : null,
@@ -47,6 +52,7 @@ class LocationsTransformer
                 'assets_count'    => (int) $location->assets_count,
                 'users_count'    => (int) $location->users_count,
                 'currency' =>  ($location->currency) ? e($location->currency) : null,
+                'purchase_cost' => ($location->purchase_cost) ? Helper::formatCurrencyOutput($location->purchase_cost) : null,
                 'ldap_ou' =>  ($location->ldap_ou) ? e($location->ldap_ou) : null,
                 'created_at' => Helper::getFormattedDateObject($location->created_at, 'datetime'),
                 'updated_at' => Helper::getFormattedDateObject($location->updated_at, 'datetime'),
@@ -55,8 +61,8 @@ class LocationsTransformer
                     'name'=> e($location->parent->name)
                 ] : null,
                 'manager' => ($location->manager) ? (new UsersTransformer)->transformUser($location->manager) : null,
-
-
+                'occupied' => ($location->occupied == '1') ? true : false,
+                'occupied_by' => ($location->occupied_by) ? e($location->occupied_by) : null,
                 'children' => $children_arr,
             ];
 

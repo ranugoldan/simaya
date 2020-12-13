@@ -42,6 +42,8 @@ return array(
     'exists'               => 'The selected :attribute is invalid.',
     'file'                 => 'The :attribute must be a file.',
     'filled'               => 'The :attribute field must have a value.',
+    'if_occupied'          => 'The :attribute field cannot be empty when occupied and vice versa.',
+    'if_room'              => 'The :attribute field cannot be checked if category does not contain "room".',
     'image'                => 'The :attribute must be an image.',
     'in'                   => 'The selected :attribute is invalid.',
     'in_array'             => 'The :attribute field does not exist in :other.',

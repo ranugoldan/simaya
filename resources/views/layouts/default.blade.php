@@ -105,7 +105,7 @@
           </a>
           <div class="nav navbar-nav navbar-left">
               <div class="left-navblock">
-                 @if ($snipeSettings->brand == '3')
+                  @if ($snipeSettings->brand == '3')
                       <a class="logo navbar-brand no-hover" href="{{ url('/') }}">
                           @if ($snipeSettings->logo!='')
                           <img class="navbar-brand-img" src="{{ Storage::disk('public')->url('/').e($snipeSettings->logo) }}" alt="{{ $snipeSettings->site_name }} logo">
@@ -167,6 +167,30 @@
                       <a href="{{ route('components.index') }}" tabindex="-1">
                           <i class="fa fa-hdd-o"></i>
                           <span class="sr-only">Components</span>
+                      </a>
+                  </li>
+                  @endcan
+                  {{-- @can('index', \App\Models\Land::class)
+                  <li aria-hidden="true"{!! (Request::is('land*') ? ' class="active"' : '') !!}>
+                      <a href="{{ route('land.index') }}" tabindex="-1">
+                          <i class="fa fa-th-large"></i>
+                          <span class="sr-only">Land</span>
+                      </a>
+                  </li>
+                  @endcan
+                  @can('index', \App\Models\Building::class)
+                  <li aria-hidden="true"{!! (Request::is('buildings*') ? ' class="active"' : '') !!}>
+                      <a href="{{ route('buildings.index') }}" tabindex="-1">
+                          <i class="fa fa-building"></i>
+                          <span class="sr-only">Buildings</span>
+                      </a>
+                  </li>
+                  @endcan --}}
+                  @can('view', \App\Models\Location::class)
+                  <li aria-hidden="true"{!! (Request::is('locations*') ? ' class="active"' : '') !!}>
+                      <a href="{{ route('locations.index') }}" tabindex="-1">
+                          <i class="fa fa-building"></i>
+                          <span class="sr-only">Locations</span>
                       </a>
                   </li>
                   @endcan
@@ -237,6 +261,30 @@
                            </a>
                        </li>
                        @endcan
+                       {{-- @can('create', \App\Models\Land::class)
+                       <li {!! (Request::is('land/create') ? 'class="active"' : '') !!}>
+                           <a href="{{ route('land.create') }}" tabindex="-1">
+                           <i class="fa fa-th-large fa-fw" aria-hidden="true"></i>
+                           {{ trans('general.land') }}
+                           </a>
+                       </li>
+                       @endcan
+                       @can('create', \App\Models\Building::class)
+                       <li {!! (Request::is('buildings/create') ? 'class="active"' : '') !!}>
+                           <a href="{{ route('buildings.create') }}" tabindex="-1">
+                           <i class="fa fa-building fa-fw" aria-hidden="true"></i>
+                           {{ trans('general.buildings') }}
+                           </a>
+                       </li>
+                       @endcan --}}
+                        @can('create', \App\Models\Location::class)
+                            <li {!! (Request::is('locations/create') ? 'class="active"' : '') !!}>
+                                <a href="{{ route('locations.create') }}" tabindex="-1">
+                                    <i class="fa fa-building fa-fw" aria-hidden="true"></i>
+                                    {{ trans('general.locations') }}
+                                </a>
+                            </li>
+                        @endcan
                          @can('create', \App\Models\User::class)
                              <li {!! (Request::is('users/create') ? 'class="active"' : '') !!}>
                                  <a href="{{ route('users.create') }}" tabindex="-1">
@@ -543,6 +591,30 @@
                 </a>
             </li>
             @endcan
+            {{-- @can('index', \App\Models\Land::class)
+            <li{!! (Request::is('land*') ? ' class="active"' : '') !!}>
+                <a href="{{ route('land.index') }}">
+                  <i class="fa fa-th-large"></i>
+                  <span>{{ trans('general.land') }}</span>
+                </a>
+            </li>
+            @endcan
+            @can('index', \App\Models\Building::class)
+            <li{!! (Request::is('buildings*') ? ' class="active"' : '') !!}>
+                <a href="{{ route('buildings.index') }}">
+                  <i class="fa fa-building"></i>
+                  <span>{{ trans('general.buildings') }}</span>
+                </a>
+            </li>
+            @endcan --}}
+            @can('view', \App\Models\Location::class)
+            <li{!! (Request::is('locations*') ? ' class="active"' : '') !!}>
+                <a href="{{ route('locations.index') }}">
+                  <i class="fa fa-building"></i>
+                  <span>{{ trans('general.locations') }}</span>
+                </a>
+            </li>
+            @endcan
             @can('view', \App\Models\PredefinedKit::class)
                 <li{!! (Request::is('kits') ? ' class="active"' : '') !!}>
                     <a href="{{ route('kits.index') }}">
@@ -635,13 +707,13 @@
                             </li>
                         @endcan
 
-                        @can('view', \App\Models\Location::class)
+                        {{-- @can('view', \App\Models\Location::class)
                             <li>
                                 <a href="{{ route('locations.index') }}" {{ (Request::is('/locations') ? ' class="active"' : '') }}>
                                     {{ trans('general.locations') }}
                                 </a>
                             </li>
-                        @endcan
+                        @endcan --}}
 
                         @can('view', \App\Models\Company::class)
                             <li>

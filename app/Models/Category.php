@@ -39,7 +39,7 @@ class Category extends SnipeModel
         'name'   => 'required|min:1|max:255|unique_undeleted',
         'require_acceptance'   => 'boolean',
         'use_default_eula'   => 'boolean',
-        'category_type'   => 'required|in:asset,accessory,consumable,component,license',
+        'category_type'   => 'required|in:asset,accessory,consumable,component,license,location',
     );
 
     /**
@@ -167,6 +167,8 @@ class Category extends SnipeModel
                 return $this->consumables()->count();
             case 'license':
                 return $this->licenses()->count();
+            case 'location':
+                return $this->locations()->count();
         }
         return '0';
     }
@@ -193,6 +195,18 @@ class Category extends SnipeModel
     public function models()
     {
         return $this->hasMany('\App\Models\AssetModel', 'category_id');
+    }
+
+    /**
+     * Establishes the category -> locations relationship
+     *
+     * @author [A. Gianotto] [<snipe@snipe.net>]
+     * @since [v2.0]
+     * @return \Illuminate\Database\Eloquent\Relations\Relation
+     */
+    public function locations()
+    {
+        return $this->hasMany('\App\Models\Location', 'category_id');
     }
 
     /**

@@ -42,6 +42,8 @@ return array(
     'exists'               => ':attribute yang di pilih tidak benar.',
     'file'                 => 'The: atribut harus berupa file.',
     'filled'               => 'Bidang atribut: harus memiliki nilai.',
+    'if_occupied'          => 'Kolom ini tidak dapat dikosongkan bila dipinjam dan sebaliknya.',
+    'if_room'              => 'Kolom ini tidak dapat dicentang apabila kategori tidak mengandung kata "ruang".',
     'image'                => ':attribute harus dalam bentuk gambar.',
     'in'                   => ':attribute yang di pilih tidak benar.',
     'in_array'             => 'Bidang atribut: tidak ada di: other.',

@@ -26,11 +26,17 @@ class LocationsController extends Controller
         $allowed_columns = [
             'id','name','address','address2','city','state','country','zip','created_at',
             'updated_at','manager_id','image',
-            'assigned_assets_count','users_count','assets_count','currency','ldap_ou'];
+            'assigned_assets_count','users_count','assets_count','currency','ldap_ou',
+            'category_id', 'area', 'purchase_cost',
+            'occupied', 'occupied_by'
+        ];
 
-        $locations = Location::with('parent', 'manager', 'children')->select([
+        $locations = Location::with('parent', 'manager', 'children', 'category')->select([
             'locations.id',
             'locations.name',
+            'locations.category_id',
+            'locations.area',
+            'locations.purchase_cost',
             'locations.address',
             'locations.address2',
             'locations.city',
@@ -43,7 +49,9 @@ class LocationsController extends Controller
             'locations.updated_at',
             'locations.image',
             'locations.ldap_ou',
-            'locations.currency'
+            'locations.currency',
+            'locations.occupied',
+            'locations.occupied_by'
         ])->withCount('assignedAssets as assigned_assets_count')
             ->withCount('assets as assets_count')
             ->withCount('users as users_count');
@@ -68,6 +76,9 @@ class LocationsController extends Controller
                 break;
             case 'manager':
                 $locations->OrderManager($order);
+                break;
+            case 'category':
+                $locations->OrderCategory($order);
                 break;
             default:
                 $locations->orderBy($sort, $order);
@@ -112,10 +123,13 @@ class LocationsController extends Controller
     public function show($id)
     {
         $this->authorize('view', Location::class);
-        $location = Location::with('parent', 'manager', 'children')
+        $location = Location::with('parent', 'manager', 'children', 'category')
             ->select([
                 'locations.id',
                 'locations.name',
+                'locations.category_id',
+                'locations.area',
+                'locations.purchase_cost',
                 'locations.address',
                 'locations.address2',
                 'locations.city',
@@ -127,7 +141,9 @@ class LocationsController extends Controller
                 'locations.created_at',
                 'locations.updated_at',
                 'locations.image',
-                'locations.currency'
+                'locations.currency',
+                'locations.occupied',
+                'locations.occupied_by'
             ])
             ->withCount('assignedAssets as assigned_assets_count')
             ->withCount('assets as assets_count')

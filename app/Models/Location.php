@@ -29,11 +29,18 @@ class Location extends SnipeModel
         'zip'           => 'min:3|max:10|nullable',
         'manager_id'    => 'exists:users,id|nullable',
         'parent_id'     => 'nullable|exists:locations,id|different:id',
+        'category_id'   => 'exists:categories,id|nullable',
+        'area'          => 'numeric|nullable',
+        'purchase_cost' => 'numeric|nullable',
+        'occupied'      => 'if_room',
+        'occupied_by'   => 'if_occupied'
     );
 
     protected $casts = [
         'parent_id'     => 'integer',
         'manager_id'    => 'integer',
+        'category_id'   => 'integer',
+        'occupied'      => 'boolean'
     ];
 
     /**
@@ -56,6 +63,9 @@ class Location extends SnipeModel
     protected $fillable = [
         'name',
         'parent_id',
+        'category_id',
+        'area',
+        'purchase_cost',
         'address',
         'address2',
         'city',
@@ -66,6 +76,8 @@ class Location extends SnipeModel
         'currency',
         'manager_id',
         'image',
+        'occupied',
+        'occupied_by'
     ];
     protected $hidden = ['user_id'];
 
@@ -76,7 +88,19 @@ class Location extends SnipeModel
      * 
      * @var array
      */
-    protected $searchableAttributes = ['name', 'address', 'city', 'state', 'zip', 'created_at', 'ldap_ou'];
+    protected $searchableAttributes = [
+        'name',
+        'area',
+        'purchase_cost',
+        'address',
+        'city',
+        'state',
+        'zip',
+        'created_at',
+        'ldap_ou',
+        'occupied',
+        'occupied_by'
+    ];
 
     /**
      * The relations and their attributes that should be included when searching the model.
@@ -84,7 +108,8 @@ class Location extends SnipeModel
      * @var array
      */
     protected $searchableRelations = [
-      'parent' => ['name']
+      'parent'      => ['name'],
+      'category'    => ['name']
     ];
 
     public function isDeletable()
@@ -135,6 +160,11 @@ class Location extends SnipeModel
     public function manager()
     {
         return $this->belongsTo('\App\Models\User', 'manager_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo('\App\Models\Category', 'category_id');
     }
 
     public function children() {
@@ -212,5 +242,18 @@ class Location extends SnipeModel
     public function scopeOrderManager($query, $order)
     {
         return $query->leftJoin('users as location_user', 'locations.manager_id', '=', 'location_user.id')->orderBy('location_user.first_name', $order)->orderBy('location_user.last_name', $order);
+    }
+
+    /**
+    * Query builder scope to order on category
+    *
+    * @param  Illuminate\Database\Query\Builder  $query  Query builder instance
+    * @param  text                              $order       Order
+    *
+    * @return Illuminate\Database\Query\Builder          Modified query builder
+    */
+    public function scopeOrderCategory($query, $order)
+    {
+        return $query->leftJoin('categories', 'locations.category_id', '=', 'categories.id')->orderBy('categories.name', $order);
     }
 }
