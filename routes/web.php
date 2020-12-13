@@ -65,22 +65,6 @@ Route::group(['middleware' => 'auth'], function () {
         'parameters' => ['department' => 'department_id']
     ]);
 
-    // /**
-    //  * Land
-    //  */
-    // Route::resource('land', 'Land\LandController', [
-    //     // 'middleware' => ['auth'],
-    //     'parameters' => ['land' => 'land_id']
-    // ]);
-
-    // /**
-    //  * Buildings
-    //  */
-    // Route::resource('buildings', 'Buildings\BuildingsController', [
-    //     // 'middleware' => ['auth'],
-    //     'parameters' => ['building' => 'building_id']
-    // ]);
-
 });
 
 
