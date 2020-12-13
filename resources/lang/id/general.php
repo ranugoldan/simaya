@@ -14,6 +14,7 @@
     'all_assets'			=> 'Semua aset',
     'all'       			=> 'Semua',
     'archived'              => 'Diarsipkan',
+    'area'                  => 'Luas',
     'asset_models'			=> 'Model aset',
     'asset_model'			=> 'Model',
     'asset'					=> 'Aset',

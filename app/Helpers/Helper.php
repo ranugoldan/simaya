@@ -475,7 +475,8 @@ class Helper
             'asset' => 'Asset',
             'consumable' => 'Consumable',
             'component' => 'Component',
-            'license' => 'License'
+            'license' => 'License',
+            'location' => 'Location'
         );
         return $category_types;
     }

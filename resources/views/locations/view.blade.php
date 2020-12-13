@@ -141,6 +141,15 @@
             @if (($location->city!='') || ($location->state!='') || ($location->zip!=''))
               <li>{{ $location->city }} {{ $location->state }} {{ $location->zip }}</li>
             @endif
+            @if ($location->category)
+              <li>{{ trans('admin/locations/table.category') }}: {!! $location->category->present()->nameUrl() !!}</li>
+            @endif
+            @if ($location->area)
+              <li>{{ trans('admin/locations/table.area') }}: {{ $location->area }}</li>
+            @endif
+            @if ($location->purchase_cost)
+              <li>{{ trans('admin/locations/table.purchase_cost') }}: {{ \App\Helpers\Helper::formatCurrencyOutput($location->purchase_cost) }}</li>
+            @endif
             @if ($location->manager)
               <li>{{ trans('admin/users/table.manager') }}: {!! $location->manager->present()->nameUrl() !!}</li>
             @endif

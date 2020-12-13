@@ -4,7 +4,7 @@ namespace App\Presenters;
 
 
 /**
- * Class ComponentPresenter
+ * Class ConsumablePresenter
  * @package App\Presenters
  */
 class ConsumablePresenter extends Presenter

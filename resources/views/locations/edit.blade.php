@@ -6,7 +6,7 @@
     'helpText' => trans('admin/locations/table.about_locations'),
     'formAction' => (isset($item->id)) ? route('locations.update', ['location' => $item->id]) : route('locations.store'),
 ])
-
+{{-- {{dd($item)}} --}}
 {{-- Page content --}}
 @section('inputFields')
 @include ('partials.forms.edit.name', ['translated_name' => trans('admin/locations/table.name')])
@@ -16,6 +16,9 @@
 
 <!-- Manager-->
 @include ('partials.forms.edit.user-select', ['translated_name' => trans('admin/users/table.manager'), 'fieldname' => 'manager_id'])
+
+@include ('partials.forms.edit.category-select', ['translated_name' => trans('general.category'), 'fieldname' => 'category_id', 'required' => 'true','category_type' => 'location'])
+@include ('partials.forms.edit.area', ['translated_name' => trans('general.area')])
 
 <!-- Currency -->
 <div class="form-group {{ $errors->has('currency') ? ' has-error' : '' }}">
@@ -28,7 +31,17 @@
     </div>
 </div>
 
+@include ('partials.forms.edit.purchase_cost')
 @include ('partials.forms.edit.address')
+<div class="form-group {{ $errors->has('occupied') ? ' has-error' : '' }}">
+    <label for="occupied" class="col-md-3 control-label">{{ trans('admin/locations/table.occupied') }}</label>
+    <div class="checkbox col-md-7">
+        {{ Form::Checkbox('occupied', '1', old('occupied', $item->occupied),array('class' => 'minimal', 'aria-label'=>'occupied')) }}
+        {{ trans('general.yes') }}
+        {!! $errors->first('occupied', '<span class="alert-msg" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i> :message</span>') !!}
+    </div>
+</div>
+@include ('partials.forms.edit.occupied_by', ['translated_name' => trans('admin/locations/table.occupied_by')])
 
 <!-- LDAP Search OU -->
 @if ($snipeSettings->ldap_enabled == 1)

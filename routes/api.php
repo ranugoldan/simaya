@@ -448,7 +448,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'auth:api']
         ]
     ); // Hardware resource
 
-
+    
     /*--- Imports API ---*/
 
     Route::resource('imports', 'ImportController',
