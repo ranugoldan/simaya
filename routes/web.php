@@ -310,11 +310,11 @@ Route::group(['middleware' => ['auth']], function () {
         [ 'as' => 'reports/export/licenses', 'uses' => 'ReportsController@exportLicenseReport' ]
     );
 
-    Route::get('reports/accessories', [ 'as' => 'reports/accessories', 'uses' => 'ReportsController@getAccessoryReport' ]);
-    Route::get(
-        'reports/export/accessories',
-        [ 'as' => 'reports/export/accessories', 'uses' => 'ReportsController@exportAccessoryReport' ]
-    );
+    // Route::get('reports/accessories', [ 'as' => 'reports/accessories', 'uses' => 'ReportsController@getAccessoryReport' ]);
+    // Route::get(
+    //     'reports/export/accessories',
+    //     [ 'as' => 'reports/export/accessories', 'uses' => 'ReportsController@exportAccessoryReport' ]
+    // );
     Route::get('reports/custom', [ 'as' => 'reports/custom', 'uses' => 'ReportsController@getCustomReport' ]);
     Route::post('reports/custom', 'ReportsController@postCustom');
 

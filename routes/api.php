@@ -34,65 +34,65 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'auth:api']
 
     });
 
-    /*--- Accessories API ---*/    
-    Route::group(['prefix' => 'accessories'], function () {
+    // /*--- Accessories API ---*/    
+    // Route::group(['prefix' => 'accessories'], function () {
 
-        Route::get('{accessory}/checkedout',
-            [
-                'as' => 'api.accessories.checkedout',
-                'uses' => 'AccessoriesController@checkedout'
-            ]
-        );
+    //     Route::get('{accessory}/checkedout',
+    //         [
+    //             'as' => 'api.accessories.checkedout',
+    //             'uses' => 'AccessoriesController@checkedout'
+    //         ]
+    //     );
 
-        Route::get('selectlist',
-            [
-                'as' => 'api.accessories.selectlist',
-                'uses'=> 'AccessoriesController@selectlist'
-            ]
-        );
-    });
+    //     Route::get('selectlist',
+    //         [
+    //             'as' => 'api.accessories.selectlist',
+    //             'uses'=> 'AccessoriesController@selectlist'
+    //         ]
+    //     );
+    // });
 
-    // Accessories group
-    Route::resource('accessories', 'AccessoriesController',
-        ['names' =>
-            [
-                'index' => 'api.accessories.index',
-                'show' => 'api.accessories.show',
-                'update' => 'api.accessories.update',
-                'store' => 'api.accessories.store',
-                'destroy' => 'api.accessories.destroy'
-            ],
-            'except' => ['create', 'edit'],
-            'parameters' => ['accessory' => 'accessory_id']
-        ]
-    );
+    // // Accessories group
+    // Route::resource('accessories', 'AccessoriesController',
+    //     ['names' =>
+    //         [
+    //             'index' => 'api.accessories.index',
+    //             'show' => 'api.accessories.show',
+    //             'update' => 'api.accessories.update',
+    //             'store' => 'api.accessories.store',
+    //             'destroy' => 'api.accessories.destroy'
+    //         ],
+    //         'except' => ['create', 'edit'],
+    //         'parameters' => ['accessory' => 'accessory_id']
+    //     ]
+    // );
 
-    // Accessories resource
+    // // Accessories resource
 
-    Route::group(['prefix' => 'accessories'], function () {
+    // Route::group(['prefix' => 'accessories'], function () {
 
-        Route::get('{accessory}/checkedout',
-            [
-                'as' => 'api.accessories.checkedout',
-                'uses' => 'AccessoriesController@checkedout'
-            ]
-        );
+    //     Route::get('{accessory}/checkedout',
+    //         [
+    //             'as' => 'api.accessories.checkedout',
+    //             'uses' => 'AccessoriesController@checkedout'
+    //         ]
+    //     );
 
-        Route::post('{accessory}/checkout',
-            [
-                'as' => 'api.accessories.checkout',
-                'uses' => 'AccessoriesController@checkout'
-            ]
-        );
+    //     Route::post('{accessory}/checkout',
+    //         [
+    //             'as' => 'api.accessories.checkout',
+    //             'uses' => 'AccessoriesController@checkout'
+    //         ]
+    //     );
 
-        Route::post('{accessory}/checkin',
-            [
-                'as' => 'api.accessories.checkin',
-                'uses' => 'AccessoriesController@checkin'
-            ]
-        );
+    //     Route::post('{accessory}/checkin',
+    //         [
+    //             'as' => 'api.accessories.checkin',
+    //             'uses' => 'AccessoriesController@checkin'
+    //         ]
+    //     );
 
-    }); // Accessories group
+    // }); // Accessories group
 
 
     /*--- Categories API ---*/
@@ -182,32 +182,32 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'auth:api']
     ); // Departments resource
 
 
-    /*--- Components API ---*/
+    // /*--- Components API ---*/
 
-    Route::resource('components', 'ComponentsController',
-        [
-            'names' =>
-                [
-                    'index' => 'api.components.index',
-                    'show' => 'api.components.show',
-                    'store' => 'api.components.store',
-                    'update' => 'api.components.update',
-                    'destroy' => 'api.components.destroy'
-                ],
-            'except' => ['create', 'edit'],
-            'parameters' => ['component' => 'component_id']
-        ]
-    ); // Components resource
+    // Route::resource('components', 'ComponentsController',
+    //     [
+    //         'names' =>
+    //             [
+    //                 'index' => 'api.components.index',
+    //                 'show' => 'api.components.show',
+    //                 'store' => 'api.components.store',
+    //                 'update' => 'api.components.update',
+    //                 'destroy' => 'api.components.destroy'
+    //             ],
+    //         'except' => ['create', 'edit'],
+    //         'parameters' => ['component' => 'component_id']
+    //     ]
+    // ); // Components resource
 
-    Route::group(['prefix' => 'components'], function () {
+    // Route::group(['prefix' => 'components'], function () {
 
-        Route::get('{component}/assets',
-            [
-                'as' =>'api.components.assets',
-                'uses' => 'ComponentsController@getAssets',
-            ]
-        );
-    }); // Components group
+    //     Route::get('{component}/assets',
+    //         [
+    //             'as' =>'api.components.assets',
+    //             'uses' => 'ComponentsController@getAssets',
+    //         ]
+    //     );
+    // }); // Components group
 
 
     /*--- Consumables API ---*/
@@ -808,12 +808,12 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'auth:api']
         );
 
 
-        Route::get('{user}/accessories',
-            [
-                'as' => 'api.users.accessorieslist',
-                'uses' => 'UsersController@accessories'
-            ]
-        );
+        // Route::get('{user}/accessories',
+        //     [
+        //         'as' => 'api.users.accessorieslist',
+        //         'uses' => 'UsersController@accessories'
+        //     ]
+        // );
 
 
         Route::get('{user}/licenses',
@@ -852,143 +852,143 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'auth:api']
         [ 'as' => 'api.activity.index', 'uses' => 'ReportsController@index' ]
     );
 
-    /*--- Kits API ---*/
+    // /*--- Kits API ---*/
 
-    Route::resource('kits', 'PredefinedKitsController',
-        [
-            'names' =>
-                [
-                    'index' => 'api.kits.index',
-                    'show' => 'api.kits.show',
-                    'store' => 'api.kits.store',
-                    'update' => 'api.kits.update',
-                    'destroy' => 'api.kits.destroy',
-                ],
-            'except' => ['create', 'edit'],
-            'parameters' => ['kit' => 'kit_id']
-        ]
-    );
+    // Route::resource('kits', 'PredefinedKitsController',
+    //     [
+    //         'names' =>
+    //             [
+    //                 'index' => 'api.kits.index',
+    //                 'show' => 'api.kits.show',
+    //                 'store' => 'api.kits.store',
+    //                 'update' => 'api.kits.update',
+    //                 'destroy' => 'api.kits.destroy',
+    //             ],
+    //         'except' => ['create', 'edit'],
+    //         'parameters' => ['kit' => 'kit_id']
+    //     ]
+    // );
 
 
-    Route::group([ 'prefix' => 'kits/{kit_id}' ], function () {
+    // Route::group([ 'prefix' => 'kits/{kit_id}' ], function () {
 
-        // kit licenses
-        Route::get('licenses', 
-            [
-                'as' => 'api.kits.licenses.index',
-                'uses' => 'PredefinedKitsController@indexLicenses',
-            ]
-        );
+    //     // kit licenses
+    //     Route::get('licenses', 
+    //         [
+    //             'as' => 'api.kits.licenses.index',
+    //             'uses' => 'PredefinedKitsController@indexLicenses',
+    //         ]
+    //     );
         
-        Route::post('licenses', 
-            [
-                'as' => 'api.kits.licenses.store',
-                'uses' => 'PredefinedKitsController@storeLicense',
-            ]
-        );
+    //     Route::post('licenses', 
+    //         [
+    //             'as' => 'api.kits.licenses.store',
+    //             'uses' => 'PredefinedKitsController@storeLicense',
+    //         ]
+    //     );
         
-        Route::put('licenses/{license_id}', 
-            [
-                'as' => 'api.kits.licenses.update',
-                'uses' => 'PredefinedKitsController@updateLicense',
-            ]
-        );
+    //     Route::put('licenses/{license_id}', 
+    //         [
+    //             'as' => 'api.kits.licenses.update',
+    //             'uses' => 'PredefinedKitsController@updateLicense',
+    //         ]
+    //     );
 
-        Route::delete('licenses/{license_id}', 
-            [
-                'as' => 'api.kits.licenses.destroy',
-                'uses' => 'PredefinedKitsController@detachLicense',
-            ]
-        );
+    //     Route::delete('licenses/{license_id}', 
+    //         [
+    //             'as' => 'api.kits.licenses.destroy',
+    //             'uses' => 'PredefinedKitsController@detachLicense',
+    //         ]
+    //     );
         
-        // kit models
-        Route::get('models', 
-            [
-                'as' => 'api.kits.models.index',
-                'uses' => 'PredefinedKitsController@indexModels',
-            ]
-        );
+    //     // kit models
+    //     Route::get('models', 
+    //         [
+    //             'as' => 'api.kits.models.index',
+    //             'uses' => 'PredefinedKitsController@indexModels',
+    //         ]
+    //     );
         
-        Route::post('models', 
-            [
-                'as' => 'api.kits.models.store',
-                'uses' => 'PredefinedKitsController@storeModel',
-            ]
-        );
+    //     Route::post('models', 
+    //         [
+    //             'as' => 'api.kits.models.store',
+    //             'uses' => 'PredefinedKitsController@storeModel',
+    //         ]
+    //     );
         
-        Route::put('models/{model_id}', 
-            [
-                'as' => 'api.kits.models.update',
-                'uses' => 'PredefinedKitsController@updateModel',
-            ]
-        );
+    //     Route::put('models/{model_id}', 
+    //         [
+    //             'as' => 'api.kits.models.update',
+    //             'uses' => 'PredefinedKitsController@updateModel',
+    //         ]
+    //     );
 
-        Route::delete('models/{model_id}', 
-            [
-                'as' => 'api.kits.models.destroy',
-                'uses' => 'PredefinedKitsController@detachModel',
-            ]
-        );
+    //     Route::delete('models/{model_id}', 
+    //         [
+    //             'as' => 'api.kits.models.destroy',
+    //             'uses' => 'PredefinedKitsController@detachModel',
+    //         ]
+    //     );
 
-        // kit accessories
-        Route::get('accessories', 
-            [
-                'as' => 'api.kits.accessories.index',
-                'uses' => 'PredefinedKitsController@indexAccessories',
-            ]
-        );
+    //     // kit accessories
+    //     Route::get('accessories', 
+    //         [
+    //             'as' => 'api.kits.accessories.index',
+    //             'uses' => 'PredefinedKitsController@indexAccessories',
+    //         ]
+    //     );
         
-        Route::post('accessories', 
-            [
-                'as' => 'api.kits.accessories.store',
-                'uses' => 'PredefinedKitsController@storeAccessory',
-            ]
-        );
+    //     Route::post('accessories', 
+    //         [
+    //             'as' => 'api.kits.accessories.store',
+    //             'uses' => 'PredefinedKitsController@storeAccessory',
+    //         ]
+    //     );
         
-        Route::put('accessories/{accessory_id}', 
-            [
-                'as' => 'api.kits.accessories.update',
-                'uses' => 'PredefinedKitsController@updateAccessory',
-            ]
-        );
+    //     Route::put('accessories/{accessory_id}', 
+    //         [
+    //             'as' => 'api.kits.accessories.update',
+    //             'uses' => 'PredefinedKitsController@updateAccessory',
+    //         ]
+    //     );
 
-        Route::delete('accessories/{accessory_id}', 
-            [
-                'as' => 'api.kits.accessories.destroy',
-                'uses' => 'PredefinedKitsController@detachAccessory',
-            ]
-        );
+    //     Route::delete('accessories/{accessory_id}', 
+    //         [
+    //             'as' => 'api.kits.accessories.destroy',
+    //             'uses' => 'PredefinedKitsController@detachAccessory',
+    //         ]
+    //     );
 
-        // kit consumables
-        Route::get('consumables', 
-            [
-                'as' => 'api.kits.consumables.index',
-                'uses' => 'PredefinedKitsController@indexConsumables',
-            ]
-        );
+    //     // kit consumables
+    //     Route::get('consumables', 
+    //         [
+    //             'as' => 'api.kits.consumables.index',
+    //             'uses' => 'PredefinedKitsController@indexConsumables',
+    //         ]
+    //     );
         
-        Route::post('consumables', 
-            [
-                'as' => 'api.kits.consumables.store',
-                'uses' => 'PredefinedKitsController@storeConsumable',
-            ]
-        );
+    //     Route::post('consumables', 
+    //         [
+    //             'as' => 'api.kits.consumables.store',
+    //             'uses' => 'PredefinedKitsController@storeConsumable',
+    //         ]
+    //     );
         
-        Route::put('consumables/{consumable_id}', 
-            [
-                'as' => 'api.kits.consumables.update',
-                'uses' => 'PredefinedKitsController@updateConsumable',
-            ]
-        );
+    //     Route::put('consumables/{consumable_id}', 
+    //         [
+    //             'as' => 'api.kits.consumables.update',
+    //             'uses' => 'PredefinedKitsController@updateConsumable',
+    //         ]
+    //     );
 
-        Route::delete('consumables/{consumable_id}', 
-            [
-                'as' => 'api.kits.consumables.destroy',
-                'uses' => 'PredefinedKitsController@detachConsumable',
-            ]
-        );
+    //     Route::delete('consumables/{consumable_id}', 
+    //         [
+    //             'as' => 'api.kits.consumables.destroy',
+    //             'uses' => 'PredefinedKitsController@detachConsumable',
+    //         ]
+    //     );
 
-    }); // kits group
+    // }); // kits group
 
 });
 
