@@ -19,7 +19,7 @@ return array(
     'currency'                  => 'Location Currency',
     'ldap_ou'                   => 'LDAP Search OU',
     'category'                  => 'Category',
-    'area'                      => 'Area',
+    'area'                      => 'Area (m²)',
     'purchase_cost'             => 'Purchase Cost',
     'occupied'                  => 'Occupied?',
     'occupied_by'               => 'Occupied by'

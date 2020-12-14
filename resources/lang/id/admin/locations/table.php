@@ -19,7 +19,7 @@ return array(
     'currency'                  => 'Mata Uang Lokasi',
     'ldap_ou'                   => 'LDAP Cari OU',
     'category'                  => 'Kategori',
-    'area'                      => 'Luas',
+    'area'                      => 'Luas (m²)',
     'purchase_cost'             => 'Biaya Pembelian',
     'occupied'                  => 'Dipinjam?',
     'occupied_by'               => 'Dipinjam oleh'
