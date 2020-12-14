@@ -146,14 +146,14 @@
                       </a>
                   </li>
                   @endcan
-                  @can('index', \App\Models\Accessory::class)
+                  {{-- @can('index', \App\Models\Accessory::class)
                   <li aria-hidden="true"{!! (Request::is('accessories*') ? ' class="active"' : '') !!} tabindex="-1">
                       <a href="{{ route('accessories.index') }}" tabindex="-1">
                           <i class="fa fa-keyboard-o"></i>
                           <span class="sr-only">Accessories</span>
                       </a>
                   </li>
-                  @endcan
+                  @endcan --}}
                   @can('index', \App\Models\Consumable::class)
                   <li aria-hidden="true"{!! (Request::is('consumables*') ? ' class="active"' : '') !!}>
                       <a href="{{ url('consumables') }}" tabindex="-1">
@@ -162,27 +162,11 @@
                       </a>
                   </li>
                   @endcan
-                  @can('view', \App\Models\Component::class)
+                  {{-- @can('view', \App\Models\Component::class)
                   <li aria-hidden="true"{!! (Request::is('components*') ? ' class="active"' : '') !!}>
                       <a href="{{ route('components.index') }}" tabindex="-1">
                           <i class="fa fa-hdd-o"></i>
                           <span class="sr-only">Components</span>
-                      </a>
-                  </li>
-                  @endcan
-                  {{-- @can('index', \App\Models\Land::class)
-                  <li aria-hidden="true"{!! (Request::is('land*') ? ' class="active"' : '') !!}>
-                      <a href="{{ route('land.index') }}" tabindex="-1">
-                          <i class="fa fa-th-large"></i>
-                          <span class="sr-only">Land</span>
-                      </a>
-                  </li>
-                  @endcan
-                  @can('index', \App\Models\Building::class)
-                  <li aria-hidden="true"{!! (Request::is('buildings*') ? ' class="active"' : '') !!}>
-                      <a href="{{ route('buildings.index') }}" tabindex="-1">
-                          <i class="fa fa-building"></i>
-                          <span class="sr-only">Buildings</span>
                       </a>
                   </li>
                   @endcan --}}
@@ -238,13 +222,13 @@
                            </a>
                        </li>
                        @endcan
-                       @can('create', \App\Models\Accessory::class)
+                       {{-- @can('create', \App\Models\Accessory::class)
                        <li {!! (Request::is('accessories/create') ? 'class="active"' : '') !!}>
                            <a href="{{ route('accessories.create') }}" tabindex="-1">
                                <i class="fa fa-keyboard-o fa-fw" aria-hidden="true"></i>
                                {{ trans('general.accessory') }}</a>
                        </li>
-                       @endcan
+                       @endcan --}}
                        @can('create', \App\Models\Consumable::class)
                        <li {!! (Request::is('consunmables/create') ? 'class="active"' : '') !!}>
                            <a href="{{ route('consumables.create') }}" tabindex="-1">
@@ -253,27 +237,11 @@
                            </a>
                        </li>
                        @endcan
-                       @can('create', \App\Models\Component::class)
+                       {{-- @can('create', \App\Models\Component::class)
                        <li {!! (Request::is('components/create') ? 'class="active"' : '') !!}>
                            <a href="{{ route('components.create') }}" tabindex="-1">
                            <i class="fa fa-hdd-o fa-fw" aria-hidden="true"></i>
                            {{ trans('general.component') }}
-                           </a>
-                       </li>
-                       @endcan
-                       {{-- @can('create', \App\Models\Land::class)
-                       <li {!! (Request::is('land/create') ? 'class="active"' : '') !!}>
-                           <a href="{{ route('land.create') }}" tabindex="-1">
-                           <i class="fa fa-th-large fa-fw" aria-hidden="true"></i>
-                           {{ trans('general.land') }}
-                           </a>
-                       </li>
-                       @endcan
-                       @can('create', \App\Models\Building::class)
-                       <li {!! (Request::is('buildings/create') ? 'class="active"' : '') !!}>
-                           <a href="{{ route('buildings.create') }}" tabindex="-1">
-                           <i class="fa fa-building fa-fw" aria-hidden="true"></i>
-                           {{ trans('general.buildings') }}
                            </a>
                        </li>
                        @endcan --}}
@@ -567,14 +535,14 @@
                   </a>
               </li>
               @endcan
-              @can('index', \App\Models\Accessory::class)
+              {{-- @can('index', \App\Models\Accessory::class)
               <li{!! (Request::is('accessories*') ? ' class="active"' : '') !!}>
                 <a href="{{ route('accessories.index') }}">
                   <i class="fa fa-keyboard-o"></i>
                   <span>{{ trans('general.accessories') }}</span>
                 </a>
               </li>
-              @endcan
+              @endcan --}}
               @can('view', \App\Models\Consumable::class)
             <li{!! (Request::is('consumables*') ? ' class="active"' : '') !!}>
                 <a href="{{ url('consumables') }}">
@@ -583,27 +551,11 @@
                 </a>
             </li>
              @endcan
-             @can('view', \App\Models\Component::class)
+             {{-- @can('view', \App\Models\Component::class)
             <li{!! (Request::is('components*') ? ' class="active"' : '') !!}>
                 <a href="{{ route('components.index') }}">
                   <i class="fa fa-hdd-o"></i>
                   <span>{{ trans('general.components') }}</span>
-                </a>
-            </li>
-            @endcan
-            {{-- @can('index', \App\Models\Land::class)
-            <li{!! (Request::is('land*') ? ' class="active"' : '') !!}>
-                <a href="{{ route('land.index') }}">
-                  <i class="fa fa-th-large"></i>
-                  <span>{{ trans('general.land') }}</span>
-                </a>
-            </li>
-            @endcan
-            @can('index', \App\Models\Building::class)
-            <li{!! (Request::is('buildings*') ? ' class="active"' : '') !!}>
-                <a href="{{ route('buildings.index') }}">
-                  <i class="fa fa-building"></i>
-                  <span>{{ trans('general.buildings') }}</span>
                 </a>
             </li>
             @endcan --}}
@@ -615,14 +567,14 @@
                 </a>
             </li>
             @endcan
-            @can('view', \App\Models\PredefinedKit::class)
+            {{-- @can('view', \App\Models\PredefinedKit::class)
                 <li{!! (Request::is('kits') ? ' class="active"' : '') !!}>
                     <a href="{{ route('kits.index') }}">
                         <i class="fa fa-object-group"></i>
                         <span>{{ trans('general.kits') }}</span>
                     </a>
                 </li>
-            @endcan
+            @endcan --}}
 
             @can('view', \App\Models\User::class)
             <li{!! (Request::is('users*') ? ' class="active"' : '') !!}>
@@ -774,11 +726,11 @@
                             {{ trans('general.unaccepted_asset_report') }}
                         </a>
                     </li>
-                    <li>
+                    {{-- <li>
                         <a href="{{ url('reports/accessories') }}" {{ (Request::is('reports/accessories') ? ' class="active"' : '') }}>
                             {{ trans('general.accessory_report') }}
                         </a>
-                    </li>
+                    </li> --}}
                     <li>
                         <a href="{{ url('reports/custom') }}" {{ (Request::is('reports/custom') ? ' class="active"' : '') }}>
                             {{ trans('general.custom_report') }}

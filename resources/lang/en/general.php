@@ -14,7 +14,7 @@
     'all_assets'			=> 'All Assets',
     'all'       			=> 'All',
     'archived'              => 'Archived',
-    'area'                  => 'Area',
+    'area'                  => 'Area (m²)',
     'asset_models'			=> 'Asset Models',
     'asset_model'			=> 'Model',
     'asset'					=> 'Asset',

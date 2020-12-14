@@ -29,7 +29,7 @@
 
 <div class="row">
   <!-- panel -->
-  <div class="col-lg-3 col-xs-6">
+  <div class="col-lg-4 col-xs-6">
       <a href="{{ route('hardware.index') }}">
     <!-- small box -->
     <div class="small-box bg-teal">
@@ -47,7 +47,7 @@
       </a>
   </div><!-- ./col -->
 
-  <div class="col-lg-3 col-xs-6">
+  <div class="col-lg-4 col-xs-6">
      <a href="{{ route('licenses.index') }}">
     <!-- small box -->
     <div class="small-box bg-maroon">
@@ -66,7 +66,7 @@
   </div><!-- ./col -->
 
 
-  <div class="col-lg-3 col-xs-6">
+  {{-- <div class="col-lg-3 col-xs-6">
     <!-- small box -->
       <a href="{{ route('accessories.index') }}">
     <div class="small-box bg-orange">
@@ -82,9 +82,9 @@
       @endcan
     </div>
       </a>
-  </div><!-- ./col -->
+  </div><!-- ./col --> --}}
 
-  <div class="col-lg-3 col-xs-6">
+  <div class="col-lg-4 col-xs-6">
     <!-- small box -->
 
       <a href="{{ route('consumables.index') }}">
@@ -101,42 +101,6 @@
       @endcan
     </div>
   </div><!-- ./col -->
-
-  {{-- <div class="col-lg-3 col-xs-6">
-    <!-- small box -->
-
-      <a href="{{ route('land.index') }}">
-    <div class="small-box bg-brown">
-      <div class="inner">
-        <h3> {{ number_format($counts['land']) }}</h3>
-          <p>{{ trans('general.total_land') }}</p>
-      </div>
-      <div class="icon" aria-hidden="true">
-        <i class="fa fa-th-large"></i>
-      </div>
-      @can('index', \App\Models\Land::class)
-        <a href="{{ route('land.index') }}" class="small-box-footer">{{ trans('general.moreinfo') }} <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
-      @endcan
-    </div>
-  </div><!-- ./col --> --}}
-
-  {{-- <div class="col-lg-3 col-xs-6">
-    <!-- small box -->
-
-      <a href="{{ route('buildings.index') }}">
-    <div class="small-box bg-cyan">
-      <div class="inner">
-        <h3> {{ number_format($counts['building']) }}</h3>
-          <p>{{ trans('general.total_buildings') }}</p>
-      </div>
-      <div class="icon" aria-hidden="true">
-        <i class="fa fa-building"></i>
-      </div>
-      @can('index', \App\Models\Building::class)
-        <a href="{{ route('buildings.index') }}" class="small-box-footer">{{ trans('general.moreinfo') }} <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
-      @endcan
-    </div>
-  </div><!-- ./col --> --}}
 </div>
 </div>
 
@@ -165,22 +129,22 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             @can('create', \App\Models\Asset::class)
                             <a class="btn bg-teal" style="width: 100%" href="{{ route('hardware.create') }}">New Asset</a>
                             @endcan
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             @can('create', \App\Models\License::class)
                                 <a class="btn bg-maroon" style="width: 100%" href="{{ route('licenses.create') }}">New License</a>
                             @endcan
                         </div>
-                        <div class="col-md-3">
+                        {{-- <div class="col-md-3">
                             @can('create', \App\Models\Accessory::class)
                                 <a class="btn bg-orange" style="width: 100%" href="{{ route('accessories.create') }}">New Accessory</a>
                             @endcan
-                        </div>
-                        <div class="col-md-3">
+                        </div> --}}
+                        <div class="col-md-4">
                             @can('create', \App\Models\Consumable::class)
                                 <a class="btn bg-purple" style="width: 100%" href="{{ route('consumables.create') }}">New Consumable</a>
                             @endcan
@@ -310,18 +274,18 @@
                                     <i class="fa fa-barcode" aria-hidden="true"></i>
                                     <span class="sr-only">Asset Count</span>
                                 </th>
-                                <th class="col-sm-1" data-visible="true" data-field="accessories_count" data-sortable="true">
+                                {{-- <th class="col-sm-1" data-visible="true" data-field="accessories_count" data-sortable="true">
                                     <i class="fa fa-keyboard-o" aria-hidden="true"></i>
                                     <span class="sr-only">Accessories Count</span>
-                                </th>
+                                </th> --}}
                                 <th class="col-sm-1" data-visible="true" data-field="consumables_count" data-sortable="true">
                                     <i class="fa fa-tint" aria-hidden="true"></i>
                                     <span class="sr-only">Consumables Count</span>
                                 </th>
-                                <th class="col-sm-1" data-visible="true" data-field="components_count" data-sortable="true">
+                                {{-- <th class="col-sm-1" data-visible="true" data-field="components_count" data-sortable="true">
                                     <i class="fa fa-hdd-o" aria-hidden="true"></i>
                                     <span class="sr-only">Components Count</span>
-                                </th>
+                                </th> --}}
                                 <th class="col-sm-1" data-visible="true" data-field="licenses_count" data-sortable="true">
                                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                     <span class="sr-only">Licenses Count</span>
