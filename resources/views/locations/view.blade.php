@@ -87,7 +87,7 @@
           </div> <!--/.box-->
 
 
-      <div class="box box-default">
+      {{-- <div class="box box-default">
           <div class="box-header with-border">
               <div class="box-heading">
                   <h2 class="box-title">{{ trans('general.components') }}</h2>
@@ -118,7 +118,7 @@
                   </table>
               </div><!-- /.table-responsive -->
           </div><!-- /.box-body -->
-      </div> <!--/.box-->
+      </div> <!--/.box--> --}}
 
 
   </div><!--/.col-md-9-->
