@@ -5,7 +5,7 @@ return array(
     'undeployable' 		=> '<strong>Peringatan: </strong> Aset ini telah di tandai sebagai aset yang tak dapat digunakan.
                         Jika status ini telah berubah, silahkan perbarui status aset.',
     'does_not_exist' 	=> 'Aset tidak ada.',
-    'does_not_exist_or_not_requestable' => 'Aset tersebut tidak terdaftar atau tidak dapat di minta.',
+    'does_not_exist_or_not_requestable' => 'Aset tersebut tidak terdaftar atau tidak dapat di-request.',
     'assoc_users'	 	=> 'Aset ini sudah diberikan kepada pengguna dan tidak dapat di hapus. Silahkan cek aset terlebih dahulu kemudian coba hapus kembali. ',
 
     'create' => array(
@@ -75,8 +75,8 @@ return array(
     ),
 
     'requests' => array(
-        'error'   		=> 'Aset gagal di minta, silahkan coba kembali',
-        'success' 		=> 'Sukses meminta aset.',
+        'error'   		=> 'Aset gagal di-request, silakan coba kembali',
+        'success' 		=> 'Aset berhasil di-request.',
         'canceled'      => 'Permintaan pemeriksaan berhasil dibatalkan'
     )
 

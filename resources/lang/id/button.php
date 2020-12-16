@@ -8,7 +8,7 @@ return array(
     'delete'  	                => 'Hapus',
     'edit'    	                => 'Ubah',
     'restore' 	                => 'Kembalikan',
-    'request'                   => 'Permintaan',
+    'request'                   => 'Request',
     'submit'  	                => 'Kirim',
     'upload'                    => 'Unggah',
 	'select_file'				=> 'Pilih file...',
