@@ -169,6 +169,7 @@
     'processing'			=> 'Pengolahan',
     'profile'				=> 'Profil anda',
     'purchase_cost'                              => 'Biaya Pembelian',
+    'value'                 => 'Nilai',
     'purchase_date'         => 'Tanggal Pembelian',
     'qty'		            => 'JML',
     'quantity'		        => 'Jumlah',

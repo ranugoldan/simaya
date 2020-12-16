@@ -148,7 +148,7 @@
               <li>{{ trans('admin/locations/table.area') }}: {{ $location->area }}</li>
             @endif
             @if ($location->purchase_cost)
-              <li>{{ trans('admin/locations/table.purchase_cost') }}: {{ \App\Helpers\Helper::formatCurrencyOutput($location->purchase_cost) }}</li>
+              <li>{{ trans('admin/locations/table.value') }}: {{ \App\Helpers\Helper::formatCurrencyOutput($location->purchase_cost) }}</li>
             @endif
             @if ($location->manager)
               <li>{{ trans('admin/users/table.manager') }}: {!! $location->manager->present()->nameUrl() !!}</li>
