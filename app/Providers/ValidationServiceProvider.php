@@ -192,17 +192,30 @@ class ValidationServiceProvider extends ServiceProvider
         Validator::extend('if_room', function ($attribute, $value, $parameters, $validator) {
             $data = $validator->getData();
 
-            $category_name = strtolower(\App\Models\Category::find($data['category_id'])->name);
-            
-            if (str_contains($category_name, 'room') || str_contains($category_name, 'ruang')) {
-                // if category is 'room' or 'ruang'; ok
-                return true;
-            } else {
-                // if category is not 'room' or 'ruang':
-                    // 1. ok if occupied is false
-                    // 2. not ok if occupied is true
-                return !$value;
+            // if location has a category:
+            if (\App\Models\Category::find($data['category_id'])) {
+                $category_name = strtolower(\App\Models\Category::find($data['category_id'])->name);
+                
+                if (str_contains($category_name, 'room') || str_contains($category_name, 'ruang')) {
+                    // if category contains 'room' or 'ruang'; ok
+                    return true;
+                } else {
+                    // if category does not contain 'room' or 'ruang':
+                        // 1. ok if occupied is false
+                        // 2. not ok if occupied is true
+                    return !$value;
+                }
             }
+
+            // if location does not have a category:
+                // 1. ok if occupied is false
+                // 2. not ok if occupied is true
+            return !$value;
+
+            // a location must have:
+                // 1. a category 
+                // 2. which contains the word 'room' or 'ruang'
+            // in order for it to be occupiable
         });
 
 
