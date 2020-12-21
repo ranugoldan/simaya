@@ -46,7 +46,6 @@ class SnipeModel extends Model
             $value = null;
         }
         $this->attributes['category_id'] = $value;
-        // dd($this->attributes);
         return;
     }
 
