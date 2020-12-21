@@ -155,15 +155,6 @@ class UserPresenter extends Presenter
                 "formatter" => "departmentsLinkObjFormatter"
             ],
             [
-                "field" => "location",
-                "searchable" => true,
-                "sortable" => true,
-                "switchable" => true,
-                "title" => trans('admin/users/table.location'),
-                "visible" => true,
-                "formatter" => "locationsLinkObjFormatter"
-            ],
-            [
                 "field" => "manager",
                 "searchable" => true,
                 "sortable" => true,
@@ -180,33 +171,6 @@ class UserPresenter extends Presenter
                 'class' => 'css-barcode',
                 'title' => 'Assets',
                 'visible' => true,
-            ],
-            [
-                "field" => "licenses_count",
-                "searchable" => false,
-                "sortable" => true,
-                "switchable" => true,
-                'class' => 'css-license',
-                "title" => 'License',
-                "visible" => true,
-            ],
-            [
-                "field" => "consumables_count",
-                "searchable" => false,
-                "sortable" => true,
-                "switchable" => true,
-                'class' => 'css-consumable',
-                "title" => 'Consumables',
-                "visible" => true,
-            ],
-            [
-                "field" => "accessories_count",
-                "searchable" => false,
-                "sortable" => true,
-                "switchable" => true,
-                'class' => 'css-accessory',
-                "title" => 'Accessories',
-                "visible" => true,
             ],
             [
                 "field" => "notes",

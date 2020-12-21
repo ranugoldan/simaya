@@ -37,12 +37,6 @@
         </div>
 
 
-        @can('self.edit_location')
-        <!-- Location -->
-        @include ('partials.forms.edit.location-profile-select', ['translated_name' => trans('general.location')])
-        @endcan
-
-
         <!-- Language -->
         <div class="form-group {{ $errors->has('locale') ? 'has-error' : '' }}">
           <label class="col-md-3 control-label" for="locale">{{ trans('general.language') }}</label>

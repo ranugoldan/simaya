@@ -38,7 +38,6 @@
                             <th class="col-sm-2" data-field="created_at" data-formatter="dateDisplayFormatter">{{ trans('general.audit') }}</th>
                             <th class="col-sm-2" data-field="admin" data-formatter="usersLinkObjFormatter">{{ trans('general.admin') }}</th>
                             <th class="col-sm-2" data-field="item" data-formatter="polymorphicItemFormatter">{{ trans('general.item') }}</th>
-                            <th class="col-sm-1" data-field="location" data-formatter="locationsLinkObjFormatter">{{ trans('general.location') }}</th>
                             <th class="col-sm-2" data-field="next_audit_date" data-formatter="dateDisplayFormatter">{{ trans('general.next_audit_date') }}</th>
                             <th class="col-sm-1" data-field="days_to_next_audit">{{ trans('general.days_to_next_audit') }}</th>
 

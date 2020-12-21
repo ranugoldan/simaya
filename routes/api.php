@@ -90,8 +90,6 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'auth:api']
 
 
     /*--- Departments API ---*/
-
-    /*--- Suppliers API ---*/
     Route::group(['prefix' => 'departments'], function () {
 
 
@@ -357,7 +355,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'auth:api']
             'as' => 'manufacturers.selectlist',
             'uses' => 'ManufacturersController@selectlist'
         ]);
-    }); // Locations group
+    }); // Manufacturers group
 
 
     Route::resource('manufacturers', 'ManufacturersController',

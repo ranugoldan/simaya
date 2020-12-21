@@ -49,7 +49,6 @@
                 <th class="col-sm-1">{{ trans('admin/depreciations/general.number_of_months') }}</th>
                 <th class="col-sm-1">{{ trans('admin/hardware/table.status') }}</th>
                 <th class="col-sm-1">{{ trans('admin/hardware/table.checkoutto') }}</th>
-                <th class="col-sm-1" data-visible="false">{{ trans('admin/hardware/table.location') }}</th>
                 <th class="col-sm-1">{{ trans('admin/hardware/table.purchase_date') }}</th>
                 <th class="col-sm-1">{{ trans('admin/hardware/table.eol') }}</th>
                 <th class="col-sm-1 align-right">{{ trans('admin/hardware/table.purchase_cost') }}</th>
@@ -102,13 +101,6 @@
                             {{ $asset->assigned->name }}
                         @endif
                     @endif
-                </td>
-                <td>
-                  @if ($asset->location)
-                  {{ $asset->location->name }}
-                  @elseif ($asset->defaultloc)
-                  {{ $asset->defaultloc->name }}
-                  @endif
                 </td>
                 <td>
                   {{ \Carbon\Carbon::parse($asset->purchase_date)->format('Y-m-d') }}
