@@ -18,9 +18,6 @@
     <!-- Manager -->
     @include ('partials.forms.edit.user-select', ['translated_name' => trans('admin/users/table.manager'), 'fieldname' => 'manager_id'])
 
-    <!-- Location -->
-    @include ('partials.forms.edit.location-select', ['translated_name' => trans('general.location'), 'fieldname' => 'location_id'])
-
     <!-- Image -->
     @if ($item->image)
         <div class="form-group {{ $errors->has('image_delete') ? 'has-error' : '' }}">

@@ -471,12 +471,7 @@ class Helper
     {
         $category_types = array(
             '' => '',
-            // 'accessory' => 'Accessory',
             'asset' => 'Asset',
-            'consumable' => 'Consumable',
-            // 'component' => 'Component',
-            'license' => 'License',
-            'location' => 'Location'
         );
         return $category_types;
     }

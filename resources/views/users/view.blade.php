@@ -33,31 +33,6 @@
         </li>
 
         <li>
-          <a href="#licenses" data-toggle="tab">
-            <span class="hidden-lg hidden-md">
-            <i class="fa fa-floppy-o"></i>
-            </span>
-            <span class="hidden-xs hidden-sm">{{ trans('general.licenses') }}</span>
-          </a>
-        </li>
-
-        <li>
-          <a href="#accessories" data-toggle="tab">
-            <span class="hidden-lg hidden-md">
-            <i class="fa fa-keyboard-o"></i>
-            </span> <span class="hidden-xs hidden-sm">{{ trans('general.accessories') }}</span>
-          </a>
-        </li>
-
-        <li>
-          <a href="#consumables" data-toggle="tab">
-            <span class="hidden-lg hidden-md">
-            <i class="fa fa-tint"></i></span>
-            <span class="hidden-xs hidden-sm">{{ trans('general.consumables') }}</span>
-          </a>
-        </li>
-
-        <li>
           <a href="#files" data-toggle="tab">
             <span class="hidden-lg hidden-md">
             <i class="fa fa-paperclip"></i></span>
@@ -72,16 +47,6 @@
             <span class="hidden-xs hidden-sm">{{ trans('general.history') }}</span>
           </a>
         </li>
-
-        @if ($user->managedLocations()->count() >= 0 )
-        <li>
-          <a href="#managed" data-toggle="tab">
-            <span class="hidden-lg hidden-md">
-            <i class="fa fa-clock-o"></i></span>
-            <span class="hidden-xs hidden-sm">{{ trans('admin/users/table.managed_locations') }}</span>
-          </a>
-        </li>
-        @endif
 
         @can('update', $user)
           <li class="dropdown pull-right">
@@ -233,14 +198,6 @@
                   </tr>
                   @endif
 
-                  @if ($user->userloc)
-                  <tr>
-                    <td class="text-nowrap">{{ trans('admin/users/table.location') }}</td>
-                    <td>{{ link_to_route('locations.show', $user->userloc->name, [$user->userloc->id]) }}</td>
-
-
-                  </tr>
-                  @endif
                     @if ($user->last_login)
                       <tr>
                         <td class="text-nowrap">{{ trans('general.last_login') }}</td>

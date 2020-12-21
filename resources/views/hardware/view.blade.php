@@ -107,36 +107,6 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#software" data-toggle="tab">
-            <span class="hidden-lg hidden-md">
-              <i class="fa fa-floppy-o" aria-hidden="true"></i>
-            </span>
-                            <span class="hidden-xs hidden-sm">
-              {{ trans('general.licenses') }}
-            </span>
-                        </a>
-                    </li>
-                    {{-- <li>
-                        <a href="#components" data-toggle="tab">
-            <span class="hidden-lg hidden-md">
-              <i class="fa fa-hdd-o" aria-hidden="true"></i>
-            </span>
-                            <span class="hidden-xs hidden-sm">
-              {{ trans('general.components') }}
-            </span>
-                        </a>
-                    </li> --}}
-                    <li>
-                        <a href="#assets" data-toggle="tab">
-            <span class="hidden-lg hidden-md">
-              <i class="fa fa-barcode" aria-hidden="true"></i>
-            </span>
-                            <span class="hidden-xs hidden-sm">
-              {{ trans('general.assets') }}
-            </span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="#maintenances" data-toggle="tab">
             <span class="hidden-lg hidden-md">
               <i class="fa fa-wrench" aria-hidden="true"></i>
@@ -609,44 +579,6 @@
                                             {!! nl2br(e($asset->notes)) !!}
                                         </div>
                                     </div>
-
-                                    @if ($asset->location)
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <strong>
-                                                    {{ trans('general.location') }}
-                                                </strong>
-                                            </div>
-                                            <div class="col-md-6">
-                                                @can('superuser')
-                                                    <a href="{{ route('locations.show', ['location' => $asset->location->id]) }}">
-                                                        {{ $asset->location->name }}
-                                                    </a>
-                                                @else
-                                                    {{ $asset->location->name }}
-                                                @endcan
-                                            </div>
-                                        </div>
-                                    @endif
-
-                                    @if ($asset->defaultLoc)
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <strong>
-                                                    {{ trans('admin/hardware/form.default_location') }}
-                                                </strong>
-                                            </div>
-                                            <div class="col-md-6">
-                                                @can('superuser')
-                                                    <a href="{{ route('locations.show', ['location' => $asset->defaultLoc->id]) }}">
-                                                        {{ $asset->defaultLoc->name }}
-                                                    </a>
-                                                @else
-                                                    {{ $asset->defaultLoc->name }}
-                                                @endcan
-                                            </div>
-                                        </div>
-                                    @endif
 
                                     @if ($asset->created_at!='')
                                         <div class="row">
