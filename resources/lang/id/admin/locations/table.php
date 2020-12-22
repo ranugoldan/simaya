@@ -21,6 +21,7 @@ return array(
     'category'                  => 'Kategori',
     'area'                      => 'Luas (m²)',
     'purchase_cost'             => 'Biaya Pembelian',
+    'value'                     => 'Nilai',
     'occupied'                  => 'Dipinjam?',
     'occupied_by'               => 'Dipinjam oleh'
     );

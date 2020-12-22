@@ -87,7 +87,7 @@
           </div> <!--/.box-->
 
 
-      <div class="box box-default">
+      {{-- <div class="box box-default">
           <div class="box-header with-border">
               <div class="box-heading">
                   <h2 class="box-title">{{ trans('general.components') }}</h2>
@@ -118,7 +118,7 @@
                   </table>
               </div><!-- /.table-responsive -->
           </div><!-- /.box-body -->
-      </div> <!--/.box-->
+      </div> <!--/.box--> --}}
 
 
   </div><!--/.col-md-9-->
@@ -148,7 +148,7 @@
               <li>{{ trans('admin/locations/table.area') }}: {{ $location->area }}</li>
             @endif
             @if ($location->purchase_cost)
-              <li>{{ trans('admin/locations/table.purchase_cost') }}: {{ \App\Helpers\Helper::formatCurrencyOutput($location->purchase_cost) }}</li>
+              <li>{{ trans('admin/locations/table.value') }}: {{ \App\Helpers\Helper::formatCurrencyOutput($location->purchase_cost) }}</li>
             @endif
             @if ($location->manager)
               <li>{{ trans('admin/users/table.manager') }}: {!! $location->manager->present()->nameUrl() !!}</li>

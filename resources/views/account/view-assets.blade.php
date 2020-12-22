@@ -234,7 +234,7 @@ View Assets for  {{ $user->present()->fullName() }}
   </div> <!-- .col-md-12-->
 </div> <!-- .row-->
 
-<div class="row">
+{{-- <div class="row">
   <div class="col-md-12">
     <div class="box box-default">
 
@@ -286,7 +286,7 @@ View Assets for  {{ $user->present()->fullName() }}
        </div> <!-- .box-body-->
     </div><!--.box.box-default-->
   </div> <!-- .col-md-12-->
-</div> <!-- .row-->
+</div> <!-- .row--> --}}
 
 <div class="row">
   <div class="col-md-12">

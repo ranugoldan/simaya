@@ -105,7 +105,7 @@ class LocationPresenter extends Presenter
                 "searchable" => true,
                 "sortable" => true,
                 "switchable" => true,
-                "title" => trans('admin/locations/table.purchase_cost'),
+                "title" => trans('admin/locations/table.value'),
                 "visible" => true,
             ],
             [
