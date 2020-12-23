@@ -29,10 +29,12 @@ class DashboardController extends Controller
             $asset_stats=null;
 
             $counts['asset'] = \App\Models\Asset::count();
-            $counts['accessory'] = \App\Models\Accessory::count();
-            $counts['license'] = \App\Models\License::assetcount();
-            $counts['consumable'] = \App\Models\Consumable::count();
-            $counts['grand_total'] =  $counts['asset'] +  $counts['accessory'] +  $counts['license'] +  $counts['consumable'];
+            // $counts['accessory'] = \App\Models\Accessory::count();
+            // $counts['license'] = \App\Models\License::assetcount();
+            // $counts['consumable'] = \App\Models\Consumable::count();
+            $counts['grand_total'] =  $counts['asset']
+            // +  $counts['accessory'] +  $counts['license'] +  $counts['consumable']
+            ;
 
             if ((!file_exists(storage_path().'/oauth-private.key')) || (!file_exists(storage_path().'/oauth-public.key'))) {
                 \Artisan::call('migrate', ['--force' => true]);
