@@ -43,7 +43,6 @@
                                 <th data-sortable="true" data-field="image" data-visible="false" data-formatter="imageFormatter">{{ trans('general.image') }}</th>
                                 <th data-sortable="true" data-formatter="usersLinkObjFormatter" data-field="manager" data-searchable="false">{{ trans('admin/departments/table.manager') }}</th>
                                 <th data-sortable="true" data-field="users_count" data-searchable="false">{{ trans('general.users') }}</th>
-                                <th data-sortable="true" data-formatter="locationsLinkObjFormatter" data-field="location" data-searchable="false">{{ trans('admin/departments/table.location') }}</th>
                                 <th data-sortable="false" data-formatter="departmentsActionsFormatter" data-field="actions" data-searchable="false">{{ trans('table.actions') }}</th>
 
                             </tr>

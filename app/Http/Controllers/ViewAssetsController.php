@@ -30,10 +30,6 @@ class ViewAssetsController extends Controller
 
         $user = User::with(
             'assets.model',
-            'consumables',
-            'accessories',
-            'licenses',
-            'userloc',
             'userlog'
         )->withTrashed()->find(Auth::user()->id);
 
@@ -61,7 +57,7 @@ class ViewAssetsController extends Controller
     public function getRequestableIndex()
     {
 
-        $assets = Asset::with('model', 'defaultLoc', 'location', 'assignedTo', 'requests')->Hardware()->RequestableAssets()->get();
+        $assets = Asset::with('model', 'assignedTo', 'requests')->Hardware()->RequestableAssets()->get();
         $models = AssetModel::with('category', 'requests', 'assets')->RequestableModels()->get();
 
         return view('account/requestable-assets', compact('assets', 'models'));
@@ -87,9 +83,6 @@ class ViewAssetsController extends Controller
         $logaction->item_type = $fullItemType;
         $logaction->created_at = $data['requested_date'] = date("Y-m-d H:i:s");
 
-        if ($user->location_id) {
-            $logaction->location_id = $user->location_id;
-        }
         $logaction->target_id = $data['user_id'] = Auth::user()->id;
         $logaction->target_type = User::class;
 
@@ -164,9 +157,6 @@ class ViewAssetsController extends Controller
         $logaction->item_type = $data['item_type'] = Asset::class;
         $logaction->created_at = $data['requested_date'] = date("Y-m-d H:i:s");
 
-        if ($user->location_id) {
-            $logaction->location_id = $user->location_id;
-        }
         $logaction->target_id = $data['user_id'] = Auth::user()->id;
         $logaction->target_type = User::class;
 

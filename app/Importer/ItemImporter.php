@@ -5,7 +5,6 @@ namespace App\Importer;
 use App\Models\AssetModel;
 use App\Models\Category;
 use App\Models\Company;
-use App\Models\Location;
 use App\Models\Manufacturer;
 use App\Models\Statuslabel;
 use App\Models\Supplier;
@@ -32,11 +31,6 @@ class ItemImporter extends Importer
         $item_company_name = $this->findCsvMatch($row, "company");
         if ($this->shouldUpdateField($item_company_name)) {
             $this->item["company_id"] = $this->createOrFetchCompany($item_company_name);
-        }
-
-        $item_location = $this->findCsvMatch($row, "location");
-        if ($this->shouldUpdateField($item_location)) {
-            $this->item["location_id"] = $this->createOrFetchLocation($item_location);
         }
 
         $item_manufacturer = $this->findCsvMatch($row, "manufacturer");
@@ -98,10 +92,6 @@ class ItemImporter extends Importer
         // We only support checkout-to-location for asset, so short circuit otherwise.
         if(get_class($this) != AssetImporter::class) {
             return $this->createOrFetchUser($row);
-        }
-
-        if ($this->item['checkout_class'] === 'location') {
-            return Location::findOrFail($this->createOrFetchLocation($this->findCsvMatch($row, 'checkout_location')));
         }
 
         return $this->createOrFetchUser($row);
@@ -381,43 +371,6 @@ class ItemImporter extends Importer
             return $manufacturer->id;
         }
         $this->logError($manufacturer, 'Manufacturer "'. $manufacturer->name . '"');
-        return null;
-    }
-
-    /**
-     * Checks the DB to see if a location with the same name exists, otherwise create it
-     *
-     * @author Daniel Melzter
-     * @since 3.0
-     * @param $asset_location string
-     * @return Location|null
-     */
-    public function createOrFetchLocation($asset_location)
-    {
-        if (empty($asset_location)) {
-            $this->log('No location given, so none created.');
-            return null;
-        }
-        $location = Location::where(['name' => $asset_location])->first();
-
-        if ($location) {
-            $this->log('Location ' . $asset_location . ' already exists');
-            return $location->id;
-        }
-        // No matching locations in the collection, create a new one.
-        $location = new Location();
-        $location->name = $asset_location;
-        $location->address = '';
-        $location->city = '';
-        $location->state = '';
-        $location->country = '';
-        $location->user_id = $this->user_id;
-
-        if ($location->save()) {
-            $this->log('Location ' . $asset_location . ' was created');
-            return $location->id;
-        }
-        $this->logError($location, 'Location');
         return null;
     }
 

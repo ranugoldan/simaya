@@ -338,10 +338,6 @@
                   <!--  Department -->
               @include ('partials.forms.edit.department-select', ['translated_name' => trans('general.department'), 'fieldname' => 'department_id'])
 
-
-                  <!-- Location -->
-              @include ('partials.forms.edit.location-select', ['translated_name' => trans('general.location'), 'fieldname' => 'location_id'])
-
                 <!-- Phone -->
                 <div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
                   <label class="col-md-3 control-label" for="phone">{{ trans('admin/users/table.phone') }}</label>

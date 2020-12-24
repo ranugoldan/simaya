@@ -45,10 +45,6 @@ class UsersTransformer
                     'id' => (int) $user->department->id,
                     'name'=> e($user->department->name)
                 ]  : null,
-                'location' => ($user->userloc) ? [
-                    'id' => (int) $user->userloc->id,
-                    'name'=> e($user->userloc->name)
-                ]  : null,
                 'notes'=> e($user->notes),
                 'permissions' => $user->decodePermissions(),
                 'activated' => ($user->activated =='1') ? true : false,
@@ -56,9 +52,6 @@ class UsersTransformer
                 'two_factor_activated' => ($user->two_factor_active()) ? true : false,
                 'two_factor_enrolled' => ($user->two_factor_active_and_enrolled()) ? true : false,
                 'assets_count' => (int) $user->assets_count,
-                'licenses_count' => (int) $user->licenses_count,
-                'accessories_count' => (int) $user->accessories_count,
-                'consumables_count' => (int) $user->consumables_count,
                 'company' => ($user->company) ? ['id' => (int) $user->company->id,'name'=> e($user->company->name)] : null,
                 'created_at' => Helper::getFormattedDateObject($user->created_at, 'datetime'),
                 'updated_at' => Helper::getFormattedDateObject($user->updated_at, 'datetime'),
@@ -68,7 +61,7 @@ class UsersTransformer
 
         $permissions_array['available_actions'] = [
             'update' => (Gate::allows('update', User::class) && ($user->deleted_at=='')),
-            'delete' => (Gate::allows('delete', User::class) && ($user->assets_count == 0) && ($user->licenses_count == 0)  && ($user->accessories_count == 0)  && ($user->consumables_count == 0)),
+            'delete' => (Gate::allows('delete', User::class) && ($user->assets_count == 0)),
             'clone' => (Gate::allows('create', User::class) && ($user->deleted_at=='')) ,
             'restore' => (Gate::allows('create', User::class) && ($user->deleted_at!='')),
         ];

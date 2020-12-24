@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Users;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
-use App\Models\Accessory;
 use App\Models\Actionlog;
 use App\Models\Asset;
 use App\Models\Group;
-use App\Models\LicenseSeat;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +33,7 @@ class BulkUsersController extends Controller
         if (($request->filled('ids')) && (count($request->input('ids')) > 0)) {
             // Get the list of affected users
             $users = User::whereIn('id', array_keys(request('ids')))
-                ->with('groups', 'assets', 'licenses', 'accessories')->get();
+                ->with('groups', 'assets')->get();
 
             if ($request->input('bulk_actions') == 'edit') {
                 return view('users/bulk-edit', compact('users'))
@@ -92,8 +90,7 @@ class BulkUsersController extends Controller
         ];
 
 
-        $this->conditionallyAddItem('location_id')
-            ->conditionallyAddItem('department_id')
+        $this->conditionallyAddItem('department_id')
             ->conditionallyAddItem('company_id')
             ->conditionallyAddItem('locale')
             ->conditionallyAddItem('activated')
@@ -175,13 +172,9 @@ class BulkUsersController extends Controller
 
         $users = User::whereIn('id', $user_raw_array)->get();
         $assets = Asset::whereIn('assigned_to', $user_raw_array)->get();
-        $accessories = DB::table('accessories_users')->whereIn('assigned_to', $user_raw_array)->get();
-        $licenses = DB::table('license_seats')->whereIn('assigned_to', $user_raw_array)->get();
 
 
         $this->logItemCheckinAndDelete($assets, Asset::class);
-        $this->logItemCheckinAndDelete($accessories, Accessory::class);
-        $this->logItemCheckinAndDelete($licenses, LicenseSeat::class);
 
         Asset::whereIn('id', $assets->pluck('id'))->update([
             'status_id'     => e(request('status_id')),
@@ -189,11 +182,7 @@ class BulkUsersController extends Controller
             'assigned_type' => null,
         ]);
 
-
-        LicenseSeat::whereIn('id', $licenses->pluck('id'))->update(['assigned_to' => null]);
-
         foreach ($users as $user) {
-            $user->accessories()->sync([]);
             $user->delete();
         }
 

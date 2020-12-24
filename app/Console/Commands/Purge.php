@@ -2,14 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Accessory;
 use App\Models\Asset;
 use App\Models\AssetModel;
 use App\Models\Category;
-use App\Models\Component;
-use App\Models\Consumable;
-use App\Models\License;
-use App\Models\Location;
 use App\Models\Manufacturer;
 use App\Models\Statuslabel;
 use App\Models\Supplier;
@@ -72,52 +67,6 @@ class Purge extends Command
 
             $this->info($asset_assoc.' corresponding log records purged.');
             $this->info($asset_maintenances.' corresponding maintenance records purged.');
-
-            $locations = Location::whereNotNull('deleted_at')->withTrashed()->get();
-            $this->info($locations->count().' locations purged.');
-            foreach ($locations as $location) {
-                $this->info('- Location "'.$location->name.'" deleted.');
-                $location->forceDelete();
-            }
-
-
-            $accessories = Accessory::whereNotNull('deleted_at')->withTrashed()->get();
-            $accessory_assoc=0;
-            $this->info($accessories->count().' accessories purged.');
-            foreach ($accessories as $accessory) {
-                $this->info('- Accessory "'.$accessory->name.'" deleted.');
-                $accessory_assoc += $accessory->assetlog()->count();
-                $accessory->assetlog()->forceDelete();
-                $accessory->forceDelete();
-            }
-            $this->info($accessory_assoc.' corresponding log records purged.');
-
-
-            $consumables = Consumable::whereNotNull('deleted_at')->withTrashed()->get();
-            $this->info($consumables->count().' consumables purged.');
-            foreach ($consumables as $consumable) {
-                $this->info('- Consumable "'.$consumable->name.'" deleted.');
-                $consumable->assetlog()->forceDelete();
-                $consumable->forceDelete();
-            }
-
-
-            $components = Component::whereNotNull('deleted_at')->withTrashed()->get();
-            $this->info($components->count().' components purged.');
-            foreach ($components as $component) {
-                $this->info('- Component "'.$component->name.'" deleted.');
-                $component->assetlog()->forceDelete();
-                $component->forceDelete();
-            }
-
-            $licenses = License::whereNotNull('deleted_at')->withTrashed()->get();
-            $this->info($licenses->count().' licenses purged.');
-            foreach ($licenses as $license) {
-                $this->info('- License "'.$license->name.'" deleted.');
-                $license->assetlog()->forceDelete();
-                $license->licenseseats()->forceDelete();
-                $license->forceDelete();
-            }
 
             $models = AssetModel::whereNotNull('deleted_at')->withTrashed()->get();
             $this->info($models->count().' asset models purged.');

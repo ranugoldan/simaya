@@ -21,13 +21,11 @@ class Department extends SnipeModel
 
     protected $casts = [
         'manager_id'   => 'integer',
-        'location_id'  => 'integer',
         'company_id'   => 'integer',
     ];
 
     protected $rules = [
         'name'                  => 'required|max:255',
-        'location_id'           => 'numeric|nullable',
         'company_id'            => 'numeric|nullable',
         'manager_id'            => 'numeric|nullable',
     ];
@@ -40,7 +38,6 @@ class Department extends SnipeModel
     protected $fillable = [
         'user_id',
         'name',
-        'location_id',
         'company_id',
         'manager_id',
         'notes',
@@ -98,31 +95,6 @@ class Department extends SnipeModel
     public function manager()
     {
         return $this->belongsTo('\App\Models\User', 'manager_id');
-    }
-
-    /**
-     * Establishes the department -> location relationship
-     *
-     * @author A. Gianotto <snipe@snipe.net>
-     * @since [v4.0]
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
-     */
-    public function location()
-    {
-        return $this->belongsTo('\App\Models\Location', 'location_id');
-    }
-    
-    /**
-     * Query builder scope to order on location name
-     *
-     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text                              $order       Order
-     *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
-     */
-    public function scopeOrderLocation($query, $order)
-    {
-        return $query->leftJoin('locations as department_location', 'departments.location_id', '=', 'department_location.id')->orderBy('department_location.name', $order);
     }
 
     /**

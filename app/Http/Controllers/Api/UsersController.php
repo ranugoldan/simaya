@@ -5,14 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveUserRequest;
-use App\Http\Transformers\AccessoriesTransformer;
 use App\Http\Transformers\AssetsTransformer;
-use App\Http\Transformers\LicensesTransformer;
 use App\Http\Transformers\SelectlistTransformer;
 use App\Http\Transformers\UsersTransformer;
 use App\Models\Asset;
 use App\Models\Company;
-use App\Models\License;
 use App\Models\User;
 use Auth;
 use Illuminate\Http\Request;
@@ -49,7 +46,6 @@ class UsersController extends Controller
             'users.jobtitle',
             'users.last_login',
             'users.last_name',
-            'users.location_id',
             'users.manager_id',
             'users.notes',
             'users.permissions',
@@ -62,8 +58,8 @@ class UsersController extends Controller
             'users.zip',
             'users.ldap_import',
 
-        ])->with('manager', 'groups', 'userloc', 'company', 'department','assets','licenses','accessories','consumables')
-            ->withCount('assets as assets_count','licenses as licenses_count','accessories as accessories_count','consumables as consumables_count');
+        ])->with('manager', 'groups', 'company', 'department','assets')
+            ->withCount('assets as assets_count');
         $users = Company::scopeCompanyables($users);
 
 
@@ -75,10 +71,6 @@ class UsersController extends Controller
 
         if ($request->filled('company_id')) {
             $users = $users->where('users.company_id', '=', $request->input('company_id'));
-        }
-
-        if ($request->filled('location_id')) {
-            $users = $users->where('users.location_id', '=', $request->input('location_id'));
         }
 
         if ($request->filled('email')) {
@@ -116,9 +108,6 @@ class UsersController extends Controller
             case 'manager':
                 $users = $users->OrderManager($order);
                 break;
-            case 'location':
-                $users = $users->OrderLocation($order);
-                break;
             case 'department':
                 $users = $users->OrderDepartment($order);
                 break;
@@ -128,10 +117,10 @@ class UsersController extends Controller
             default:
                 $allowed_columns =
                     [
-                        'last_name','first_name','email','jobtitle','username','employee_num',
-                        'assets','accessories', 'consumables','licenses','groups','activated','created_at',
-                        'two_factor_enrolled','two_factor_optin','last_login', 'assets_count', 'licenses_count',
-                        'consumables_count', 'accessories_count', 'phone', 'address', 'city', 'state',
+                        'last_name','first_name','email','jobtitle','username',
+                        'employee_num','assets','groups','activated','created_at',
+                        'two_factor_enrolled','two_factor_optin','last_login',
+                        'assets_count', 'phone', 'address', 'city', 'state',
                         'country', 'zip', 'id', 'ldap_import'
                     ];
 
@@ -259,7 +248,7 @@ class UsersController extends Controller
     public function show($id)
     {
         $this->authorize('view', User::class);
-        $user = User::withCount('assets as assets_count','licenses as licenses_count','accessories as accessories_count','consumables as consumables_count')->findOrFail($id);
+        $user = User::withCount('assets as assets_count')->findOrFail($id);
         return (new UsersTransformer)->transformUser($user);
     }
 
@@ -312,13 +301,6 @@ class UsersController extends Controller
             $user->permissions =  $permissions_array;
         }
 
-
-
-
-        // Update the location of any assets checked out to this user
-        Asset::where('assigned_type', User::class)
-            ->where('assigned_to', $user->id)->update(['location_id' => $request->input('location_id', null)]);
-
         if ($user->save()) {
 
             // Sync group memberships:
@@ -361,18 +343,6 @@ class UsersController extends Controller
             return response()->json(Helper::formatStandardApiResponse('error', null,  trans('admin/users/message.error.delete_has_assets')));
         }
 
-        if (($user->licenses) && ($user->licenses->count() > 0)) {
-            return response()->json(Helper::formatStandardApiResponse('error', null,  'This user still has ' . $user->licenses->count() . ' license(s) associated with them and cannot be deleted.'));
-        }
-
-        if (($user->accessories) && ($user->accessories->count() > 0)) {
-            return response()->json(Helper::formatStandardApiResponse('error', null,  'This user still has ' . $user->accessories->count() . ' accessories associated with them.'));
-        }
-
-        if (($user->managedLocations()) && ($user->managedLocations()->count() > 0)) {
-            return response()->json(Helper::formatStandardApiResponse('error', null,  'This user still has ' . $user->managedLocations()->count() . ' locations that they manage.'));
-        }
-
         if ($user->delete()) {
 
             // Remove the user's avatar if they have one
@@ -402,40 +372,6 @@ class UsersController extends Controller
         $this->authorize('view', Asset::class);
         $assets = Asset::where('assigned_to', '=', $id)->where('assigned_type', '=', User::class)->with('model')->get();
         return (new AssetsTransformer)->transformAssets($assets, $assets->count());
-    }
-
-    /**
-     * Return JSON containing a list of accessories assigned to a user.
-     *
-     * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v4.6.14]
-     * @param $userId
-     * @return string JSON
-     */
-    public function accessories($id)
-    {
-        $this->authorize('view', User::class);
-        $user = User::findOrFail($id);
-        $this->authorize('view', Accessory::class);
-        $accessories = $user->accessories;
-        return (new AccessoriesTransformer)->transformAccessories($accessories, $accessories->count());
-    }
-
-    /**
-     * Return JSON containing a list of licenses assigned to a user.
-     *
-     * @author [N. Mathar] [<snipe@snipe.net>]
-     * @since [v5.0]
-     * @param $userId
-     * @return string JSON
-     */
-    public function licenses($id)
-    {
-        $this->authorize('view', User::class);
-        $this->authorize('view', License::class);
-        $user = User::where('id', $id)->withTrashed()->first();
-        $licenses = $user->licenses()->get();
-        return (new LicensesTransformer())->transformLicenses($licenses, $licenses->count());
     }
 
     /**

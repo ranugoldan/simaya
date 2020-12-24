@@ -33,31 +33,6 @@
         </li>
 
         <li>
-          <a href="#licenses" data-toggle="tab">
-            <span class="hidden-lg hidden-md">
-            <i class="fa fa-floppy-o"></i>
-            </span>
-            <span class="hidden-xs hidden-sm">{{ trans('general.licenses') }}</span>
-          </a>
-        </li>
-
-        <li>
-          <a href="#accessories" data-toggle="tab">
-            <span class="hidden-lg hidden-md">
-            <i class="fa fa-keyboard-o"></i>
-            </span> <span class="hidden-xs hidden-sm">{{ trans('general.accessories') }}</span>
-          </a>
-        </li>
-
-        <li>
-          <a href="#consumables" data-toggle="tab">
-            <span class="hidden-lg hidden-md">
-            <i class="fa fa-tint"></i></span>
-            <span class="hidden-xs hidden-sm">{{ trans('general.consumables') }}</span>
-          </a>
-        </li>
-
-        <li>
           <a href="#files" data-toggle="tab">
             <span class="hidden-lg hidden-md">
             <i class="fa fa-paperclip"></i></span>
@@ -72,16 +47,6 @@
             <span class="hidden-xs hidden-sm">{{ trans('general.history') }}</span>
           </a>
         </li>
-
-        @if ($user->managedLocations()->count() >= 0 )
-        <li>
-          <a href="#managed" data-toggle="tab">
-            <span class="hidden-lg hidden-md">
-            <i class="fa fa-clock-o"></i></span>
-            <span class="hidden-xs hidden-sm">{{ trans('admin/users/table.managed_locations') }}</span>
-          </a>
-        </li>
-        @endif
 
         @can('update', $user)
           <li class="dropdown pull-right">
@@ -233,14 +198,6 @@
                   </tr>
                   @endif
 
-                  @if ($user->userloc)
-                  <tr>
-                    <td class="text-nowrap">{{ trans('admin/users/table.location') }}</td>
-                    <td>{{ link_to_route('locations.show', $user->userloc->name, [$user->userloc->id]) }}</td>
-
-
-                  </tr>
-                  @endif
                     @if ($user->last_login)
                       <tr>
                         <td class="text-nowrap">{{ trans('general.last_login') }}</td>
@@ -399,159 +356,6 @@
           </div>
         </div><!-- /asset -->
 
-        <div class="tab-pane" id="licenses">
-          <div class="table-responsive">
-            <table
-                    data-cookie-id-table="userLicenseTable"
-                    data-id-table="userLicenseTable"
-                    id="userLicenseTable"
-                    data-search="true"
-                    data-pagination="true"
-                    data-side-pagination="client"
-                    data-show-columns="true"
-                    data-show-export="true"
-                    data-show-footer="true"
-                    data-show-refresh="true"
-                    data-sort-order="asc"
-                    data-sort-name="name"
-                    class="table table-striped snipe-table table-hover"
-                    data-export-options='{
-                    "fileName": "export-license-{{ str_slug($user->username) }}-{{ date('Y-m-d') }}",
-                    "ignoreColumn": ["actions","image","change","checkbox","checkincheckout","delete","download","icon"]
-                    }'>
-
-              <thead>
-                <tr>
-                  <th class="col-md-5">{{ trans('general.name') }}</th>
-                  <th>{{ trans('admin/hardware/form.serial') }}</th>
-                  <th data-footer-formatter="sumFormatter" data-fieldname="purchase_cost">{{ trans('general.purchase_cost') }}</th>
-                  <th>{{ trans('admin/licenses/form.purchase_order') }}</th>
-                  <th>{{ trans('general.order_number') }}</th>
-                  <th class="col-md-1 hidden-print">{{ trans('general.action') }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach ($user->licenses as $license)
-                <tr>
-                  <td class="col-md-4">
-                    {!! $license->present()->nameUrl() !!}
-                  </td>
-                  <td class="col-md-4">
-                    @can('viewKeys', $license)
-                    {!! $license->present()->serialUrl() !!}
-                    @else
-                      ------------
-                    @endcan
-                  </td>
-                  <td class="col-md-2">
-                    {{ $license->purchase_cost }}
-                  </td>
-                  <td>
-                    {{ $license->purchase_order }}
-                  </td>
-                  <td>
-                    {{ $license->order_number }}
-                  </td>
-                  <td class="hidden-print col-md-2">
-                    @can('update', $license)
-                      <a href="{{ route('licenses.checkin', array('licenseSeatId'=> $license->pivot->id, 'backto'=>'user')) }}" class="btn btn-primary btn-sm hidden-print">{{ trans('general.checkin') }}</a>
-                     @endcan
-                  </td>
-                </tr>
-                @endforeach
-              </tbody>
-          </table>
-          </div>
-        </div><!-- /licenses-tab -->
-
-        <div class="tab-pane" id="accessories">
-          <div class="table-responsive">
-            <table
-                    data-cookie-id-table="userAccessoryTable"
-                    data-id-table="userAccessoryTable"
-                    id="userAccessoryTable"
-                    data-search="true"
-                    data-pagination="true"
-                    data-side-pagination="client"
-                    data-show-columns="true"
-                    data-show-export="true"
-                    data-show-footer="true"
-                    data-show-refresh="true"
-                    data-sort-order="asc"
-                    data-sort-name="name"
-                    class="table table-striped snipe-table table-hover"
-                    data-export-options='{
-                    "fileName": "export-accessory-{{ str_slug($user->username) }}-{{ date('Y-m-d') }}",
-                    "ignoreColumn": ["actions","image","change","checkbox","checkincheckout","delete","download","icon"]
-                    }'>
-              <thead>
-                <tr>
-                  <th class="col-md-5">{{ trans('general.name') }}</th>
-                  <th class="col-md-6" data-footer-formatter="sumFormatter" data-fieldname="purchase_cost">{{ trans('general.purchase_cost') }}</th>
-                  <th class="col-md-1 hidden-print">{{ trans('general.action') }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                  @foreach ($user->accessories as $accessory)
-                  <tr>
-                    <td>{!!$accessory->present()->nameUrl()!!}</td>
-                    <td>
-                      {!! $accessory->purchase_cost !!}
-                    </td>
-                    <td class="hidden-print">
-                      @can('checkin', $accessory)
-                        <a href="{{ route('checkin/accessory', array('accessoryID'=> $accessory->pivot->id, 'backto'=>'user')) }}" class="btn btn-primary btn-sm hidden-print">{{ trans('general.checkin') }}</a>
-                      @endcan
-                    </td>
-                  </tr>
-                  @endforeach
-              </tbody>
-            </table>
-          </div>
-        </div><!-- /accessories-tab -->
-
-        <div class="tab-pane" id="consumables">
-          <div class="table-responsive">
-            <table
-                    data-cookie-id-table="userConsumableTable"
-                    data-id-table="userConsumableTable"
-                    id="userConsumableTable"
-                    data-search="true"
-                    data-pagination="true"
-                    data-side-pagination="client"
-                    data-show-columns="true"
-                    data-show-export="true"
-                    data-show-footer="true"
-                    data-show-refresh="true"
-                    data-sort-order="asc"
-                    data-sort-name="name"
-                    class="table table-striped snipe-table table-hover"
-                    data-export-options='{
-                    "fileName": "export-consumable-{{ str_slug($user->username) }}-{{ date('Y-m-d') }}",
-                    "ignoreColumn": ["actions","image","change","checkbox","checkincheckout","delete","download","icon"]
-                    }'>
-              <thead>
-                <tr>
-                  <th class="col-md-6">{{ trans('general.name') }}</th>
-                  <th class="col-md-2" data-footer-formatter="sumFormatter" data-fieldname="purchase_cost">{{ trans('general.purchase_cost') }}</th>
-                  <th class="col-md-4">{{ trans('general.date') }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach ($user->consumables as $consumable)
-                <tr>
-                  <td>{!! $consumable->present()->nameUrl() !!}</td>
-                  <td>
-                    {!! $consumable->purchase_cost !!}
-                  </td>
-                  <td>{{ $consumable->created_at }}</td>
-                </tr>
-                @endforeach
-              </tbody>
-          </table>
-          </div>
-        </div><!-- /consumables-tab -->
-
         <div class="tab-pane" id="files">
           <div class="row">
 
@@ -633,26 +437,6 @@
           </div>
         </div><!-- /.tab-pane -->
 
-        <div class="tab-pane" id="managed">
-          <div class="table-responsive">
-            <table class="display table table-striped">
-              <thead>
-                <tr>
-                  <th class="col-md-8">{{ trans('general.name') }}</th>
-                  <th class="col-md-4">{{ trans('general.date') }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach ($user->managedLocations as $location)
-                <tr>
-                  <td>{!! $location->present()->nameUrl() !!}</td>
-                  <td>{{ $location->created_at }}</td>
-                </tr>
-                @endforeach
-              </tbody>
-          </table>
-          </div>
-        </div><!-- /consumables-tab -->
       </div><!-- /.tab-content -->
     </div><!-- nav-tabs-custom -->
   </div>

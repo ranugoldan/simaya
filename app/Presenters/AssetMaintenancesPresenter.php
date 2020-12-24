@@ -60,12 +60,6 @@ class AssetMaintenancesPresenter extends Presenter
                 "visible" => false,
                 "formatter" => "suppliersLinkObjFormatter"
             ], [
-                "field" => "location",
-                "searchable" => true,
-                "sortable" => true,
-                "title" => trans('general.location'),
-                "formatter" => "locationsLinkObjFormatter",
-            ], [
                 "field" => "asset_maintenance_type",
                 "searchable" => true,
                 "sortable" => true,

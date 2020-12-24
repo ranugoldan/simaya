@@ -37,10 +37,6 @@ class DepartmentsTransformer
                     'first_name'=> e($department->manager->first_name),
                     'last_name'=> e($department->manager->last_name)
                 ] : null,
-                'location' => ($department->location) ? [
-                    'id' => (int) $department->location->id,
-                    'name' => e($department->location->name)
-                ] : null,
                 'users_count' => e($department->users_count),
                 'created_at' => Helper::getFormattedDateObject($department->created_at, 'datetime'),
                 'updated_at' => Helper::getFormattedDateObject($department->updated_at, 'datetime'),

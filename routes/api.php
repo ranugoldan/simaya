@@ -34,67 +34,6 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'auth:api']
 
     });
 
-    // /*--- Accessories API ---*/    
-    // Route::group(['prefix' => 'accessories'], function () {
-
-    //     Route::get('{accessory}/checkedout',
-    //         [
-    //             'as' => 'api.accessories.checkedout',
-    //             'uses' => 'AccessoriesController@checkedout'
-    //         ]
-    //     );
-
-    //     Route::get('selectlist',
-    //         [
-    //             'as' => 'api.accessories.selectlist',
-    //             'uses'=> 'AccessoriesController@selectlist'
-    //         ]
-    //     );
-    // });
-
-    // // Accessories group
-    // Route::resource('accessories', 'AccessoriesController',
-    //     ['names' =>
-    //         [
-    //             'index' => 'api.accessories.index',
-    //             'show' => 'api.accessories.show',
-    //             'update' => 'api.accessories.update',
-    //             'store' => 'api.accessories.store',
-    //             'destroy' => 'api.accessories.destroy'
-    //         ],
-    //         'except' => ['create', 'edit'],
-    //         'parameters' => ['accessory' => 'accessory_id']
-    //     ]
-    // );
-
-    // // Accessories resource
-
-    // Route::group(['prefix' => 'accessories'], function () {
-
-    //     Route::get('{accessory}/checkedout',
-    //         [
-    //             'as' => 'api.accessories.checkedout',
-    //             'uses' => 'AccessoriesController@checkedout'
-    //         ]
-    //     );
-
-    //     Route::post('{accessory}/checkout',
-    //         [
-    //             'as' => 'api.accessories.checkout',
-    //             'uses' => 'AccessoriesController@checkout'
-    //         ]
-    //     );
-
-    //     Route::post('{accessory}/checkin',
-    //         [
-    //             'as' => 'api.accessories.checkin',
-    //             'uses' => 'AccessoriesController@checkin'
-    //         ]
-    //     );
-
-    // }); // Accessories group
-
-
     /*--- Categories API ---*/
 
     Route::group(['prefix' => 'categories'], function () {
@@ -151,8 +90,6 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'auth:api']
 
 
     /*--- Departments API ---*/
-
-    /*--- Suppliers API ---*/
     Route::group(['prefix' => 'departments'], function () {
 
 
@@ -181,73 +118,6 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'auth:api']
         ]
     ); // Departments resource
 
-
-    // /*--- Components API ---*/
-
-    // Route::resource('components', 'ComponentsController',
-    //     [
-    //         'names' =>
-    //             [
-    //                 'index' => 'api.components.index',
-    //                 'show' => 'api.components.show',
-    //                 'store' => 'api.components.store',
-    //                 'update' => 'api.components.update',
-    //                 'destroy' => 'api.components.destroy'
-    //             ],
-    //         'except' => ['create', 'edit'],
-    //         'parameters' => ['component' => 'component_id']
-    //     ]
-    // ); // Components resource
-
-    // Route::group(['prefix' => 'components'], function () {
-
-    //     Route::get('{component}/assets',
-    //         [
-    //             'as' =>'api.components.assets',
-    //             'uses' => 'ComponentsController@getAssets',
-    //         ]
-    //     );
-    // }); // Components group
-
-
-    /*--- Consumables API ---*/
-    Route::get('consumables/selectlist',
-        [
-            'as' => 'api.consumables.selectlist',
-            'uses'=> 'ConsumablesController@selectlist'
-        ]
-    );
-
-    Route::resource('consumables', 'ConsumablesController',
-        [
-            'names' =>
-                [
-                    'index' => 'api.consumables.index',
-                    'show' => 'api.consumables.show',
-                    'store' => 'api.consumables.store',
-                    'update' => 'api.consumables.update',
-                    'destroy' => 'api.consumables.destroy'
-                ],
-            'except' => ['create', 'edit'],
-            'parameters' => ['consumable' => 'consumable_id']
-        ]
-    ); // Consumables resource
-
-    Route::group(['prefix' => 'consumables'], function () {
-        Route::get('view/{id}/users',
-            [
-                'as' => 'api.consumables.showUsers',
-                'uses' => 'ConsumablesController@getDataView'
-            ]
-        );
-
-        Route::post('{consumable}/checkout',
-            [
-                'as' => 'api.consumables.checkout',
-                'uses' => 'ConsumablesController@checkout'
-            ]
-        );
-    });
 
     /*--- Depreciations API ---*/
 
@@ -477,94 +347,6 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'auth:api']
     }); // Imports group
 
 
-
-
-    /*--- Licenses API ---*/
-
-    Route::group(['prefix' => 'licenses'], function () {
-        Route::get('{licenseId}/seats', [
-            'as' => 'api.license.seats',
-            'uses' => 'LicensesController@seats'
-        ]);
-        
-        Route::get('selectlist',
-            [
-                'as' => 'api.licenses.selectlist',
-                'uses'=> 'LicensesController@selectlist'
-            ]
-        );
-
-    }); // Licenses group
-
-    Route::resource('licenses', 'LicensesController',
-        [
-            'names' =>
-                [
-                    'index' => 'api.licenses.index',
-                    'show' => 'api.licenses.show',
-                    'store' => 'api.licenses.store',
-                    'update' => 'api.licenses.update',
-                    'destroy' => 'api.licenses.destroy'
-                ],
-            'except' => ['create', 'edit'],
-            'parameters' => ['license' => 'license_id']
-        ]
-    ); // Licenses resource
-
-
-
-    /*--- Locations API ---*/
-
-    Route::group(['prefix' => 'locations'], function () {
-
-        Route::get('{location}/users',
-            [
-                'as'=>'api.locations.viewusers',
-                'uses'=>'LocationsController@getDataViewUsers'
-            ]
-        );
-
-        Route::get('{location}/assets',
-            [
-                'as'=>'api.locations.viewassets',
-                'uses'=>'LocationsController@getDataViewAssets'
-            ]
-        );
-
-        // Do we actually still need this, now that we have an API?
-        Route::get('{location}/check',
-            [
-                'as' => 'api.locations.check',
-                'uses' => 'LocationsController@show'
-            ]
-        );
-
-        Route::get( 'selectlist',  [
-            'as' => 'locations.selectlist',
-            'uses' => 'LocationsController@selectlist'
-        ]);
-    }); // Locations group
-
-
-
-    Route::resource('locations', 'LocationsController',
-        [
-            'names' =>
-                [
-                    'index' => 'api.locations.index',
-                    'show' => 'api.locations.show',
-                    'store' => 'api.locations.store',
-                    'update' => 'api.locations.update',
-                    'destroy' => 'api.locations.destroy'
-                ],
-            'except' => ['create', 'edit'],
-            'parameters' => ['location' => 'location_id']
-        ]
-    ); // Locations resource
-
-
-
-
     /*--- Manufacturers API ---*/
 
     Route::group(['prefix' => 'manufacturers'], function () {
@@ -573,7 +355,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'auth:api']
             'as' => 'manufacturers.selectlist',
             'uses' => 'ManufacturersController@selectlist'
         ]);
-    }); // Locations group
+    }); // Manufacturers group
 
 
     Route::resource('manufacturers', 'ManufacturersController',
@@ -807,22 +589,6 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'auth:api']
             ]
         );
 
-
-        // Route::get('{user}/accessories',
-        //     [
-        //         'as' => 'api.users.accessorieslist',
-        //         'uses' => 'UsersController@accessories'
-        //     ]
-        // );
-
-
-        Route::get('{user}/licenses',
-            [
-                'as' => 'api.users.licenselist',
-                'uses' => 'UsersController@licenses'
-            ]
-        );
-
         Route::post('{user}/upload',
             [
                 'as' => 'api.users.uploads',
@@ -851,145 +617,6 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'auth:api']
         'reports/activity',
         [ 'as' => 'api.activity.index', 'uses' => 'ReportsController@index' ]
     );
-
-    // /*--- Kits API ---*/
-
-    // Route::resource('kits', 'PredefinedKitsController',
-    //     [
-    //         'names' =>
-    //             [
-    //                 'index' => 'api.kits.index',
-    //                 'show' => 'api.kits.show',
-    //                 'store' => 'api.kits.store',
-    //                 'update' => 'api.kits.update',
-    //                 'destroy' => 'api.kits.destroy',
-    //             ],
-    //         'except' => ['create', 'edit'],
-    //         'parameters' => ['kit' => 'kit_id']
-    //     ]
-    // );
-
-
-    // Route::group([ 'prefix' => 'kits/{kit_id}' ], function () {
-
-    //     // kit licenses
-    //     Route::get('licenses', 
-    //         [
-    //             'as' => 'api.kits.licenses.index',
-    //             'uses' => 'PredefinedKitsController@indexLicenses',
-    //         ]
-    //     );
-        
-    //     Route::post('licenses', 
-    //         [
-    //             'as' => 'api.kits.licenses.store',
-    //             'uses' => 'PredefinedKitsController@storeLicense',
-    //         ]
-    //     );
-        
-    //     Route::put('licenses/{license_id}', 
-    //         [
-    //             'as' => 'api.kits.licenses.update',
-    //             'uses' => 'PredefinedKitsController@updateLicense',
-    //         ]
-    //     );
-
-    //     Route::delete('licenses/{license_id}', 
-    //         [
-    //             'as' => 'api.kits.licenses.destroy',
-    //             'uses' => 'PredefinedKitsController@detachLicense',
-    //         ]
-    //     );
-        
-    //     // kit models
-    //     Route::get('models', 
-    //         [
-    //             'as' => 'api.kits.models.index',
-    //             'uses' => 'PredefinedKitsController@indexModels',
-    //         ]
-    //     );
-        
-    //     Route::post('models', 
-    //         [
-    //             'as' => 'api.kits.models.store',
-    //             'uses' => 'PredefinedKitsController@storeModel',
-    //         ]
-    //     );
-        
-    //     Route::put('models/{model_id}', 
-    //         [
-    //             'as' => 'api.kits.models.update',
-    //             'uses' => 'PredefinedKitsController@updateModel',
-    //         ]
-    //     );
-
-    //     Route::delete('models/{model_id}', 
-    //         [
-    //             'as' => 'api.kits.models.destroy',
-    //             'uses' => 'PredefinedKitsController@detachModel',
-    //         ]
-    //     );
-
-    //     // kit accessories
-    //     Route::get('accessories', 
-    //         [
-    //             'as' => 'api.kits.accessories.index',
-    //             'uses' => 'PredefinedKitsController@indexAccessories',
-    //         ]
-    //     );
-        
-    //     Route::post('accessories', 
-    //         [
-    //             'as' => 'api.kits.accessories.store',
-    //             'uses' => 'PredefinedKitsController@storeAccessory',
-    //         ]
-    //     );
-        
-    //     Route::put('accessories/{accessory_id}', 
-    //         [
-    //             'as' => 'api.kits.accessories.update',
-    //             'uses' => 'PredefinedKitsController@updateAccessory',
-    //         ]
-    //     );
-
-    //     Route::delete('accessories/{accessory_id}', 
-    //         [
-    //             'as' => 'api.kits.accessories.destroy',
-    //             'uses' => 'PredefinedKitsController@detachAccessory',
-    //         ]
-    //     );
-
-    //     // kit consumables
-    //     Route::get('consumables', 
-    //         [
-    //             'as' => 'api.kits.consumables.index',
-    //             'uses' => 'PredefinedKitsController@indexConsumables',
-    //         ]
-    //     );
-        
-    //     Route::post('consumables', 
-    //         [
-    //             'as' => 'api.kits.consumables.store',
-    //             'uses' => 'PredefinedKitsController@storeConsumable',
-    //         ]
-    //     );
-        
-    //     Route::put('consumables/{consumable_id}', 
-    //         [
-    //             'as' => 'api.kits.consumables.update',
-    //             'uses' => 'PredefinedKitsController@updateConsumable',
-    //         ]
-    //     );
-
-    //     Route::delete('consumables/{consumable_id}', 
-    //         [
-    //             'as' => 'api.kits.consumables.destroy',
-    //             'uses' => 'PredefinedKitsController@detachConsumable',
-    //         ]
-    //     );
-
-    // }); // kits group
-
 });
 
 

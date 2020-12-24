@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Models\Actionlog;
 use App\Models\Asset;
-use App\Models\License;
 use App\Models\User;
 use Artisan;
 use DB;
@@ -47,7 +46,6 @@ class RestoreDeletedUsers extends Command
         $start_date = $this->option('start_date');
         $end_date = $this->option('end_date');
         $asset_totals = 0;
-        $license_totals = 0;
         $user_count = 0;
 
 
@@ -79,23 +77,6 @@ class RestoreDeletedUsers extends Command
                         ->update(['assigned_to' => $user->id, 'assigned_type'=> User::class]);
 
                     $this->info('      ** Asset '.$user_log->item->id.' ('.$user_log->item->asset_tag.') restored to user '.$user->id.'');
-
-                } elseif ($user_log->item_type==License::class) {
-                    $license_totals++;
-
-                    $avail_seat = DB::table('license_seats')->where('license_id','=',$user_log->item->id)
-                        ->whereNull('assigned_to')->whereNull('asset_id')->whereBetween('updated_at', [$start_date, $end_date])->first();
-                    if ($avail_seat) {
-                        $this->info('      ** Allocating seat '.$avail_seat->id.' for this License');
-
-                        DB::table('license_seats')
-                            ->where('id', $avail_seat->id)
-                            ->update(['assigned_to' => $user->id]);
-
-                    } else {
-                        $this->warn('ERROR: No available seats for '.$user_log->item->name);
-                    }
-
                 }
 
             }
@@ -107,7 +88,6 @@ class RestoreDeletedUsers extends Command
         }
 
         $this->info($asset_totals.' assets affected');
-        $this->info($license_totals.' licenses affected');
 
 
 

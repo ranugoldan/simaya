@@ -2,36 +2,26 @@
 
 namespace App\Providers;
 
-use App\Models\Accessory;
 use App\Models\Asset;
 use App\Models\AssetModel;
 use App\Models\Category;
 use App\Models\Company;
-use App\Models\Component;
-use App\Models\Consumable;
 use App\Models\CustomField;
 use App\Models\CustomFieldset;
 use App\Models\Department;
 use App\Models\Depreciation;
-use App\Models\License;
-use App\Models\Location;
 use App\Models\Manufacturer;
 use App\Models\Statuslabel;
 use App\Models\Supplier;
 use App\Models\User;
-use App\Policies\AccessoryPolicy;
 use App\Policies\AssetModelPolicy;
 use App\Policies\AssetPolicy;
 use App\Policies\CategoryPolicy;
 use App\Policies\CompanyPolicy;
-use App\Policies\ComponentPolicy;
-use App\Policies\ConsumablePolicy;
 use App\Policies\CustomFieldPolicy;
 use App\Policies\CustomFieldsetPolicy;
 use App\Policies\DepartmentPolicy;
 use App\Policies\DepreciationPolicy;
-use App\Policies\LicensePolicy;
-use App\Policies\LocationPolicy;
 use App\Policies\ManufacturerPolicy;
 use App\Policies\StatuslabelPolicy;
 use App\Policies\SupplierPolicy;
@@ -51,18 +41,13 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Accessory::class => AccessoryPolicy::class,
         Asset::class => AssetPolicy::class,
         AssetModel::class => AssetModelPolicy::class,
         Category::class => CategoryPolicy::class,
-        Component::class => ComponentPolicy::class,
-        Consumable::class => ConsumablePolicy::class,
         CustomField::class => CustomFieldPolicy::class,
         CustomFieldset::class => CustomFieldsetPolicy::class,
         Department::class => DepartmentPolicy::class,
         Depreciation::class => DepreciationPolicy::class,
-        License::class => LicensePolicy::class,
-        Location::class => LocationPolicy::class,
         Statuslabel::class => StatuslabelPolicy::class,
         Supplier::class => SupplierPolicy::class,
         User::class => UserPolicy::class,
@@ -160,7 +145,6 @@ class AuthServiceProvider extends ServiceProvider
                 || $user->can('view', Manufacturer::class)
                 || $user->can('view', Supplier::class)
                 || $user->can('view', Department::class)
-                || $user->can('view', Location::class)
                 || $user->can('view', Company::class)
                 || $user->can('view', Manufacturer::class)
                 || $user->can('view', CustomField::class)

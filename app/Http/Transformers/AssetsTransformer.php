@@ -55,14 +55,6 @@ class AssetsTransformer
                 'id' => (int) $asset->company->id,
                 'name'=> e($asset->company->name)
             ] : null,
-            'location' => ($asset->location) ? [
-                'id' => (int) $asset->location->id,
-                'name'=> e($asset->location->name)
-            ]  : null,
-            'rtd_location' => ($asset->defaultLoc) ? [
-                'id' => (int) $asset->defaultLoc->id,
-                'name'=> e($asset->defaultLoc->name)
-            ]  : null,
             'image' => ($asset->getImageUrl()) ? $asset->getImageUrl() : null,
             'assigned_to' => $this->transformAssignedTo($asset),
             'warranty_months' =>  ($asset->warranty_months > 0) ? e($asset->warranty_months . ' ' . trans('admin/hardware/form.months')) : null,
@@ -183,7 +175,6 @@ class AssetsTransformer
             'model' => ($asset->model) ? e($asset->model->name) : null,
             'model_number' => (($asset->model) && ($asset->model->model_number)) ? e($asset->model->model_number) : null,
             'expected_checkin' => Helper::getFormattedDateObject($asset->expected_checkin, 'date'),
-            'location' => ($asset->location) ? e($asset->location->name) : null,
             'status'=> ($asset->assetstatus) ? $asset->present()->statusMeta : null,
         ];
 

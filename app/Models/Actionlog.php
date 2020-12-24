@@ -173,17 +173,6 @@ class Actionlog extends SnipeModel
         return $this->morphTo('target')->withTrashed();
     }
 
-    /**
-     * Establishes the actionlog -> location relationship
-     *
-     * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v3.0]
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
-     */
-    public function location() {
-        return $this->belongsTo('\App\Models\Location', 'location_id' )->withTrashed();
-    }
-
 
     /**
      * Check if the file exists, and if it does, force a download

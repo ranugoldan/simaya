@@ -133,18 +133,6 @@ class ImportController extends Controller
             case "asset":
                 $redirectTo = "hardware.index";
                 break;
-            case "accessory":
-                $redirectTo = "accessories.index";
-                break;
-            case "consumable":
-                $redirectTo = "consumables.index";
-                break;
-            case "component":
-                $redirectTo = "components.index";
-                break;
-            case "license":
-                $redirectTo = "licenses.index";
-                break;
             case "user":
                 $redirectTo = "users.index";
                 break;

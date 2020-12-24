@@ -91,10 +91,6 @@ class ActionlogsTransformer
                 'name' => ($actionlog->itemType()=='user') ? $actionlog->filename : e($actionlog->item->getDisplayNameAttribute()),
                 'type' => e($actionlog->itemType()),
             ] : null,
-            'location' => ($actionlog->location) ? [
-                'id' => (int) $actionlog->location->id,
-                'name' => e($actionlog->location->name)
-            ] : null,
             'created_at'    => Helper::getFormattedDateObject($actionlog->created_at, 'datetime'),
             'updated_at'    => Helper::getFormattedDateObject($actionlog->updated_at, 'datetime'),
             'next_audit_date' => ($actionlog->itemType()=='asset') ? Helper::getFormattedDateObject($actionlog->calcNextAuditDate(null, $actionlog->item), 'date'): null,
@@ -120,18 +116,6 @@ class ActionlogsTransformer
         ];
 
         return $array;
-    }
-
-
-
-    public function transformCheckedoutActionlog (Collection $accessories_users, $total)
-    {
-
-        $array = array();
-        foreach ($accessories_users as $user) {
-            $array[] = (new UsersTransformer)->transformUser($user);
-        }
-        return (new DatatablesTransformer)->transformDatatables($array, $total);
     }
 
 

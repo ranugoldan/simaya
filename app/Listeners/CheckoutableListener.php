@@ -2,23 +2,13 @@
 
 namespace App\Listeners;
 
-use App\Models\Accessory;
 use App\Models\Asset;
 use App\Models\CheckoutAcceptance;
-use App\Models\Consumable;
-use App\Models\LicenseSeat;
 use App\Models\Recipients\AdminRecipient;
 use App\Models\Setting;
 use App\Models\User;
-use App\Notifications\CheckinAccessoryNotification;
 use App\Notifications\CheckinAssetNotification;
-use App\Notifications\CheckinLicenseNotification;
-use App\Notifications\CheckinLicenseSeatNotification;
-use App\Notifications\CheckoutAccessoryNotification;
 use App\Notifications\CheckoutAssetNotification;
-use App\Notifications\CheckoutConsumableNotification;
-use App\Notifications\CheckoutLicenseNotification;
-use App\Notifications\CheckoutLicenseSeatNotification;
 use Illuminate\Support\Facades\Notification;
 
 class CheckoutableListener
@@ -147,15 +137,9 @@ class CheckoutableListener
         $notificationClass = null;
 
         switch (get_class($event->checkoutable)) {
-            case Accessory::class:
-                $notificationClass = CheckinAccessoryNotification::class;
-                break;
             case Asset::class:
                 $notificationClass = CheckinAssetNotification::class;
                 break;    
-            case LicenseSeat::class:
-                $notificationClass = CheckinLicenseSeatNotification::class;
-                break;
         }
 
         \Log::debug('Notification class: '.$notificationClass);
@@ -173,18 +157,9 @@ class CheckoutableListener
         $notificationClass = null;
 
         switch (get_class($event->checkoutable)) {
-            case Accessory::class:
-                $notificationClass = CheckoutAccessoryNotification::class;
-                break;
             case Asset::class:
                 $notificationClass = CheckoutAssetNotification::class;
                 break;
-            case Consumable::class:
-                $notificationClass = CheckoutConsumableNotification::class;
-                break;    
-            case LicenseSeat::class:
-                $notificationClass = CheckoutLicenseSeatNotification::class;
-                break;                
         }
 
         return new $notificationClass($event->checkoutable, $event->checkedOutTo, $event->checkedOutBy, $acceptance, $event->note);

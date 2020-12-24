@@ -22,11 +22,11 @@ class ManufacturersController extends Controller
     public function index(Request $request)
     {
         $this->authorize('view', Manufacturer::class);
-        $allowed_columns = ['id','name','url','support_url','support_email','support_phone','created_at','updated_at','image', 'assets_count', 'consumables_count', 'components_count', 'licenses_count'];
+        $allowed_columns = ['id','name','url','support_url','support_email','support_phone','created_at','updated_at','image', 'assets_count'];
 
         $manufacturers = Manufacturer::select(
             array('id','name','url','support_url','support_email','support_phone','created_at','updated_at','image', 'deleted_at')
-        )->withCount('assets as assets_count')->withCount('licenses as licenses_count')->withCount('consumables as consumables_count')->withCount('accessories as accessories_count');
+        )->withCount('assets as assets_count');
 
         if ($request->input('deleted')=='true') {
             $manufacturers->onlyTrashed();
@@ -86,7 +86,7 @@ class ManufacturersController extends Controller
     public function show($id)
     {
         $this->authorize('view', Manufacturer::class);
-        $manufacturer = Manufacturer::withCount('assets as assets_count')->withCount('licenses as licenses_count')->withCount('consumables as consumables_count')->withCount('accessories as accessories_count')->findOrFail($id);
+        $manufacturer = Manufacturer::withCount('assets as assets_count');
         return (new ManufacturersTransformer)->transformManufacturer($manufacturer);
     }
 

@@ -35,11 +35,6 @@ class CheckoutRequest extends Model
         return snake_case(class_basename($this->requestable_type));
     }
 
-    public function location()
-    {
-        return $this->itemRequested()->location;
-    }
-
     public function name()
     {
         if ($this->itemType() == "asset") {

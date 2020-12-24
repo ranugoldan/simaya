@@ -156,9 +156,6 @@ final class Company extends SnipeModel
     public function isDeletable() {
         return Gate::allows('delete', $this)
                 && ($this->assets()->count() === 0)
-                && ($this->accessories()->count() === 0)
-                && ($this->consumables()->count() === 0)
-                && ($this->components()->count() === 0)
                 && ($this->users()->count() === 0);
     }
 
@@ -211,24 +208,5 @@ final class Company extends SnipeModel
     public function assets()
     {
         return $this->hasMany(Asset::class, 'company_id');
-    }
-
-    public function licenses()
-    {
-        return $this->hasMany(License::class, 'company_id');
-    }
-    public function accessories()
-    {
-        return $this->hasMany(Accessory::class, 'company_id');
-    }
-
-    public function consumables()
-    {
-        return $this->hasMany(Consumable::class, 'company_id');
-    }
-
-    public function components()
-    {
-        return $this->hasMany(Component::class, 'company_id');
     }
 }

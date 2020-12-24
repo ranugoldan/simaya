@@ -1,9 +1,6 @@
 <?php
 namespace App\Helpers;
 
-use App\Models\Accessory;
-use App\Models\Component;
-use App\Models\Consumable;
 use App\Models\CustomField;
 use App\Models\CustomFieldset;
 use App\Models\Depreciation;
@@ -471,12 +468,7 @@ class Helper
     {
         $category_types = array(
             '' => '',
-            // 'accessory' => 'Accessory',
             'asset' => 'Asset',
-            'consumable' => 'Consumable',
-            // 'component' => 'Component',
-            'license' => 'License',
-            'location' => 'Location'
         );
         return $category_types;
     }
@@ -558,84 +550,84 @@ class Helper
      * @since [v3.0]
      * @return Array
      */
-    public static function checkLowInventory()
-    {
-        $consumables = Consumable::withCount('consumableAssignments as consumable_assignments_count')->whereNotNull('min_amt')->get();
-        $accessories = Accessory::withCount('users as users_count')->whereNotNull('min_amt')->get();
-        $components = Component::withCount('assets as assets_count')->whereNotNull('min_amt')->get();
+    // public static function checkLowInventory()
+    // {
+    //     $consumables = Consumable::withCount('consumableAssignments as consumable_assignments_count')->whereNotNull('min_amt')->get();
+    //     $accessories = Accessory::withCount('users as users_count')->whereNotNull('min_amt')->get();
+    //     $components = Component::withCount('assets as assets_count')->whereNotNull('min_amt')->get();
 
-        $avail_consumables = 0;
-        $items_array = array();
-        $all_count = 0;
+    //     $avail_consumables = 0;
+    //     $items_array = array();
+    //     $all_count = 0;
 
-        foreach ($consumables as $consumable) {
-            $avail = $consumable->numRemaining();
-            if ($avail < ($consumable->min_amt) + \App\Models\Setting::getSettings()->alert_threshold) {
-                if ($consumable->qty > 0) {
-                    $percent = number_format((($avail / $consumable->qty) * 100), 0);
-                } else {
-                    $percent = 100;
-                }
+    //     foreach ($consumables as $consumable) {
+    //         $avail = $consumable->numRemaining();
+    //         if ($avail < ($consumable->min_amt) + \App\Models\Setting::getSettings()->alert_threshold) {
+    //             if ($consumable->qty > 0) {
+    //                 $percent = number_format((($avail / $consumable->qty) * 100), 0);
+    //             } else {
+    //                 $percent = 100;
+    //             }
 
-                $items_array[$all_count]['id'] = $consumable->id;
-                $items_array[$all_count]['name'] = $consumable->name;
-                $items_array[$all_count]['type'] = 'consumables';
-                $items_array[$all_count]['percent'] = $percent;
-                $items_array[$all_count]['remaining'] = $avail;
-                $items_array[$all_count]['min_amt']=$consumable->min_amt;
-                $all_count++;
-            }
-
-
-        }
-
-        foreach ($accessories as $accessory) {
-            $avail = $accessory->qty - $accessory->users_count;
-            if ($avail < ($accessory->min_amt) + \App\Models\Setting::getSettings()->alert_threshold) {
-
-                if ($accessory->qty > 0) {
-                    $percent = number_format((($avail / $accessory->qty) * 100), 0);
-                } else {
-                    $percent = 100;
-                }
-
-                $items_array[$all_count]['id'] = $accessory->id;
-                $items_array[$all_count]['name'] = $accessory->name;
-                $items_array[$all_count]['type'] = 'accessories';
-                $items_array[$all_count]['percent'] = $percent;
-                $items_array[$all_count]['remaining'] = $avail;
-                $items_array[$all_count]['min_amt']=$accessory->min_amt;
-                $all_count++;
-            }
-
-        }
-
-        foreach ($components as $component) {
-            $avail = $component->qty - $component->assets_count;
-            if ($avail < ($component->min_amt) + \App\Models\Setting::getSettings()->alert_threshold) {
-                if ($component->qty > 0) {
-                    $percent = number_format((($avail / $component->qty) * 100), 0);
-                } else {
-                    $percent = 100;
-                }
-
-                $items_array[$all_count]['id'] = $component->id;
-                $items_array[$all_count]['name'] = $component->name;
-                $items_array[$all_count]['type'] = 'components';
-                $items_array[$all_count]['percent'] = $percent;
-                $items_array[$all_count]['remaining'] = $avail;
-                $items_array[$all_count]['min_amt']=$component->min_amt;
-                $all_count++;
-            }
-
-        }
+    //             $items_array[$all_count]['id'] = $consumable->id;
+    //             $items_array[$all_count]['name'] = $consumable->name;
+    //             $items_array[$all_count]['type'] = 'consumables';
+    //             $items_array[$all_count]['percent'] = $percent;
+    //             $items_array[$all_count]['remaining'] = $avail;
+    //             $items_array[$all_count]['min_amt']=$consumable->min_amt;
+    //             $all_count++;
+    //         }
 
 
+    //     }
 
-        return $items_array;
+    //     foreach ($accessories as $accessory) {
+    //         $avail = $accessory->qty - $accessory->users_count;
+    //         if ($avail < ($accessory->min_amt) + \App\Models\Setting::getSettings()->alert_threshold) {
+
+    //             if ($accessory->qty > 0) {
+    //                 $percent = number_format((($avail / $accessory->qty) * 100), 0);
+    //             } else {
+    //                 $percent = 100;
+    //             }
+
+    //             $items_array[$all_count]['id'] = $accessory->id;
+    //             $items_array[$all_count]['name'] = $accessory->name;
+    //             $items_array[$all_count]['type'] = 'accessories';
+    //             $items_array[$all_count]['percent'] = $percent;
+    //             $items_array[$all_count]['remaining'] = $avail;
+    //             $items_array[$all_count]['min_amt']=$accessory->min_amt;
+    //             $all_count++;
+    //         }
+
+    //     }
+
+    //     foreach ($components as $component) {
+    //         $avail = $component->qty - $component->assets_count;
+    //         if ($avail < ($component->min_amt) + \App\Models\Setting::getSettings()->alert_threshold) {
+    //             if ($component->qty > 0) {
+    //                 $percent = number_format((($avail / $component->qty) * 100), 0);
+    //             } else {
+    //                 $percent = 100;
+    //             }
+
+    //             $items_array[$all_count]['id'] = $component->id;
+    //             $items_array[$all_count]['name'] = $component->name;
+    //             $items_array[$all_count]['type'] = 'components';
+    //             $items_array[$all_count]['percent'] = $percent;
+    //             $items_array[$all_count]['remaining'] = $avail;
+    //             $items_array[$all_count]['min_amt']=$component->min_amt;
+    //             $all_count++;
+    //         }
+
+    //     }
 
 
-    }
+
+    //     return $items_array;
+
+
+    // }
 
 
     /**
