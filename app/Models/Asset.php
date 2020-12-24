@@ -340,19 +340,6 @@ class Asset extends Depreciable
 
 
     /**
-     * Get components assigned to this asset
-     *
-     * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v4.0]
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
-     */
-    public function components()
-    {
-        return $this->belongsToMany('\App\Models\Component', 'components_assets', 'asset_id', 'component_id')->withPivot('id', 'assigned_qty')->withTrashed();
-    }
-
-
-    /**
      * Get depreciation attribute from associated asset model
      *
      * @todo Is this still needed?
@@ -590,19 +577,6 @@ class Asset extends Depreciable
                                  . ' DAY) AND DATE_ADD(`purchase_date`,INTERVAL `warranty_months` MONTH) > NOW()'))
             ->orderBy('purchase_date', 'ASC')
             ->get();
-    }
-
-
-    /**
-     * Establishes the asset -> assigned licenses relationship
-     *
-     * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v4.0]
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
-     */
-    public function licenses()
-    {
-        return $this->belongsToMany('\App\Models\License', 'license_seats', 'asset_id', 'license_id');
     }
 
     /**
