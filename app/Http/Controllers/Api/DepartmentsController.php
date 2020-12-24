@@ -28,13 +28,12 @@ class DepartmentsController extends Controller
         $departments = Department::select([
             'departments.id',
             'departments.name',
-            'departments.location_id',
             'departments.company_id',
             'departments.manager_id',
             'departments.created_at',
             'departments.updated_at',
             'departments.image'
-        ])->with('users')->with('location')->with('manager')->with('company')->withCount('users as users_count');
+        ])->with('users')->with('manager')->with('company')->withCount('users as users_count');
 
         if ($request->filled('search')) {
             $departments = $departments->TextSearch($request->input('search'));
@@ -51,9 +50,6 @@ class DepartmentsController extends Controller
         $sort = in_array($request->input('sort'), $allowed_columns) ? $request->input('sort') : 'created_at';
 
         switch ($request->input('sort')) {
-            case 'location':
-                $departments->OrderLocation($order);
-                break;
             case 'manager':
                 $departments->OrderManager($order);
                 break;
