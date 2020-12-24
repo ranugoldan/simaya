@@ -6,14 +6,11 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AssetCheckoutRequest;
 use App\Http\Transformers\AssetsTransformer;
-use App\Http\Transformers\LicensesTransformer;
 use App\Http\Transformers\SelectlistTransformer;
 use App\Models\Asset;
 use App\Models\AssetModel;
 use App\Models\Company;
 use App\Models\CustomField;
-use App\Models\License;
-// use App\Models\Location;
 use App\Models\Setting;
 use App\Models\User;
 use Auth;
@@ -88,11 +85,7 @@ class AssetsController extends Controller
         }
 
         $assets = Company::scopeCompanyables(Asset::select('assets.*'),"company_id","assets")
-            ->with(
-                // 'location', 
-                'assetstatus', 'assetlog', 'company'
-                // , 'defaultLoc'
-                ,'assignedTo',
+            ->with('assetstatus', 'assetlog', 'company','assignedTo',
                 'model.category', 'model.manufacturer', 'model.fieldset','supplier');
 
 
@@ -114,14 +107,6 @@ class AssetsController extends Controller
         if ($request->filled('category_id')) {
             $assets->InCategory($request->input('category_id'));
         }
-
-        // if ($request->filled('location_id')) {
-        //     $assets->where('assets.location_id', '=', $request->input('location_id'));
-        // }
-
-        // if ($request->filled('rtd_location_id')) {
-        //     $assets->where('assets.rtd_location_id', '=', $request->input('rtd_location_id'));
-        // }
 
         if ($request->filled('supplier_id')) {
             $assets->where('assets.supplier_id', '=', $request->input('supplier_id'));
@@ -276,11 +261,6 @@ class AssetsController extends Controller
             case 'company':
                 $assets->OrderCompany($order);
                 break;
-            // case 'location':
-            //     $assets->OrderLocation($order);
-            // case 'rtd_location':
-            //     $assets->OrderRtdLocation($order);
-            //     break;
             case 'status_label':
                 $assets->OrderStatus($order);
                 break;
@@ -298,7 +278,6 @@ class AssetsController extends Controller
 
         $total = $assets->count();
         $assets = $assets->skip($offset)->take($limit)->get();
-        // dd($assets);
         return (new AssetsTransformer)->transformAssets($assets, $total);
     }
 
@@ -359,14 +338,6 @@ class AssetsController extends Controller
 
 
     }
-    public function licenses($id)
-    {
-        $this->authorize('view', Asset::class);
-        $this->authorize('view', License::class);
-        $asset = Asset::where('id', $id)->withTrashed()->first();
-        $licenses = $asset->licenses()->get();
-        return (new LicensesTransformer())->transformLicenses($licenses, $licenses->count());
-     }
 
 
     /**
@@ -460,8 +431,6 @@ class AssetsController extends Controller
         $asset->assigned_to             = $request->get('assigned_to', null);
         $asset->supplier_id             = $request->get('supplier_id', 0);
         $asset->requestable             = $request->get('requestable', 0);
-        // $asset->rtd_location_id         = $request->get('rtd_location_id', null);
-        // $asset->location_id             = $request->get('rtd_location_id', null);
 
         if ($request->has('image_source') && $request->input('image_source') != "") {
             $saved_image_path = Helper::processUploadedImage(
@@ -500,8 +469,6 @@ class AssetsController extends Controller
                 $target = User::find(request('assigned_user'));
             } elseif ($request->get('assigned_asset')) {
                 $target = Asset::find(request('assigned_asset'));
-            // } elseif ($request->get('assigned_location')) {
-            //     $target = Location::find(request('assigned_location'));
             }
             if (isset($target)) {
                 $asset->checkOut($target, Auth::user(), date('Y-m-d H:i:s'), '', 'Checked out on asset creation', e($request->get('name')));
@@ -535,19 +502,12 @@ class AssetsController extends Controller
 
             ($request->filled('model_id')) ?
                 $asset->model()->associate(AssetModel::find($request->get('model_id'))) : null;
-            // ($request->filled('rtd_location_id')) ?
-            //     $asset->location_id = $request->get('rtd_location_id') : '';
             ($request->filled('company_id')) ?
                 $asset->company_id = Company::getIdForCurrentUser($request->get('company_id')) : '';
-
-// ($request->filled('rtd_location_id')) ?
-//                 $asset->location_id = $request->get('rtd_location_id') : null;
 
 
             if ($request->filled('image_source')) {
                 if ($request->input('image_source') == "") {
-            // ($request->filled('rtd_location_id')) ?
-            //     $asset->location_id = $request->get('rtd_location_id') : null;
                     $asset->image = null;
                 } else {
                     $saved_image_path = Helper::processUploadedImage(
@@ -584,20 +544,8 @@ class AssetsController extends Controller
 
             if ($asset->save()) {
 
-                if (($request->filled('assigned_user')) && ($target = User::find($request->get('assigned_user')))) {
-                        $location = $target->location_id;
-                } elseif (($request->filled('assigned_asset')) && ($target = Asset::find($request->get('assigned_asset')))) {
-                    $location = $target->location_id;
-
-                    Asset::where('assigned_type', '\\App\\Models\\Asset')->where('assigned_to', $id)
-                        ->update(['location_id' => $target->location_id]);
-
-                } elseif (($request->filled('assigned_location')) && ($target = Location::find($request->get('assigned_location')))) {
-                    $location = $target->id;
-                }
-
                 if (isset($target)) {
-                    $asset->checkOut($target, Auth::user(), date('Y-m-d H:i:s'), '', 'Checked out on asset update', e($request->get('name')), $location);
+                    $asset->checkOut($target, Auth::user(), date('Y-m-d H:i:s'), '', 'Checked out on asset update', e($request->get('name')));
                 }
 
                 if ($asset->image) {
@@ -667,26 +615,9 @@ class AssetsController extends Controller
             'asset_tag' => $asset->asset_tag,
         ];
 
-
-        // This item is checked out to a location
-        if (request('checkout_to_type')=='location') {
-            // $target = Location::find(request('assigned_location'));
-            // $asset->location_id = ($target) ? $target->id : '';
-            // $error_payload['target_id'] = $request->input('assigned_location');
-            // $error_payload['target_type'] = 'location';
-
-        } elseif (request('checkout_to_type')=='asset') {
-            $target = Asset::where('id','!=',$asset_id)->find(request('assigned_asset'));
-            $asset->location_id = $target->rtd_location_id;
-            // Override with the asset's location_id if it has one
-            $asset->location_id = (($target) && (isset($target->location_id))) ? $target->location_id : '';
-            $error_payload['target_id'] = $request->input('assigned_asset');
-            $error_payload['target_type'] = 'asset';
-
-        } elseif (request('checkout_to_type')=='user') {
+        if (request('checkout_to_type')=='user') {
             // Fetch the target and set the asset's new location_id
             $target = User::find(request('assigned_user'));
-            $asset->location_id = (($target) && (isset($target->location_id))) ? $target->location_id : '';
             $error_payload['target_id'] = $request->input('assigned_user');
             $error_payload['target_type'] = 'user';
         }
@@ -704,18 +635,9 @@ class AssetsController extends Controller
         $note = request('note', null);
         $asset_name = request('name', null);
 
-        // Set the location ID to the RTD location id if there is one
-        // Wait, why are we doing this? This overrides the stuff we set further up, which makes no sense.
-        // TODO: Follow up here. WTF. Commented out for now. 
 
 
-//        if ((isset($target->rtd_location_id)) && ($asset->rtd_location_id!='')) {
-//            $asset->location_id = $target->rtd_location_id;
-//        }
-
-
-
-        if ($asset->checkOut($target, Auth::user(), $checkout_at, $expected_checkin, $note, $asset_name, $asset->location_id)) {
+        if ($asset->checkOut($target, Auth::user(), $checkout_at, $expected_checkin, $note, $asset_name)) {
             return response()->json(Helper::formatStandardApiResponse('success', ['asset'=> e($asset->asset_tag)], trans('admin/hardware/message.checkout.success')));
         }
 
@@ -752,12 +674,6 @@ class AssetsController extends Controller
         if ($request->filled('name')) {
             $asset->name = $request->input('name');
         }
-        
-        // $asset->location_id =  $asset->rtd_location_id;
-
-        // if ($request->filled('location_id')) {
-        //     $asset->location_id =  $request->input('location_id');
-        // }
 
         if ($request->has('status_id')) {
             $asset->status_id =  $request->input('status_id');
@@ -786,7 +702,6 @@ class AssetsController extends Controller
         $this->authorize('audit', Asset::class);
         $rules = array(
             'asset_tag' => 'required',
-            'location_id' => 'exists:locations,id|nullable|numeric',
             'next_audit_date' => 'date|nullable'
         );
 
@@ -810,16 +725,10 @@ class AssetsController extends Controller
                 $asset->next_audit_date = $request->input('next_audit_date');
             }
 
-            // Check to see if they checked the box to update the physical location,
-            // not just note it in the audit notes
-            if ($request->input('update_location')=='1') {
-                $asset->location_id = $request->input('location_id');
-            }
-
             $asset->last_audit_date = date('Y-m-d h:i:s');
 
             if ($asset->save()) {
-                $log = $asset->logAudit(request('note'),request('location_id'));
+                $log = $asset->logAudit(request('note'));
                 return response()->json(Helper::formatStandardApiResponse('success', [
                     'asset_tag'=> e($asset->asset_tag),
                     'note'=> e($request->input('note')),
@@ -850,8 +759,9 @@ class AssetsController extends Controller
         $this->authorize('viewRequestable', Asset::class);
 
         $assets = Company::scopeCompanyables(Asset::select('assets.*'),"company_id","assets")
-            ->with('location', 'assetstatus', 'assetlog', 'company', 'defaultLoc','assignedTo',
-                'model.category', 'model.manufacturer', 'model.fieldset','supplier')->where('assets.requestable', '=', '1');
+            ->with('assetstatus', 'assetlog', 'company','assignedTo',
+                'model.category', 'model.manufacturer', 'model.fieldset','supplier')
+            ->where('assets.requestable', '=', '1');
 
         $offset = request('offset', 0);
         $limit = $request->input('limit', 50);

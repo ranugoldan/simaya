@@ -9,7 +9,6 @@ use App\Models\Asset;
 use App\Models\AssetModel;
 use App\Models\CheckoutRequest;
 use App\Models\Company;
-// use App\Models\Location;
 use App\Models\Setting;
 use App\Models\User;
 use Auth;
@@ -142,14 +141,9 @@ class AssetsController extends Controller
             $asset->assigned_to             = request('assigned_to', null);
             $asset->supplier_id             = request('supplier_id', 0);
             $asset->requestable             = request('requestable', 0);
-            // $asset->rtd_location_id         = request('rtd_location_id', null);
 
             if (!empty($settings->audit_interval)) {
                 $asset->next_audit_date         = Carbon::now()->addMonths($settings->audit_interval)->toDateString();
-            }
-
-            if ($asset->assigned_to=='') {
-                // $asset->location_id = $request->input('rtd_location_id', null);
             }
 
             // Create the image (if one was chosen.)
@@ -182,9 +176,6 @@ class AssetsController extends Controller
                 } elseif (request('assigned_asset')) {
                     $target = Asset::find(request('assigned_asset'));
                     $location = $target->location_id;
-                // } elseif (request('assigned_location')) {
-                //     $target = Location::find(request('assigned_location'));
-                //     $location = $target->id;
                 }
 
                 if (isset($target)) {
@@ -783,7 +774,7 @@ class AssetsController extends Controller
             }
 
 
-            $asset->logAudit($request->input('note'), $request->input('location_id'), $file_name);
+            $asset->logAudit($request->input('note'), $file_name);
             return redirect()->to("hardware")->with('success', trans('admin/hardware/message.audit.success'));
         }
     }
