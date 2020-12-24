@@ -80,24 +80,6 @@ class Supplier extends SnipeModel
     }
 
     /**
-     * Sets the license seat count attribute
-     *
-     * @todo I don't see the licenseSeatsRelation here?
-     *
-     * @author A. Gianotto <snipe@snipe.net>
-     * @since [v1.0]
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
-     */
-    public function getLicenseSeatsCountAttribute()
-    {
-        if ($this->licenseSeatsRelation->first()) {
-            return $this->licenseSeatsRelation->first()->count;
-        }
-
-        return 0;
-    }
-
-    /**
      * Establishes the supplier -> assets relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
@@ -107,18 +89,6 @@ class Supplier extends SnipeModel
     public function assets()
     {
         return $this->hasMany('\App\Models\Asset', 'supplier_id');
-    }
-
-    /**
-     * Establishes the supplier -> accessories relationship
-     *
-     * @author A. Gianotto <snipe@snipe.net>
-     * @since [v1.0]
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
-     */
-    public function accessories()
-    {
-        return $this->hasMany('\App\Models\Accessory', 'supplier_id');
     }
 
     /**
@@ -147,30 +117,6 @@ class Supplier extends SnipeModel
         }
 
         return 0;
-    }
-
-    /**
-     * Establishes the supplier -> license relationship
-     *
-     * @author A. Gianotto <snipe@snipe.net>
-     * @since [v1.0]
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
-     */
-    public function licenses()
-    {
-        return $this->hasMany('\App\Models\License', 'supplier_id');
-    }
-
-    /**
-     * Return the number of licenses by supplier
-     *
-     * @author A. Gianotto <snipe@snipe.net>
-     * @since [v1.0]
-     * @return int
-     */
-    public function num_licenses()
-    {
-        return $this->licenses()->count();
     }
 
     /**
