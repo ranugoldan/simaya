@@ -2,20 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Accessory;
 use App\Models\Asset;
 use App\Models\AssetModel;
 use App\Models\Category;
-use App\Models\Company;
-use App\Models\Component;
-use App\Models\Consumable;
 use App\Models\Department;
 use App\Models\Depreciation;
 use App\Models\Group;
 use App\Models\Import;
-use App\Models\License;
-use App\Models\LicenseSeat;
-use App\Models\Location;
 use App\Models\Manufacturer;
 use App\Models\Statuslabel;
 use App\Models\Supplier;
@@ -58,17 +51,10 @@ class PaveIt extends Command
     {
         if ($this->confirm("\n****************************************************\nTHIS WILL DELETE ALL OF THE DATA IN YOUR DATABASE. \nThere is NO undo. This WILL destroy ALL of your data. \n****************************************************\n\nDo you wish to continue? No backsies! [y|N]")) {
             if ($this->option('soft')) {
-                Accessory::getQuery()->delete();
                 Asset::getQuery()->delete();
                 Category::getQuery()->delete();
-                Company::getQuery()->delete();
-                Component::getQuery()->delete();
-                Consumable::getQuery()->delete();
                 Department::getQuery()->delete();
                 Depreciation::getQuery()->delete();
-                License::getQuery()->delete();
-                LicenseSeat::getQuery()->delete();
-                Location::getQuery()->delete();
                 Manufacturer::getQuery()->delete();
                 AssetModel::getQuery()->delete();
                 Statuslabel::getQuery()->delete();
@@ -76,7 +62,6 @@ class PaveIt extends Command
                 Group::getQuery()->delete();
                 Import::getQuery()->delete();
 
-                DB::statement('delete from accessories_users');
                 DB::statement('delete from asset_logs');
                 DB::statement('delete from asset_maintenances');
                 DB::statement('delete from login_attempts');
@@ -84,16 +69,9 @@ class PaveIt extends Command
                 DB::statement('delete from action_logs');
                 DB::statement('delete from checkout_requests');
                 DB::statement('delete from checkout_acceptances');
-                DB::statement('delete from consumables_users');
                 DB::statement('delete from custom_field_custom_fieldset');
                 DB::statement('delete from custom_fields');
                 DB::statement('delete from custom_fieldsets');
-                DB::statement('delete from components_assets');
-                DB::statement('delete from kits');
-                DB::statement('delete from kits_accessories');
-                DB::statement('delete from kits_consumables');
-                DB::statement('delete from kits_licenses');
-                DB::statement('delete from kits_models');
                 DB::statement('delete from login_attempts');
                 DB::statement('delete from models_custom_fields');
                 DB::statement('delete from permission_groups');
@@ -104,21 +82,14 @@ class PaveIt extends Command
                 DB::statement('delete from users_groups');
                 DB::statement('delete from users WHERE id!=1');
             } else {
-                \DB::statement('drop table IF EXISTS accessories_users');
-                \DB::statement('drop table IF EXISTS accessories');
                 \DB::statement('drop table IF EXISTS asset_logs');
                 \DB::statement('drop table IF EXISTS action_logs');
                 \DB::statement('drop table IF EXISTS asset_maintenances');
                 \DB::statement('drop table IF EXISTS asset_uploads');
                 \DB::statement('drop table IF EXISTS assets');
-                \DB::statement('drop table IF EXISTS categories');
                 \DB::statement('drop table IF EXISTS checkout_requests');
                 \DB::statement('drop table IF EXISTS checkout_acceptances');
                 \DB::statement('drop table IF EXISTS companies');
-                \DB::statement('drop table IF EXISTS components');
-                \DB::statement('drop table IF EXISTS components_assets');
-                \DB::statement('drop table IF EXISTS consumables_users');
-                \DB::statement('drop table IF EXISTS consumables');
                 \DB::statement('drop table IF EXISTS custom_field_custom_fieldset');
                 \DB::statement('drop table IF EXISTS custom_fields');
                 \DB::statement('drop table IF EXISTS custom_fieldsets');
@@ -126,16 +97,8 @@ class PaveIt extends Command
                 \DB::statement('drop table IF EXISTS departments');
                 \DB::statement('drop table IF EXISTS groups');
                 \DB::statement('drop table IF EXISTS history');
-                \DB::statement('drop table IF EXISTS kits');
-                \DB::statement('drop table IF EXISTS kits_accessories');
-                \DB::statement('drop table IF EXISTS kits_consumables');
-                \DB::statement('drop table IF EXISTS kits_licenses');
-                \DB::statement('drop table IF EXISTS kits_models');
                 \DB::statement('drop table IF EXISTS models_custom_fields');
                 \DB::statement('drop table IF EXISTS permission_groups');
-                \DB::statement('drop table IF EXISTS license_seats');
-                \DB::statement('drop table IF EXISTS licenses');
-                \DB::statement('drop table IF EXISTS locations');
                 \DB::statement('drop table IF EXISTS login_attempts');
                 \DB::statement('drop table IF EXISTS manufacturers');
                 \DB::statement('drop table IF EXISTS models');

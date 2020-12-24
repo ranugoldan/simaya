@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\Asset;
-use App\Models\License;
 use App\Models\Setting;
 use App\Notifications\ExpiringAssetsNotification;
 use App\Models\Recipients;

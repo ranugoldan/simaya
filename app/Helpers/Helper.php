@@ -1,9 +1,6 @@
 <?php
 namespace App\Helpers;
 
-use App\Models\Accessory;
-use App\Models\Component;
-use App\Models\Consumable;
 use App\Models\CustomField;
 use App\Models\CustomFieldset;
 use App\Models\Depreciation;

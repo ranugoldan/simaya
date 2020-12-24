@@ -43,7 +43,7 @@ class BulkAssetsController extends Controller
                         ->with('bulkedit', true)
                         ->with('count', 0);
                 case 'delete':
-                    $assets = Asset::with('assignedTo', 'location')->find($asset_ids);
+                    $assets = Asset::with('assignedTo')->find($asset_ids);
                     $assets->each(function ($asset) {
                         $this->authorize('delete', $asset);
                     });
@@ -83,7 +83,6 @@ class BulkAssetsController extends Controller
             || ($request->filled('supplier_id'))
             || ($request->filled('order_number'))
             || ($request->filled('warranty_months'))
-            || ($request->filled('rtd_location_id'))
             || ($request->filled('requestable'))
             || ($request->filled('company_id'))
             || ($request->filled('status_id'))
@@ -109,13 +108,6 @@ class BulkAssetsController extends Controller
                     $this->update_array['company_id'] =  $request->input('company_id');
                     if ($request->input('company_id')=="clear") {
                         $this->update_array['company_id'] = null;
-                    }
-                }
-
-                if ($request->filled('rtd_location_id')) {
-                    $this->update_array['rtd_location_id'] = $request->input('rtd_location_id');
-                    if (($request->filled('update_real_loc')) && (($request->input('update_real_loc')) == '1')) {
-                        $this->update_array['location_id'] = $request->input('rtd_location_id');
                     }
                 }
 
@@ -233,12 +225,6 @@ class BulkAssetsController extends Controller
                     $asset = Asset::findOrFail($asset_id);
                     $this->authorize('checkout', $asset);
                     $error = $asset->checkOut($target, $admin, $checkout_at, $expected_checkin, e($request->get('note')), null);
-
-                    if ($target->location_id!='') {
-                        $asset->location_id = $target->location_id;
-                        $asset->unsetEventDispatcher();
-                        $asset->save();
-                    }
 
                     if ($error) {
                         array_merge_recursive($errors, $asset->getErrors()->toArray());

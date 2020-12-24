@@ -41,8 +41,6 @@ class CurrentInventory extends Notification
         $message = (new MailMessage)->markdown('notifications.markdown.user-inventory',
             [
                 'assets'  => $this->user->assets,
-                'accessories'  => $this->user->accessories,
-                'licenses'  => $this->user->licenses,
             ])
             ->subject('Inventory Report');
 

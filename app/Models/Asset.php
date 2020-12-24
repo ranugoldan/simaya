@@ -580,18 +580,6 @@ class Asset extends Depreciable
     }
 
     /**
-     * Establishes the asset -> status relationship
-     *
-     * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v4.0]
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
-     */
-    public function licenseseats()
-    {
-        return $this->hasMany('\App\Models\LicenseSeat', 'asset_id');
-    }
-
-    /**
      * Establishes the asset -> aupplier relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]

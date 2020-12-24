@@ -44,10 +44,6 @@ class SettingsServiceProvider extends ServiceProvider
             return 'assets/';
         });
 
-        \App::singleton('accessories_upload_path', function() {
-            return 'public/uploads/accessories/';
-        });
-
         \App::singleton('models_upload_path', function(){
             return 'models/';
         });
@@ -63,15 +59,6 @@ class SettingsServiceProvider extends ServiceProvider
 
         \App::singleton('categories_upload_url', function(){
             return 'categories/';
-        });
-
-        // Locations
-        \App::singleton('locations_upload_path', function(){
-            return 'locations/';
-        });
-
-        \App::singleton('locations_upload_url', function(){
-            return 'locations/';
         });
 
         // Users
@@ -117,34 +104,6 @@ class SettingsServiceProvider extends ServiceProvider
 
         \App::singleton('companies_upload_url', function(){
             return 'companies/';
-        });
-
-        // Accessories paths and URLs
-        \App::singleton('accessories_upload_path', function(){
-            return 'accessories/';
-        });
-
-        \App::singleton('accessories_upload_url', function(){
-            return 'accessories/';
-        });
-
-        // Consumables paths and URLs
-        \App::singleton('consumables_upload_path', function(){
-            return 'consumables/';
-        });
-
-        \App::singleton('consumables_upload_url', function(){
-            return 'consumables/';
-        });
-
-
-        // Components paths and URLs
-        \App::singleton('components_upload_path', function(){
-            return 'components/';
-        });
-
-        \App::singleton('components_upload_url', function(){
-            return 'components/';
         });
 
 

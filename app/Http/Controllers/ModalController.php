@@ -12,9 +12,6 @@ class ModalController extends Controller
         if($type == "statuslabel") {
             $view->with('statuslabel_types', Helper::statusTypeList());
         }
-        if(in_array($type, ['kit-model', 'kit-license', 'kit-consumable', 'kit-accessory'])) {
-            $view->with('kitId', $itemId);
-        }
         return $view;
     }
 }
