@@ -31,15 +31,6 @@
         <li class="active">
           <a href="#assets" data-toggle="tab">Assets</a>
         </li>
-        <li>
-          <a href="#licenses" data-toggle="tab">Licenses</a>
-        </li>
-        <li>
-          <a href="#accessories" data-toggle="tab">Accessories</a>
-        </li>
-        <li>
-          <a href="#consumables" data-toggle="tab">Consumables</a>
-        </li>
       </ul>
 
       <div class="tab-content">
@@ -67,85 +58,6 @@
           </table>
 
         </div> <!-- /.tab-pane assets -->
-
-        <div class="tab-pane fade" id="licenses">
-
-          <table
-                  data-columns="{{ \App\Presenters\LicensePresenter::dataTableLayout() }}"
-                  data-cookie-id-table="licensesTable"
-                  data-pagination="true"
-                  data-id-table="licensesTable"
-                  data-search="true"
-                  data-show-footer="true"
-                  data-side-pagination="server"
-                  data-show-columns="true"
-                  data-show-export="true"
-                  data-show-refresh="true"
-                  data-sort-order="asc"
-                  id="licensesTable"
-                  class="table table-striped snipe-table"
-                  data-url="{{ route('api.licenses.index', ['manufacturer_id' => $manufacturer->id]) }}"
-                  data-export-options='{
-              "fileName": "export-manufacturers-{{ str_slug($manufacturer->name) }}-licenses-{{ date('Y-m-d') }}",
-              "ignoreColumn": ["actions","image","change","checkbox","checkincheckout","icon"]
-              }'>
-          </table>
-
-
-        </div><!-- /.tab-pan licenses-->
-
-        <div class="tab-pane fade" id="accessories">
-
-          <table
-                  data-columns="{{ \App\Presenters\AccessoryPresenter::dataTableLayout() }}"
-                  data-cookie-id-table="accessoriesTable"
-                  data-pagination="true"
-                  data-id-table="accessoriesTable"
-                  data-search="true"
-                  data-show-footer="true"
-                  data-side-pagination="server"
-                  data-show-columns="true"
-                  data-show-export="true"
-                  data-show-refresh="true"
-                  data-sort-order="asc"
-                  id="accessoriesTable"
-                  class="table table-striped snipe-table"
-                  data-url="{{ route('api.accessories.index', ['manufacturer_id' => $manufacturer->id]) }}"
-                  data-export-options='{
-              "fileName": "export-manufacturers-{{ str_slug($manufacturer->name) }}-accessories-{{ date('Y-m-d') }}",
-              "ignoreColumn": ["actions","image","change","checkbox","checkincheckout","icon"]
-              }'>
-          </table>
-
-
-        </div> <!-- /.tab-pan accessories-->
-
-        <div class="tab-pane fade" id="consumables">
-
-          <table
-                  data-columns="{{ \App\Presenters\ConsumablePresenter::dataTableLayout() }}"
-                  data-cookie-id-table="consumablesTable"
-                  data-pagination="true"
-                  data-id-table="consumablesTable"
-                  data-search="true"
-                  data-show-footer="true"
-                  data-side-pagination="server"
-                  data-show-columns="true"
-                  data-show-export="true"
-                  data-show-refresh="true"
-                  data-sort-order="asc"
-                  id="consumablesTable"
-                  class="table table-striped snipe-table"
-                  data-url="{{ route('api.consumables.index', ['manufacturer_id' => $manufacturer->id]) }}"
-                  data-export-options='{
-              "fileName": "export-manufacturers-{{ str_slug($manufacturer->name) }}-consumabled-{{ date('Y-m-d') }}",
-              "ignoreColumn": ["actions","image","change","checkbox","checkincheckout","icon"]
-              }'>
-          </table>
-
-
-
-        </div> <!-- /.tab-pan consumables-->
 
       </div> <!-- /.tab-content -->
     </div>  <!-- /.nav-tabs-custom -->
