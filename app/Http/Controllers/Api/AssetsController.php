@@ -13,7 +13,7 @@ use App\Models\AssetModel;
 use App\Models\Company;
 use App\Models\CustomField;
 use App\Models\License;
-use App\Models\Location;
+// use App\Models\Location;
 use App\Models\Setting;
 use App\Models\User;
 use Auth;
@@ -88,7 +88,11 @@ class AssetsController extends Controller
         }
 
         $assets = Company::scopeCompanyables(Asset::select('assets.*'),"company_id","assets")
-            ->with('location', 'assetstatus', 'assetlog', 'company', 'defaultLoc','assignedTo',
+            ->with(
+                // 'location', 
+                'assetstatus', 'assetlog', 'company'
+                // , 'defaultLoc'
+                ,'assignedTo',
                 'model.category', 'model.manufacturer', 'model.fieldset','supplier');
 
 
@@ -111,13 +115,13 @@ class AssetsController extends Controller
             $assets->InCategory($request->input('category_id'));
         }
 
-        if ($request->filled('location_id')) {
-            $assets->where('assets.location_id', '=', $request->input('location_id'));
-        }
+        // if ($request->filled('location_id')) {
+        //     $assets->where('assets.location_id', '=', $request->input('location_id'));
+        // }
 
-        if ($request->filled('rtd_location_id')) {
-            $assets->where('assets.rtd_location_id', '=', $request->input('rtd_location_id'));
-        }
+        // if ($request->filled('rtd_location_id')) {
+        //     $assets->where('assets.rtd_location_id', '=', $request->input('rtd_location_id'));
+        // }
 
         if ($request->filled('supplier_id')) {
             $assets->where('assets.supplier_id', '=', $request->input('supplier_id'));
@@ -272,11 +276,11 @@ class AssetsController extends Controller
             case 'company':
                 $assets->OrderCompany($order);
                 break;
-            case 'location':
-                $assets->OrderLocation($order);
-            case 'rtd_location':
-                $assets->OrderRtdLocation($order);
-                break;
+            // case 'location':
+            //     $assets->OrderLocation($order);
+            // case 'rtd_location':
+            //     $assets->OrderRtdLocation($order);
+            //     break;
             case 'status_label':
                 $assets->OrderStatus($order);
                 break;
@@ -456,8 +460,8 @@ class AssetsController extends Controller
         $asset->assigned_to             = $request->get('assigned_to', null);
         $asset->supplier_id             = $request->get('supplier_id', 0);
         $asset->requestable             = $request->get('requestable', 0);
-        $asset->rtd_location_id         = $request->get('rtd_location_id', null);
-        $asset->location_id             = $request->get('rtd_location_id', null);
+        // $asset->rtd_location_id         = $request->get('rtd_location_id', null);
+        // $asset->location_id             = $request->get('rtd_location_id', null);
 
         if ($request->has('image_source') && $request->input('image_source') != "") {
             $saved_image_path = Helper::processUploadedImage(
@@ -496,8 +500,8 @@ class AssetsController extends Controller
                 $target = User::find(request('assigned_user'));
             } elseif ($request->get('assigned_asset')) {
                 $target = Asset::find(request('assigned_asset'));
-            } elseif ($request->get('assigned_location')) {
-                $target = Location::find(request('assigned_location'));
+            // } elseif ($request->get('assigned_location')) {
+            //     $target = Location::find(request('assigned_location'));
             }
             if (isset($target)) {
                 $asset->checkOut($target, Auth::user(), date('Y-m-d H:i:s'), '', 'Checked out on asset creation', e($request->get('name')));
@@ -531,19 +535,19 @@ class AssetsController extends Controller
 
             ($request->filled('model_id')) ?
                 $asset->model()->associate(AssetModel::find($request->get('model_id'))) : null;
-            ($request->filled('rtd_location_id')) ?
-                $asset->location_id = $request->get('rtd_location_id') : '';
+            // ($request->filled('rtd_location_id')) ?
+            //     $asset->location_id = $request->get('rtd_location_id') : '';
             ($request->filled('company_id')) ?
                 $asset->company_id = Company::getIdForCurrentUser($request->get('company_id')) : '';
 
-($request->filled('rtd_location_id')) ?
-                $asset->location_id = $request->get('rtd_location_id') : null;
+// ($request->filled('rtd_location_id')) ?
+//                 $asset->location_id = $request->get('rtd_location_id') : null;
 
 
             if ($request->filled('image_source')) {
                 if ($request->input('image_source') == "") {
-            ($request->filled('rtd_location_id')) ?
-                $asset->location_id = $request->get('rtd_location_id') : null;
+            // ($request->filled('rtd_location_id')) ?
+            //     $asset->location_id = $request->get('rtd_location_id') : null;
                     $asset->image = null;
                 } else {
                     $saved_image_path = Helper::processUploadedImage(
@@ -666,10 +670,10 @@ class AssetsController extends Controller
 
         // This item is checked out to a location
         if (request('checkout_to_type')=='location') {
-            $target = Location::find(request('assigned_location'));
-            $asset->location_id = ($target) ? $target->id : '';
-            $error_payload['target_id'] = $request->input('assigned_location');
-            $error_payload['target_type'] = 'location';
+            // $target = Location::find(request('assigned_location'));
+            // $asset->location_id = ($target) ? $target->id : '';
+            // $error_payload['target_id'] = $request->input('assigned_location');
+            // $error_payload['target_type'] = 'location';
 
         } elseif (request('checkout_to_type')=='asset') {
             $target = Asset::where('id','!=',$asset_id)->find(request('assigned_asset'));
@@ -749,11 +753,11 @@ class AssetsController extends Controller
             $asset->name = $request->input('name');
         }
         
-        $asset->location_id =  $asset->rtd_location_id;
+        // $asset->location_id =  $asset->rtd_location_id;
 
-        if ($request->filled('location_id')) {
-            $asset->location_id =  $request->input('location_id');
-        }
+        // if ($request->filled('location_id')) {
+        //     $asset->location_id =  $request->input('location_id');
+        // }
 
         if ($request->has('status_id')) {
             $asset->status_id =  $request->input('status_id');

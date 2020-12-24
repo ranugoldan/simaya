@@ -180,9 +180,9 @@ class Actionlog extends SnipeModel
      * @since [v3.0]
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
-    public function location() {
-        return $this->belongsTo('\App\Models\Location', 'location_id' )->withTrashed();
-    }
+    // public function location() {
+    //     return $this->belongsTo('\App\Models\Location', 'location_id' )->withTrashed();
+    // }
 
 
     /**

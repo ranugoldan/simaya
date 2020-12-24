@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Asset;
-use App\Models\Location;
+// use App\Models\Location;
 use App\Models\SnipeModel;
 use App\Models\User;
 
@@ -17,8 +17,8 @@ trait CheckInOutRequest
           // This item is checked out to a location
         switch(request('checkout_to_type'))
         {
-            case 'location':
-                return Location::findOrFail(request('assigned_location'));
+            // case 'location':
+            //     return Location::findOrFail(request('assigned_location'));
             case 'asset':
                 return Asset::findOrFail(request('assigned_asset'));
             case 'user':

@@ -47,7 +47,7 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
         'last_name',
         'ldap_import',
         'locale',
-        'location_id',
+        // 'location_id',
         'manager_id',
         'password',
         'phone',
@@ -60,7 +60,7 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
     protected $casts = [
         'activated'    => 'boolean',
         'manager_id'   => 'integer',
-        'location_id'  => 'integer',
+        // 'location_id'  => 'integer',
         'company_id'   => 'integer',
     ];
 
@@ -79,7 +79,7 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
         'locale'                  => 'max:10|nullable',
         'website'                 => 'url|nullable',
         'manager_id'              => 'nullable|exists:users,id|cant_manage_self',
-        'location_id'             => 'exists:locations,id|nullable',
+        // 'location_id'             => 'exists:locations,id|nullable',
     ];
 
 
@@ -105,7 +105,7 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
      * @var array
      */
     protected $searchableRelations = [
-        'userloc'    => ['name'],
+        // 'userloc'    => ['name'],
         'department' => ['name'],
         'groups'     => ['name'],
         'company'    => ['name'],
@@ -352,10 +352,10 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
 
-    public function userloc()
-    {
-        return $this->belongsTo('\App\Models\Location', 'location_id')->withTrashed();
-    }
+    // public function userloc()
+    // {
+    //     return $this->belongsTo('\App\Models\Location', 'location_id')->withTrashed();
+    // }
 
 
     /**
@@ -365,10 +365,10 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
      * @since [v3.0]
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
-    public function location()
-    {
-        return $this->belongsTo('\App\Models\Location', 'location_id')->withTrashed();
-    }
+    // public function location()
+    // {
+    //     return $this->belongsTo('\App\Models\Location', 'location_id')->withTrashed();
+    // }
 
     /**
      * Establishes the user -> manager relationship
@@ -389,10 +389,10 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
      * @since [v4.0]
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
-    public function managedLocations()
-    {
-        return $this->hasMany('\App\Models\Location', 'manager_id');
-    }
+    // public function managedLocations()
+    // {
+    //     return $this->hasMany('\App\Models\Location', 'manager_id');
+    // }
 
     /**
      * Establishes the user -> groups relationship
@@ -683,10 +683,10 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
      *
      * @return \Illuminate\Database\Query\Builder          Modified query builder
      */
-    public function scopeOrderLocation($query, $order)
-    {
-        return $query->leftJoin('locations as locations_users', 'users.location_id', '=', 'locations_users.id')->orderBy('locations_users.name', $order);
-    }
+    // public function scopeOrderLocation($query, $order)
+    // {
+    //     return $query->leftJoin('locations as locations_users', 'users.location_id', '=', 'locations_users.id')->orderBy('locations_users.name', $order);
+    // }
 
 
     /**
