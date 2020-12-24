@@ -68,11 +68,7 @@ class Manufacturer extends SnipeModel
 
     public function isDeletable()
     {
-        return (Gate::allows('delete', $this)
-            && ($this->assets()->count()  === 0)
-            && ($this->licenses()->count() === 0)
-            && ($this->consumables()->count() === 0)
-            && ($this->accessories()->count() === 0));
+        return (Gate::allows('delete', $this) && ($this->assets()->count()  === 0));
     }
 
     public function assets()
@@ -83,20 +79,5 @@ class Manufacturer extends SnipeModel
     public function models()
     {
         return $this->hasMany('\App\Models\AssetModel', 'manufacturer_id');
-    }
-
-    public function licenses()
-    {
-        return $this->hasMany('\App\Models\License', 'manufacturer_id');
-    }
-
-    public function accessories()
-    {
-        return $this->hasMany('\App\Models\Accessory', 'manufacturer_id');
-    }
-
-    public function consumables()
-    {
-        return $this->hasMany('\App\Models\Consumable', 'manufacturer_id');
     }
 }
