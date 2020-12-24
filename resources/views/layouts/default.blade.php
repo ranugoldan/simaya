@@ -130,11 +130,27 @@
           <!-- Navbar Right Menu -->
             <div class="navbar-custom-menu">
               <ul class="nav navbar-nav">
+                @can('admin')
+                    <li aria-hidden="true" {!! (\Request::route()->getName()=='home' ? ' class="active"' : '') !!} tabindex="-1">
+                        <a href="{{ route('home') }}" tabindex="-1">
+                            <i class="fa fa-dashboard" aria-hidden="true"></i>
+                            <span class="sr-only">Dashboard</span>
+                        </a>
+                    </li>
+                @endcan
                   @can('index', \App\Models\Asset::class)
                   <li aria-hidden="true"{!! (Request::is('hardware*') ? ' class="active"' : '') !!} tabindex="-1">
                       <a href="{{ url('hardware') }}" tabindex="-1">
                           <i class="fa fa-barcode" aria-hidden="true"></i>
                           <span class="sr-only">Assets</span>
+                      </a>
+                  </li>
+                  @endcan
+                  @can('index', \App\Models\User::class)
+                  <li aria-hidden="true"{!! (Request::is('users*') ? ' class="active"' : '') !!} tabindex="-1">
+                      <a href="{{ url('users') }}" tabindex="-1">
+                          <i class="fa fa-user" aria-hidden="true"></i>
+                          <span class="sr-only">People</span>
                       </a>
                   </li>
                   @endcan
