@@ -2,14 +2,12 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
-use App\Models\Accessory;
 use App\Models\Actionlog;
 use App\Models\Asset;
 use App\Models\AssetMaintenance;
 use App\Models\CheckoutAcceptance;
 use App\Models\CustomField;
 use App\Models\Depreciation;
-use App\Models\License;
 use App\Models\Setting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -35,63 +33,6 @@ class ReportsController extends Controller
     }
 
     /**
-    * Returns a view that displays the accessories report.
-    *
-    * @author [A. Gianotto] [<snipe@snipe.net>]
-    * @since [v1.0]
-    * @return View
-    */
-    public function getAccessoryReport()
-    {
-        $this->authorize('reports.view');
-        $accessories = Accessory::orderBy('created_at', 'DESC')->with('company')->get();
-        return view('reports/accessories', compact('accessories'));
-    }
-
-    /**
-    * Exports the accessories to CSV
-    *
-    * @deprecated Server-side exports have been replaced by datatables export since v2.
-    * @author [A. Gianotto] [<snipe@snipe.net>]
-    * @see ManufacturersController::getDatatable() method that generates the JSON response
-    * @since [v1.0]
-    * @return \Illuminate\Http\Response
-    */
-    public function exportAccessoryReport()
-    {
-        $this->authorize('reports.view');
-        $accessories = Accessory::orderBy('created_at', 'DESC')->get();
-
-        $rows = array();
-        $header = array(
-            trans('admin/accessories/table.title'),
-            trans('admin/accessories/general.accessory_category'),
-            trans('admin/accessories/general.total'),
-            trans('admin/accessories/general.remaining')
-        );
-        $header = array_map('trim', $header);
-        $rows[] = implode($header, ', ');
-
-        // Row per accessory
-        foreach ($accessories as $accessory) {
-            $row = array();
-            $row[] = e($accessory->accessory_name);
-            $row[] = e($accessory->accessory_category);
-            $row[] = e($accessory->total);
-            $row[] = e($accessory->remaining);
-
-            $rows[] = implode($row, ',');
-        }
-
-        $csv = implode($rows, "\n");
-        $response = Response::make($csv, 200);
-        $response->header('Content-Type', 'text/csv');
-        $response->header('Content-disposition', 'attachment;filename=report.csv');
-
-        return $response;
-    }
-
-    /**
     * Show depreciation report for assets.
     *
     * @author [A. Gianotto] [<snipe@snipe.net>]
@@ -103,7 +44,7 @@ class ReportsController extends Controller
         $this->authorize('reports.view');
         $depreciations = Depreciation::get();
         // Grab all the assets
-        $assets = Asset::with( 'assignedTo', 'assetstatus', 'defaultLoc', 'location', 'company', 'model.category', 'model.depreciation')
+        $assets = Asset::with( 'assignedTo', 'assetstatus', 'company', 'model.category', 'model.depreciation')
                        ->orderBy('created_at', 'DESC')->get();
 
         return view('reports/depreciation', compact('assets'))->with('depreciations',$depreciations);
@@ -121,7 +62,7 @@ class ReportsController extends Controller
     {
         $this->authorize('reports.view');
         // Grab all the assets
-        $assets = Asset::with('model', 'assignedTo', 'assetstatus', 'defaultLoc', 'assetlog')
+        $assets = Asset::with('model', 'assignedTo', 'assetstatus', 'assetlog')
                        ->orderBy('created_at', 'DESC')->get();
 
         $csv = \League\Csv\Writer::createFromFileObject(new \SplTempFileObject());
@@ -135,7 +76,6 @@ class ReportsController extends Controller
             trans('admin/hardware/table.title'),
             trans('admin/hardware/table.serial'),
             trans('admin/hardware/table.checkoutto'),
-            trans('admin/hardware/table.location'),
             trans('admin/hardware/table.purchase_date'),
             trans('admin/hardware/table.purchase_cost'),
             trans('admin/hardware/table.book_value'),
@@ -158,23 +98,7 @@ class ReportsController extends Controller
                 $row[] = ''; // Empty string if unassigned
             }
 
-            if (( $asset->assigned_to > 0 ) && ( $location = $asset->location )) {
-                if ($location->city) {
-                    $row[] = e($location->city) . ', ' . e($location->state);
-                } elseif ($location->name) {
-                    $row[] = e($location->name);
-                } else {
-                    $row[] = '';
-                }
-            } else {
-                $row[] = '';  // Empty string if location is not set
-            }
-
-            if ($asset->location) {
-                $currency = e($asset->location->currency);
-            } else {
-                $currency = e(Setting::getSettings()->default_currency);
-            }
+            $currency = e(Setting::getSettings()->default_currency);
 
             $row[] = $asset->purchase_date;
             $row[] = $currency . Helper::formatCurrencyOutput($asset->purchase_cost);
@@ -255,7 +179,7 @@ class ReportsController extends Controller
             $executionTime = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
             \Log::debug('Added headers: '.$executionTime);
 
-            $actionlogs = Actionlog::with('item', 'user', 'target','location')
+            $actionlogs = Actionlog::with('item', 'user', 'target')
                 ->orderBy('created_at', 'DESC')
                 ->chunk(20, function($actionlogs) use($handle) {
 
@@ -307,75 +231,6 @@ class ReportsController extends Controller
         return $response;
 
 
-    }
-
-
-    /**
-     * Displays license report
-     *
-     * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v1.0]
-     * @return View
-     */
-    public function getLicenseReport()
-    {
-        $this->authorize('reports.view');
-        $licenses = License::with('depreciation')->orderBy('created_at', 'DESC')
-                           ->with('company')
-                           ->get();
-
-        return view('reports/licenses', compact('licenses'));
-    }
-
-    /**
-    * Exports the licenses to CSV
-    *
-    * @deprecated Server-side exports have been replaced by datatables export since v2.
-    * @author [A. Gianotto] [<snipe@snipe.net>]
-    * @since [v1.0]
-    * @return \Illuminate\Http\Response
-    */
-    public function exportLicenseReport()
-    {
-        $this->authorize('reports.view');
-        $licenses = License::orderBy('created_at', 'DESC')->get();
-
-        $rows     = [ ];
-        $header   = [
-            trans('admin/licenses/table.title'),
-            trans('admin/licenses/table.serial'),
-            trans('admin/licenses/form.seats'),
-            trans('admin/licenses/form.remaining_seats'),
-            trans('admin/licenses/form.expiration'),
-            trans('general.purchase_date'),
-            trans('general.depreciation'),
-            trans('general.purchase_cost')
-        ];
-
-        $header = array_map('trim', $header);
-        $rows[] = implode($header, ', ');
-
-        // Row per license
-        foreach ($licenses as $license) {
-            $row   = [ ];
-            $row[] = e($license->name);
-            $row[] = e($license->serial);
-            $row[] = e($license->seats);
-            $row[] = $license->remaincount();
-            $row[] = $license->expiration_date;
-            $row[] = $license->purchase_date;
-            $row[] = ($license->depreciation!='') ? '' : e($license->depreciation->name);
-            $row[] = '"' . Helper::formatCurrencyOutput($license->purchase_cost) . '"';
-
-            $rows[] = implode($row, ',');
-        }
-
-        $csv      = implode($rows, "\n");
-        $response = Response::make($csv, 200);
-        $response->header('Content-Type', 'text/csv');
-        $response->header('Content-disposition', 'attachment;filename=report.csv');
-
-        return $response;
     }
 
     /**
@@ -472,32 +327,6 @@ class ReportsController extends Controller
                 $header[] = trans('general.supplier');
             }
 
-            if ($request->filled('location')) {
-                $header[] = trans('admin/hardware/table.location');
-            }
-            if ($request->filled('location_address')) {
-                $header[] = trans('general.address');
-                $header[] = trans('general.address');
-                $header[] = trans('general.city');
-                $header[] = trans('general.state');
-                $header[] = trans('general.country');
-                $header[] = trans('general.zip');
-            }
-
-            if ($request->filled('rtd_location')) {
-                $header[] = trans('admin/hardware/form.default_location');
-            }
-            
-            if ($request->filled('rtd_location_address')) {
-                $header[] = trans('general.address');
-                $header[] = trans('general.address');
-                $header[] = trans('general.city');
-                $header[] = trans('general.state');
-                $header[] = trans('general.country');
-                $header[] = trans('general.zip');
-            }
-
-
             if ($request->filled('assigned_to')) {
                 $header[] = trans('admin/hardware/table.checkoutto');
                 $header[] = trans('general.type');
@@ -576,18 +405,9 @@ class ReportsController extends Controller
 
 
             $assets = \App\Models\Company::scopeCompanyables(Asset::select('assets.*'))->with(
-                'location', 'assetstatus', 'assetlog', 'company', 'defaultLoc','assignedTo',
+                'assetstatus', 'assetlog', 'company','assignedTo',
                 'model.category', 'model.manufacturer','supplier');
             
-            if ($request->filled('by_location_id')) {
-                $assets->where('assets.location_id', $request->input('by_location_id'));
-            }
-
-            if ($request->filled('by_rtd_location_id')) {
-                \Log::debug('RTD location should match: '.$request->input('by_rtd_location_id'));
-                $assets->where('assets.rtd_location_id', $request->input('by_rtd_location_id'));
-            }
-
             if ($request->filled('by_supplier_id')) {
                 $assets->where('assets.supplier_id', $request->input('by_supplier_id'));
             }
@@ -690,34 +510,6 @@ class ReportsController extends Controller
                     if ($request->filled('supplier')) {
                         $row[] = ($asset->supplier) ? $asset->supplier->name : '';
                     }
-                    
-
-                    if ($request->filled('location')) {
-                        $row[] = ($asset->location) ? $asset->location->present()->name() : '';
-                    }
-
-                    if ($request->filled('location_address')) {
-                        $row[] = ($asset->location) ? $asset->location->address : '';
-                        $row[] = ($asset->location) ? $asset->location->address2 : '';
-                        $row[] = ($asset->location) ? $asset->location->city : '';
-                        $row[] = ($asset->location) ? $asset->location->state : '';
-                        $row[] = ($asset->location) ? $asset->location->country : '';
-                        $row[] = ($asset->location) ? $asset->location->zip : '';
-                    }
-
-                    if ($request->filled('rtd_location')) {
-                        $row[] = ($asset->defaultLoc) ? $asset->defaultLoc->present()->name() : '';
-                    }
-
-                    if ($request->filled('rtd_location_address')) {
-                        $row[] = ($asset->defaultLoc) ? $asset->defaultLoc->address : '';
-                        $row[] = ($asset->defaultLoc) ? $asset->defaultLoc->address2 : '';
-                        $row[] = ($asset->defaultLoc) ? $asset->defaultLoc->city : '';
-                        $row[] = ($asset->defaultLoc) ? $asset->defaultLoc->state : '';
-                        $row[] = ($asset->defaultLoc) ? $asset->defaultLoc->country : '';
-                        $row[] = ($asset->defaultLoc) ? $asset->defaultLoc->zip : '';
-                    }
-
 
                     if ($request->filled('assigned_to')) {
                         $row[] = ($asset->checkedOutToUser() && $asset->assigned) ? $asset->assigned->getFullNameAttribute() : ($asset->assigned ? $asset->assigned->display_name : '');
