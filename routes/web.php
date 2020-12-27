@@ -17,13 +17,6 @@ Route::group(['middleware' => 'auth'], function () {
     ]);
 
     /*
-    * Locations
-    */
-    Route::resource('locations', 'LocationsController', [
-        'parameters' => ['location' => 'location_id']
-    ]);
-
-    /*
     * Manufacturers
     */
 
@@ -301,20 +294,7 @@ Route::group(['middleware' => ['auth']], function () {
             'uses' => 'ReportsController@exportAssetMaintenancesReport'
         ]
     );
-    Route::get(
-        'reports/licenses',
-        [ 'as' => 'reports/licenses', 'uses' => 'ReportsController@getLicenseReport' ]
-    );
-    Route::get(
-        'reports/export/licenses',
-        [ 'as' => 'reports/export/licenses', 'uses' => 'ReportsController@exportLicenseReport' ]
-    );
 
-    // Route::get('reports/accessories', [ 'as' => 'reports/accessories', 'uses' => 'ReportsController@getAccessoryReport' ]);
-    // Route::get(
-    //     'reports/export/accessories',
-    //     [ 'as' => 'reports/export/accessories', 'uses' => 'ReportsController@exportAccessoryReport' ]
-    // );
     Route::get('reports/custom', [ 'as' => 'reports/custom', 'uses' => 'ReportsController@getCustomReport' ]);
     Route::post('reports/custom', 'ReportsController@postCustom');
 

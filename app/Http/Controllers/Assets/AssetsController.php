@@ -9,7 +9,6 @@ use App\Models\Asset;
 use App\Models\AssetModel;
 use App\Models\CheckoutRequest;
 use App\Models\Company;
-use App\Models\Location;
 use App\Models\Setting;
 use App\Models\User;
 use Auth;
@@ -142,14 +141,9 @@ class AssetsController extends Controller
             $asset->assigned_to             = request('assigned_to', null);
             $asset->supplier_id             = request('supplier_id', 0);
             $asset->requestable             = request('requestable', 0);
-            $asset->rtd_location_id         = request('rtd_location_id', null);
 
             if (!empty($settings->audit_interval)) {
                 $asset->next_audit_date         = Carbon::now()->addMonths($settings->audit_interval)->toDateString();
-            }
-
-            if ($asset->assigned_to=='') {
-                $asset->location_id = $request->input('rtd_location_id', null);
             }
 
             // Create the image (if one was chosen.)
@@ -178,17 +172,10 @@ class AssetsController extends Controller
 
                 if (request('assigned_user')) {
                     $target = User::find(request('assigned_user'));
-                    $location = $target->location_id;
-                } elseif (request('assigned_asset')) {
-                    $target = Asset::find(request('assigned_asset'));
-                    $location = $target->location_id;
-                } elseif (request('assigned_location')) {
-                    $target = Location::find(request('assigned_location'));
-                    $location = $target->id;
                 }
 
                 if (isset($target)) {
-                    $asset->checkOut($target, Auth::user(), date('Y-m-d H:i:s'), $request->input('expected_checkin', null), 'Checked out on asset creation', e($request->get('name')), $location);
+                    $asset->checkOut($target, Auth::user(), date('Y-m-d H:i:s'), $request->input('expected_checkin', null), 'Checked out on asset creation', e($request->get('name')));
                 }
 
                 $success = true;
@@ -251,14 +238,10 @@ class AssetsController extends Controller
                 ->where('item_type', '=', Asset::class)
                 ->orderBy('created_at', 'DESC')->first();
 
-            if ($asset->location) {
-                $use_currency = $asset->location->currency;
+            if ($settings->default_currency!='') {
+                $use_currency = $settings->default_currency;
             } else {
-                if ($settings->default_currency!='') {
-                    $use_currency = $settings->default_currency;
-                } else {
-                    $use_currency = trans('general.currency');
-                }
+                $use_currency = trans('general.currency');
             }
 
             $qr_code = (object) array(
@@ -301,11 +284,6 @@ class AssetsController extends Controller
 
         // If the box isn't checked, it's not in the request at all.
         $asset->requestable = $request->filled('requestable');
-        $asset->rtd_location_id = $request->input('rtd_location_id', null);
-
-        if ($asset->assigned_to=='') {
-            $asset->location_id = $request->input('rtd_location_id', null);
-        }
 
 
         if ($request->filled('image_delete')) {
@@ -744,7 +722,6 @@ class AssetsController extends Controller
         $this->authorize('audit', Asset::class);
 
         $rules = array(
-            'location_id' => 'exists:locations,id|nullable|numeric',
             'next_audit_date' => 'date|nullable'
         );
 
@@ -762,13 +739,6 @@ class AssetsController extends Controller
         $asset->next_audit_date = $request->input('next_audit_date');
         $asset->last_audit_date = date('Y-m-d h:i:s');
 
-        // Check to see if they checked the box to update the physical location,
-        // not just note it in the audit notes
-        if ($request->input('update_location')=='1') {
-            \Log::debug('update location in audit');
-            $asset->location_id = $request->input('location_id');
-        }
-
 
         if ($asset->save()) {
             $file_name = '';
@@ -783,7 +753,7 @@ class AssetsController extends Controller
             }
 
 
-            $asset->logAudit($request->input('note'), $request->input('location_id'), $file_name);
+            $asset->logAudit($request->input('note'), $file_name);
             return redirect()->to("hardware")->with('success', trans('admin/hardware/message.audit.success'));
         }
     }

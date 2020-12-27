@@ -22,11 +22,11 @@ class SuppliersController extends Controller
     public function index(Request $request)
     {
         $this->authorize('view', Supplier::class);
-        $allowed_columns = ['id','name','address','phone','contact','fax','email','image','assets_count','licenses_count', 'accessories_count','url'];
+        $allowed_columns = ['id','name','address','phone','contact','fax','email','image','assets_count','url'];
         
         $suppliers = Supplier::select(
                 array('id','name','address','address2','city','state','country','fax', 'phone','email','contact','created_at','updated_at','deleted_at','image','notes')
-            )->withCount('assets as assets_count')->withCount('licenses as licenses_count')->withCount('accessories as accessories_count');
+            )->withCount('assets as assets_count');
 
 
         if ($request->filled('search')) {
@@ -120,7 +120,9 @@ class SuppliersController extends Controller
     public function destroy($id)
     {
         $this->authorize('delete', Supplier::class);
-        $supplier = Supplier::with('asset_maintenances', 'assets', 'licenses')->withCount('asset_maintenances as asset_maintenances_count','assets as assets_count', 'licenses as licenses_count')->findOrFail($id);
+        $supplier = Supplier::with('asset_maintenances', 'assets'
+        )->withCount('asset_maintenances as asset_maintenances_count','assets as assets_count'
+        )->findOrFail($id);
         $this->authorize('delete', $supplier);
 
 
@@ -130,10 +132,6 @@ class SuppliersController extends Controller
 
         if ($supplier->asset_maintenances_count > 0) {
             return response()->json(Helper::formatStandardApiResponse('error', null,  trans('admin/suppliers/message.delete.assoc_maintenances', ['asset_maintenances_count' => $supplier->asset_maintenances_count])));
-        }
-
-        if ($supplier->licenses_count > 0) {
-            return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/suppliers/message.delete.assoc_licenses', ['licenses_count' => (int) $supplier->licenses_count])));
         }
 
         $supplier->delete();

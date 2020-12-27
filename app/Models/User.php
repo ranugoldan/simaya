@@ -47,7 +47,6 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
         'last_name',
         'ldap_import',
         'locale',
-        'location_id',
         'manager_id',
         'password',
         'phone',
@@ -60,7 +59,6 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
     protected $casts = [
         'activated'    => 'boolean',
         'manager_id'   => 'integer',
-        'location_id'  => 'integer',
         'company_id'   => 'integer',
     ];
 
@@ -79,7 +77,6 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
         'locale'                  => 'max:10|nullable',
         'website'                 => 'url|nullable',
         'manager_id'              => 'nullable|exists:users,id|cant_manage_self',
-        'location_id'             => 'exists:locations,id|nullable',
     ];
 
 
@@ -105,7 +102,6 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
      * @var array
      */
     protected $searchableRelations = [
-        'userloc'    => ['name'],
         'department' => ['name'],
         'groups'     => ['name'],
         'company'    => ['name'],
@@ -291,43 +287,6 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
     }
 
     /**
-     * Establishes the user -> accessories relationship
-     *
-     * @author A. Gianotto <snipe@snipe.net>
-     * @since [v2.0]
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
-     */
-    public function accessories()
-    {
-        return $this->belongsToMany('\App\Models\Accessory', 'accessories_users', 'assigned_to', 'accessory_id')
-            ->withPivot('id', 'created_at', 'note')->withTrashed();
-    }
-
-    /**
-     * Establishes the user -> consumables relationship
-     *
-     * @author A. Gianotto <snipe@snipe.net>
-     * @since [v3.0]
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
-     */
-    public function consumables()
-    {
-        return $this->belongsToMany('\App\Models\Consumable', 'consumables_users', 'assigned_to', 'consumable_id')->withPivot('id')->withTrashed();
-    }
-
-    /**
-     * Establishes the user -> license seats relationship
-     *
-     * @author A. Gianotto <snipe@snipe.net>
-     * @since [v1.0]
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
-     */
-    public function licenses()
-    {
-        return $this->belongsToMany('\App\Models\License', 'license_seats', 'assigned_to', 'license_id')->withPivot('id');
-    }
-
-    /**
      * Establishes the user -> actionlogs relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
@@ -337,37 +296,6 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
     public function userlog()
     {
         return $this->hasMany('\App\Models\Actionlog', 'target_id')->where('target_type', '=', 'App\Models\User')->orderBy('created_at', 'DESC')->withTrashed();
-    }
-
-
-    /**
-     * Establishes the user -> location relationship
-     *
-     * Get the asset's location based on the assigned user
-     *
-     * @todo - this should be removed once we're sure we've switched it to location()
-     *
-     * @author A. Gianotto <snipe@snipe.net>
-     * @since [v4.0]
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
-     */
-
-    public function userloc()
-    {
-        return $this->belongsTo('\App\Models\Location', 'location_id')->withTrashed();
-    }
-
-
-    /**
-     * Establishes the user -> location relationship
-     *
-     * @author A. Gianotto <snipe@snipe.net>
-     * @since [v3.0]
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
-     */
-    public function location()
-    {
-        return $this->belongsTo('\App\Models\Location', 'location_id')->withTrashed();
     }
 
     /**
@@ -380,18 +308,6 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
     public function manager()
     {
         return $this->belongsTo('\App\Models\User', 'manager_id')->withTrashed();
-    }
-
-    /**
-     * Establishes the user -> managed locations relationship
-     *
-     * @author A. Gianotto <snipe@snipe.net>
-     * @since [v4.0]
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
-     */
-    public function managedLocations()
-    {
-        return $this->hasMany('\App\Models\Location', 'manager_id');
     }
 
     /**
@@ -673,19 +589,6 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
     {
         // Left join here, or it will only return results with parents
         return $query->leftJoin('users as users_manager', 'users.manager_id', '=', 'users_manager.id')->orderBy('users_manager.first_name', $order)->orderBy('users_manager.last_name', $order);
-    }
-
-    /**
-     * Query builder scope to order on company
-     *
-     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param string                              $order         Order
-     *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
-     */
-    public function scopeOrderLocation($query, $order)
-    {
-        return $query->leftJoin('locations as locations_users', 'users.location_id', '=', 'locations_users.id')->orderBy('locations_users.name', $order);
     }
 
 

@@ -46,16 +46,6 @@ trait Loggable
         $log->target_type = get_class($target);
         $log->target_id = $target->id;
 
-
-        // Figure out what the target is
-        if ($log->target_type == Location::class) {
-            $log->location_id = $target->id;
-        } elseif ($log->target_type == Asset::class) {
-            $log->location_id = $target->location_id;
-        } else {
-            $log->location_id = $target->location_id;
-        }
-
         $log->note = $note;
         $log->action_date = $action_date;
 
@@ -73,14 +63,8 @@ trait Loggable
     */
     private function determineLogItemType($log)
     {
-        // We need to special case licenses because of license_seat vs license.  So much for clean polymorphism :
-        if (static::class == LicenseSeat::class) {
-            $log->item_type = License::class;
-            $log->item_id = $this->license_id;
-        } else {
-            $log->item_type = static::class;
-            $log->item_id = $this->id;
-        }
+        $log->item_type = static::class;
+        $log->item_id = $this->id;
 
         return $log;
     }
@@ -96,24 +80,15 @@ trait Loggable
         $log->target_type = get_class($target);
         $log->target_id = $target->id;
 
-        if (static::class == LicenseSeat::class) {
-            $log->item_type = License::class;
-            $log->item_id = $this->license_id;
-        } else {
+        $log->item_type = static::class;
+        $log->item_id = $this->id;
 
-            $log->item_type = static::class;
-            $log->item_id = $this->id;
-
-            if (static::class == Asset::class) {
-                if ($asset = Asset::find($log->item_id)) {
-                    $asset->increment('checkin_counter', 1);
-                }
+        if (static::class == Asset::class) {
+            if ($asset = Asset::find($log->item_id)) {
+                $asset->increment('checkin_counter', 1);
             }
-
         }
 
-
-        $log->location_id = null;
         $log->note = $note;
 
         if (Auth::user()) {
@@ -121,39 +96,6 @@ trait Loggable
         }
         
         $log->logaction('checkin from');
-
-//        $params = [
-//            'target' => $target,
-//            'item' => $log->item,
-//            'admin' => $log->user,
-//            'note' => $note,
-//            'target_type' => $log->target_type,
-//            'settings' => $settings,
-//        ];
-//
-//
-//        $checkinClass = null;
-//
-//        if (method_exists($target, 'notify')) {
-//            try {
-//                $target->notify(new static::$checkinClass($params));
-//            } catch (\Exception $e) {
-//                \Log::debug($e);
-//            }
-//
-//        }
-//
-//        // Send to the admin, if settings dictate
-//        $recipient = new \App\Models\Recipients\AdminRecipient();
-//
-//        if (($settings->admin_cc_email!='') && (static::$checkinClass!='')) {
-//            try {
-//                $recipient->notify(new static::$checkinClass($params));
-//            } catch (\Exception $e) {
-//                \Log::debug($e);
-//            }
-//
-//        }
 
         return $log;
     }
@@ -164,18 +106,11 @@ trait Loggable
      * @since [v4.0]
      * @return \App\Models\Actionlog
      */
-    public function logAudit($note, $location_id, $filename = null)
+    public function logAudit($note, $filename = null)
     {
         $log = new Actionlog;
-        $location = Location::find($location_id);
-        if (static::class == LicenseSeat::class) {
-            $log->item_type = License::class;
-            $log->item_id = $this->license_id;
-        } else {
-            $log->item_type = static::class;
-            $log->item_id = $this->id;
-        }
-        $log->location_id = ($location_id) ? $location_id : null;
+        $log->item_type = static::class;
+        $log->item_id = $this->id;
         $log->note = $note;
         $log->user_id = Auth::user()->id;
         $log->filename = $filename;
@@ -185,7 +120,6 @@ trait Loggable
             'item' => $log->item,
             'filename' => $log->filename,
             'admin' => $log->user,
-            'location' => ($location) ? $location->name : '',
             'note' => $note
         ];
         Setting::getSettings()->notify(new AuditNotification($params));
@@ -207,14 +141,8 @@ trait Loggable
             $user_id = Auth::user()->id;
         }
         $log = new Actionlog;
-        if (static::class == LicenseSeat::class) {
-            $log->item_type = License::class;
-            $log->item_id = $this->license_id;
-        } else {
-            $log->item_type = static::class;
-            $log->item_id = $this->id;
-        }
-        $log->location_id = null;
+        $log->item_type = static::class;
+        $log->item_id = $this->id;
         $log->note = $note;
         $log->user_id = $user_id;
         $log->logaction('create');
@@ -230,13 +158,8 @@ trait Loggable
     public function logUpload($filename, $note)
     {
         $log = new Actionlog;
-        if (static::class == LicenseSeat::class) {
-            $log->item_type = License::class;
-            $log->item_id = $this->license_id;
-        } else {
-            $log->item_type = static::class;
-            $log->item_id = $this->id;
-        }
+        $log->item_type = static::class;
+        $log->item_id = $this->id;
         $log->user_id = Auth::user()->id;
         $log->note = $note;
         $log->target_id =  null;

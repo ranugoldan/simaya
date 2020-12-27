@@ -45,7 +45,7 @@ class MergeUsersByUsername extends Command
 
         foreach ($users as $user) {
             $parts = explode("@", $user->username);
-            $bad_users = User::where('username', '=', $parts[0])->whereNull('deleted_at')->with('assets', 'manager', 'userlog', 'licenses', 'consumables', 'accessories', 'managedLocations')->get();
+            $bad_users = User::where('username', '=', $parts[0])->whereNull('deleted_at')->with('assets', 'manager', 'userlog')->get();
 
             foreach ($bad_users as $bad_user) {
                 $this->info($bad_user->username.' ('.$bad_user->id.')  will be merged into '.$user->username.'  ('.$user->id.') ');
@@ -60,24 +60,6 @@ class MergeUsersByUsername extends Command
                     }
                 }
 
-                // Walk the list of licenses
-                foreach ($bad_user->licenses as $license) {
-                    $this->info( 'Updating license '.$license->name.' '.$license->id.' to user '.$user->id);
-                    $bad_user->licenses()->updateExistingPivot($license->id, ['assigned_to' => $user->id]);
-                }
-
-                // Walk the list of consumables
-                foreach ($bad_user->consumables as $consumable) {
-                    $this->info( 'Updating consumable '.$consumable->id.' to user '.$user->id);
-                    $bad_user->consumables()->updateExistingPivot($consumable->id, ['assigned_to' => $user->id]);
-                }
-
-                // Walk the list of accessories
-                foreach ($bad_user->accessories as $accessory) {
-                    $this->info( 'Updating accessory '.$accessory->id.' to user '.$user->id);
-                    $bad_user->accessories()->updateExistingPivot($accessory->id, ['assigned_to' => $user->id]);
-                }
-
                 // Walk the list of logs
                 foreach ($bad_user->userlog as $log) {
                     $this->info( 'Updating action log record '.$log->id.' to user '.$user->id);
@@ -88,14 +70,6 @@ class MergeUsersByUsername extends Command
                 // Update any manager IDs
                 $this->info( 'Updating managed user records to user '.$user->id);
                 User::where('manager_id', '=', $bad_user->id)->update(['manager_id' => $user->id]);
-
-
-                // Update location manager IDs
-                foreach ($bad_user->managedLocations as $managedLocation) {
-                    $this->info( 'Updating managed location record '.$managedLocation->name.' to manager '.$user->id);
-                    $managedLocation->manager_id = $user->id;
-                    $managedLocation->save();
-                }
 
                 // Mark the user as deleted
                 $this->info( 'Marking the user as deleted');

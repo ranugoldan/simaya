@@ -107,7 +107,6 @@ class UsersController extends Controller
         $user->activated = $request->input('activated', 0);
         $user->jobtitle = $request->input('jobtitle');
         $user->phone = $request->input('phone');
-        $user->location_id = $request->input('location_id', null);
         $user->department_id = $request->input('department_id', null);
         $user->company_id = Company::getIdForUser($request->input('company_id', null));
         $user->manager_id = $request->input('manager_id', null);
@@ -258,7 +257,6 @@ class UsersController extends Controller
         $user->activated = $request->input('activated', 0);
         $user->jobtitle = $request->input('jobtitle', null);
         $user->phone = $request->input('phone');
-        $user->location_id = $request->input('location_id', null);
         $user->company_id = Company::getIdForUser($request->input('company_id', null));
         $user->manager_id = $request->input('manager_id', null);
         $user->notes = $request->input('notes');
@@ -269,12 +267,6 @@ class UsersController extends Controller
         $user->country = $request->input('country', null);
         $user->activated = $request->input('activated', 0);
         $user->zip = $request->input('zip', null);
-
-
-        // Update the location of any assets checked out to this user
-        Asset::where('assigned_type', User::class)
-            ->where('assigned_to', $user->id)
-            ->update(['location_id' => $request->input('location_id', null)]);
 
         // Do we want to update the user password?
         if ($request->filled('password')) {
@@ -336,24 +328,6 @@ class UsersController extends Controller
                     ->with('error', 'This user still has ' . $assetsCount . ' assets associated with them.');
             }
 
-            if (($user->licenses()) && (($licensesCount = $user->licenses()->count())) > 0) {
-                // Redirect to the user management page
-                return redirect()->route('users.index')
-                    ->with('error', 'This user still has ' . $licensesCount . ' licenses associated with them.');
-            }
-
-            if (($user->accessories()) && (($accessoriesCount = $user->accessories()->count()) > 0)) {
-                // Redirect to the user management page
-                return redirect()->route('users.index')
-                    ->with('error', 'This user still has ' . $accessoriesCount . ' accessories associated with them.');
-            }
-
-            if (($user->managedLocations()) && (($managedLocationsCount = $user->managedLocations()->count())) > 0) {
-                // Redirect to the user management page
-                return redirect()->route('users.index')
-                    ->with('error', 'This user still has ' . $managedLocationsCount . ' locations that they manage.');
-            }
-
             // Delete the user
             $user->delete();
 
@@ -404,7 +378,7 @@ class UsersController extends Controller
      */
     public function show($userId = null)
     {
-        if (!$user = User::with('assets', 'assets.model', 'consumables', 'accessories', 'licenses', 'userloc')->withTrashed()->find($userId)) {
+        if (!$user = User::with('assets', 'assets.model')->withTrashed()->find($userId)) {
             // Redirect to the user management page
             return redirect()->route('users.index')
                 ->with('error', trans('admin/users/message.user_not_found', ['id' => $userId]));
@@ -526,7 +500,7 @@ class UsersController extends Controller
             // Open output stream
             $handle = fopen('php://output', 'w');
 
-            User::with('assets', 'accessories', 'consumables', 'department', 'licenses', 'manager', 'groups', 'userloc', 'company')
+            User::with('assets', 'department', 'manager', 'groups', 'company')
                 ->orderBy('created_at', 'DESC')
                 ->chunk(500, function ($users) use ($handle) {
                     $headers=[
@@ -539,12 +513,8 @@ class UsersController extends Controller
                         trans('admin/users/table.username'),
                         trans('admin/users/table.email'),
                         trans('admin/users/table.manager'),
-                        trans('admin/users/table.location'),
                         trans('general.department'),
                         trans('general.assets'),
-                        trans('general.licenses'),
-                        trans('general.accessories'),
-                        trans('general.consumables'),
                         trans('admin/users/table.groups'),
                         trans('general.notes'),
                         trans('admin/users/table.activated'),
@@ -570,12 +540,8 @@ class UsersController extends Controller
                             $user->username,
                             $user->email,
                             ($user->manager) ? $user->manager->present()->fullName() : '',
-                            ($user->userloc) ? $user->userloc->name : '',
                             ($user->department) ? $user->department->name : '',
                             $user->assets->count(),
-                            $user->licenses->count(),
-                            $user->accessories->count(),
-                            $user->consumables->count(),
                             $user_groups,
                             $user->notes,
                             ($user->activated=='1') ?  trans('general.yes') : trans('general.no'),
@@ -608,12 +574,7 @@ class UsersController extends Controller
         $this->authorize('view', User::class);
         $show_user = User::where('id', $id)->withTrashed()->first();
         $assets = Asset::where('assigned_to', $id)->where('assigned_type', User::class)->with('model', 'model.category')->get();
-        $accessories = $show_user->accessories()->get();
-        $consumables = $show_user->consumables()->get();
         return view('users/print')->with('assets', $assets)
-            ->with('licenses', $show_user->licenses()->get())
-            ->with('accessories', $accessories)
-            ->with('consumables', $consumables)
             ->with('show_user', $show_user)
             ->with('settings', Setting::getSettings());
     }

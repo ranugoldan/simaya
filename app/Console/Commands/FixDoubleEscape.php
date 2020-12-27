@@ -40,10 +40,6 @@ class FixDoubleEscape extends Command
 
         $tables = [
             '\App\Models\Asset' => ['name'],
-            '\App\Models\License' => ['name'],
-            '\App\Models\Consumable' => ['name'],
-            '\App\Models\Accessory' => ['name'],
-            '\App\Models\Component' => ['name'],
             '\App\Models\Company' => ['name'],
             '\App\Models\Manufacturer' => ['name'],
             '\App\Models\Supplier' => ['name'],
@@ -52,7 +48,6 @@ class FixDoubleEscape extends Command
             '\App\Models\AssetModel' => ['name'],
             '\App\Models\Group' => ['name'],
             '\App\Models\Department' => ['name'],
-            '\App\Models\Location' => ['name'],
             '\App\Models\User' => ['first_name', 'last_name'],
         ];
 

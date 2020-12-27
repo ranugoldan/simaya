@@ -39,11 +39,6 @@ class AssetMaintenancesTransformer
 
             ]  : null,
             'title'         => ($assetmaintenance->title) ? e($assetmaintenance->title) : null,
-            'location' => (($assetmaintenance->asset) && ($assetmaintenance->asset->location)) ? [
-                'id' => (int) $assetmaintenance->asset->location->id,
-                'name'=> e($assetmaintenance->asset->location->name),
-
-            ]  : null,
             'notes'         => ($assetmaintenance->notes) ? e($assetmaintenance->notes) : null,
             'supplier'      => ($assetmaintenance->supplier) ? ['id' => $assetmaintenance->supplier->id,'name'=> e($assetmaintenance->supplier->name)] : null,
             'cost'          => Helper::formatCurrencyOutput($assetmaintenance->cost),

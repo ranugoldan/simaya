@@ -47,15 +47,9 @@ class MoveUploadsToNewDisk extends Command
         }
         $delete_local = $this->argument('delete_local');
 
-        $public_uploads['accessories'] = glob('public/accessories'."/*.*");
         $public_uploads['assets'] = glob('public/assets'."/*.*");
         $public_uploads['avatars'] = glob('public/avatars'."/*.*");
-        $public_uploads['categories'] = glob('public/categories'."/*.*");
-        $public_uploads['companies'] = glob('public/companies'."/*.*");
-        $public_uploads['components'] = glob('public/components'."/*.*");
-        $public_uploads['consumables'] = glob('public/consumables'."/*.*");
         $public_uploads['departments'] = glob('public/departments'."/*.*");
-        $public_uploads['locations'] = glob('public/locations'."/*.*");
         $public_uploads['manufacturers'] = glob('public/manufacturers'."/*.*");
         $public_uploads['suppliers'] = glob('public/suppliers'."/*.*");
         $public_uploads['assetmodels'] = glob('public/models'."/*.*");
@@ -101,7 +95,6 @@ class MoveUploadsToNewDisk extends Command
         $private_uploads['audits'] = glob('storage/private_uploads/audits'."/*.*");
         $private_uploads['assetmodels'] = glob('storage/private_uploads/assetmodels'."/*.*");
         $private_uploads['imports'] = glob('storage/private_uploads/imports'."/*.*");
-        $private_uploads['licenses'] = glob('storage/private_uploads/licenses'."/*.*");
         $private_uploads['users'] = glob('storage/private_uploads/users'."/*.*");
         $private_uploads['backups'] = glob('storage/private_uploads/users'."/*.*");
 

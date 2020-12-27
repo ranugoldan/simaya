@@ -1,14 +1,14 @@
 <?php
 
 return array(
-    'a_user_canceled' => 'Pengguna telah membatalkan permintaan item di situs web',
-    'a_user_requested' => 'Pengguna telah meminta item di situs web',
+    'a_user_canceled' => 'Pengguna telah membatalkan request barang di situs web',
+    'a_user_requested' => 'Pengguna telah me-request barang di situs web',
     'accessory_name' => 'Nama Aksesori:',
     'additional_notes' => 'Catatan Tambahan:',
     'admin_has_created' => 'Administrator telah membuat akun untuk Anda di: situs web web.',
     'asset' => 'Aset:',
     'asset_name' => 'Nama Aset:',
-    'asset_requested' => 'Permintaan aset',
+    'asset_requested' => 'Aset di-request',
     'asset_tag' => 'Tag Aset',
     'assigned_to' => 'Ditugaskan untuk',
     'best_regards' => 'Salam Hormat,',
@@ -35,8 +35,8 @@ return array(
     'hi' => 'Hai',
     'i_have_read' => 'Saya telah membaca dan menyetujui persyaratan penggunaan, dan telah menerima barang ini.',
     'item' => 'Barang:',
-    'Item_Request_Canceled' => 'Permintaan Barang Dibatalkan',
-    'Item_Requested' => 'Barang yang diminta',
+    'Item_Request_Canceled' => 'Request Barang Dibatalkan',
+    'Item_Requested' => 'Barang Di-request',
     'link_to_update_password' => 'Silahkan klik pada link berikut untuk mengupdate: password web anda:',
     'login_first_admin' => 'Login ke instalasi Snipe-IT baru Anda dengan menggunakan kredensial di bawah ini:',
     'login' => 'Login:',
@@ -49,7 +49,7 @@ return array(
 
     'read_the_terms' => 'Silahkan baca syarat penggunaan di bawah ini.',
     'read_the_terms_and_click' => 'Harap baca persyaratan penggunaan di bawah ini, dan klik tautan di bagian bawah untuk memastikan bahwa Anda membaca dan menyetujui persyaratan penggunaan, dan telah menerima aset tersebut.',
-    'requested' => 'Diminta:',
+    'requested' => 'Di-request:',
     'reset_link' => 'Tautan Reset Sandi Anda',
     'reset_password' => 'Klik di sini untuk mengatur ulang kata sandi Anda:',
     'serial' => 'Serial',

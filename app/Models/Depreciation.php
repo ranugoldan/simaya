@@ -59,17 +59,4 @@ class Depreciation extends SnipeModel
     {
         return $this->hasMany('\App\Models\AssetModel', 'depreciation_id');
     }
-
-
-    /**
-     * Establishes the depreciation -> licenses relationship
-     *
-     * @author A. Gianotto <snipe@snipe.net>
-     * @since [v5.0]
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
-     */
-    public function licenses()
-    {
-        return $this->hasMany('\App\Models\License', 'depreciation_id');
-    }     
 }

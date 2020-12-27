@@ -2,23 +2,15 @@
 
 namespace App\Listeners;
 
-use App\Events\AccessoryCheckedIn;
-use App\Events\AccessoryCheckedOut;
 use App\Events\AssetCheckedIn;
 use App\Events\AssetCheckedOut;
 use App\Events\CheckoutableCheckedIn;
 use App\Events\CheckoutableCheckedOut;
 use App\Events\CheckoutAccepted;
 use App\Events\CheckoutDeclined;
-use App\Events\ComponentCheckedIn;
-use App\Events\ComponentCheckedOut;
-use App\Events\ConsumableCheckedOut;
 use App\Events\ItemAccepted;
 use App\Events\ItemDeclined;
-use App\Events\LicenseCheckedIn;
-use App\Events\LicenseCheckedOut;
 use App\Models\Actionlog;
-use App\Models\LicenseSeat;
 
 class LogListener
 {
@@ -38,11 +30,6 @@ class LogListener
         $logaction->target()->associate($event->acceptance->assignedTo);
         $logaction->accept_signature = $event->acceptance->signature_filename;
         $logaction->action_type = 'accepted';
-
-        // TODO: log the actual license seat that was checked out
-        if($event->acceptance->checkoutable instanceof LicenseSeat) {
-            $logaction->item()->associate($event->acceptance->checkoutable->license);
-        }
         
         $logaction->save();
     }   
@@ -53,11 +40,6 @@ class LogListener
         $logaction->target()->associate($event->acceptance->assignedTo);
         $logaction->accept_signature = $event->acceptance->signature_filename;
         $logaction->action_type = 'declined';
-
-        // TODO: log the actual license seat that was checked out
-        if($event->acceptance->checkoutable instanceof LicenseSeat) {
-            $logaction->item()->associate($event->acceptance->checkoutable->license);
-        }
 
         $logaction->save();        
     } 

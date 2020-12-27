@@ -21,6 +21,7 @@ return array(
     'category'                  => 'Category',
     'area'                      => 'Area (m²)',
     'purchase_cost'             => 'Purchase Cost',
+    'value'                     => 'Value',
     'occupied'                  => 'Occupied?',
     'occupied_by'               => 'Occupied by'
     );

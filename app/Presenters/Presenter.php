@@ -36,14 +36,6 @@ abstract class Presenter
         return '';
     }
 
-    public function locationUrl()
-    {
-        if ($this->model->location) {
-            return $this->model->location->present()->nameUrl();
-        }
-        return '';
-    }
-
     public function companyUrl()
     {
         if ($this->model->company) {

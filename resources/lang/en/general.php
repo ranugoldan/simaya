@@ -169,6 +169,7 @@
     'processing'			=> 'Processing',
     'profile'				=> 'Your profile',
     'purchase_cost'                              => 'Purchase Cost',
+    'value'                 => 'Value',
     'purchase_date'         => 'Purchase Date',
     'qty'		            => 'QTY',
     'quantity'		        => 'Quantity',

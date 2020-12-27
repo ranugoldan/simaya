@@ -2,7 +2,6 @@
 
 namespace App\Console;
 
-use App\Console\Commands\ImportLocations;
 use App\Console\Commands\ReEncodeCustomFieldNames;
 use App\Console\Commands\RestoreDeletedUsers;
 use Illuminate\Console\Scheduling\Schedule;

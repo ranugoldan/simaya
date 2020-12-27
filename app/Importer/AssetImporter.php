@@ -92,12 +92,6 @@ class AssetImporter extends ItemImporter
             $target = $this->item['checkout_target'];
         }
         $item = $this->sanitizeItemForStoring($asset, $editingAsset);
-        // The location id fetched by the csv reader is actually the rtd_location_id.
-        // This will also set location_id, but then that will be overridden by the
-        // checkout method if necessary below.
-        if (isset($this->item["location_id"])) {
-            $item['rtd_location_id'] = $this->item['location_id'];
-        }
 
 
         if ($editingAsset) {

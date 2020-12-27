@@ -109,32 +109,6 @@
                 {{ trans('general.suppliers') }}
               </label>
             </div>
-            <div class="checkbox col-md-12">
-              <label>
-                {{ Form::checkbox('location', '1', '1', ['class' => 'minimal']) }}
-                {{ trans('general.location') }}
-              </label>
-            </div>
-            <div class="checkbox col-md-12">
-              <label>
-                {{ Form::checkbox('location_address', '1', '1', ['class' => 'minimal']) }}
-                - {{ trans('general.address') }}
-              </label>
-            </div>
-
-            <div class="checkbox col-md-12">
-              <label>
-                {{ Form::checkbox('rtd_location', '1', '1', ['class' => 'minimal']) }}
-                {{ trans('admin/hardware/form.default_location') }}
-              </label>
-            </div>
-            <div class="checkbox col-md-12">
-              <label>
-                {{ Form::checkbox('rtd_location_address', '1', '1', ['class' => 'minimal']) }}
-                - {{ trans('general.address') }}
-              </label>
-            </div>
-
 
             <div class="checkbox col-md-12">
               <label>
@@ -261,8 +235,6 @@
             <p>If you'd like to export only certain assets, use the options below to fine-tune your results.</p>
 
             @include ('partials.forms.edit.company-select', ['translated_name' => trans('general.company'), 'fieldname' => 'by_company_id', 'hide_new' => 'true'])
-            @include ('partials.forms.edit.location-select', ['translated_name' => trans('general.location'), 'fieldname' => 'by_location_id', 'hide_new' => 'true'])
-            @include ('partials.forms.edit.location-select', ['translated_name' => trans('admin/hardware/form.default_location'), 'fieldname' => 'by_rtd_location_id', 'hide_new' => 'true'])
           @include ('partials.forms.edit.department-select', ['translated_name' => trans('general.department'), 'fieldname' => 'by_dept_id', 'hide_new' => 'true'])
             @include ('partials.forms.edit.supplier-select', ['translated_name' => trans('general.supplier'), 'fieldname' => 'by_supplier_id', 'hide_new' => 'true'])
             @include ('partials.forms.edit.model-select', ['translated_name' => trans('general.asset_model'), 'fieldname' => 'by_model_id', 'hide_new' => 'true'])

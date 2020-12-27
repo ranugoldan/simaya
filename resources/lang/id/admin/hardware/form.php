@@ -31,7 +31,7 @@ return array(
     'notes'				=> 'Catatan',
     'order'				=> 'Nomor Pemesanan',
     'qr'				=> 'Kode QR',
-    'requestable'		=> 'Pengguna dapat meminta aset ini',
+    'requestable'		=> 'Pengguna dapat me-request aset ini',
     'select_statustype'	=> 'Memilih Tipe Status',
     'serial'			=> 'Serial',
     'status'			=> 'Status',
