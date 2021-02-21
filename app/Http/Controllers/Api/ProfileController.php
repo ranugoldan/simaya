@@ -24,7 +24,6 @@ class ProfileController extends Controller
         $results = [];
         $results['total'] = $checkoutRequests->count();
 
-
         foreach ($checkoutRequests as $checkoutRequest) {
 
             // Make sure the asset and request still exist
@@ -34,7 +33,6 @@ class ProfileController extends Controller
                     'name' => $checkoutRequest->itemRequested()->present()->name(),
                     'type' => $checkoutRequest->itemType(),
                     'qty' => $checkoutRequest->quantity,
-                    'location' => ($checkoutRequest->location()) ? $checkoutRequest->location()->name : null,
                     'expected_checkin' => Helper::getFormattedDateObject($checkoutRequest->itemRequested()->expected_checkin, 'datetime'),
                     'request_date' => Helper::getFormattedDateObject($checkoutRequest->created_at, 'datetime'),
                 ];
