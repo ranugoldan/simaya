@@ -47,7 +47,6 @@
                     <tr role="row">
                         <th class="col-md-1">Image</th>
                         <th class="col-md-2">Item Name</th>
-                        <th class="col-md-2" data-sortable="true">{{ trans('admin/hardware/table.location') }}</th>
                         <th class="col-md-2" data-sortable="true">{{ trans('admin/hardware/form.expected_checkin') }}</th>
                         <th class="col-md-3" data-sortable="true">Requesting User</th>
                         <th class="col-md-2">Requested Date</th>
@@ -83,12 +82,6 @@
                              @endif
 
                             </td>
-                            @if ($request->location())
-                            <td>{{ $request->location()->name }}</td>
-                            @else
-                            <td></td>
-                            @endif
-
                             <td>
                             @if ($request->itemType() == "asset")
                                 {{ App\Helpers\Helper::getFormattedDateObject($request->requestable->expected_checkin, 'datetime', false) }}
