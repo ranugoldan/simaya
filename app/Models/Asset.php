@@ -719,6 +719,11 @@ class Asset extends Depreciable
     }
 
 
+    public function procurements()
+    {
+        return $this->belongsToMany('\App\Models\Procurement', 'procurement_assets', 'asset_id', 'procurement_id');
+    }
+
 
     /**
      * Get the next autoincremented asset tag
