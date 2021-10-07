@@ -65,6 +65,12 @@ Route::group(['middleware' => 'auth'], function () {
         'parameters' => ['department' => 'department_id']
     ]);
 
+    /**
+     * Procurements
+     */
+    Route::resource('procurements', 'ProcurementsController', [
+        'parameters' => ['procurement' => 'procurement_id']
+    ]);
 });
 
 
