@@ -627,6 +627,22 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'auth:api']
     ); // Models resource
 
 
+    /*--- Procurements API ---*/
+
+    Route::resource('procurements', 'ProcurementsController',
+        [
+            'names' =>
+                [
+                    'index' => 'api.procurements.index',
+                    'show' => 'api.procurements.show',
+                    'store' => 'api.procurements.store',
+                    'update' => 'api.procurements.update',
+                    'destroy' => 'api.procurements.destroy'
+                ],
+            'except' => ['create', 'edit'],
+            'parameters' => ['procurement' => 'procurement_id']
+        ]
+    ); // Procurements resource
 
 
     /*--- Settings API ---*/
