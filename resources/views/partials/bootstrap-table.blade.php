@@ -354,7 +354,8 @@
         'depreciations',
         'fieldsets',
         'groups',
-        'kits'
+        'kits',
+        'procurements'
     ];
 
     for (var i in formatters) {
