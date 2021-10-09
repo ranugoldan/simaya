@@ -4,7 +4,7 @@
   'topSubmit'     => true,
   'helpText'      => trans('admin/procurements/form.help'),
   'helpPosition'  => 'right',
-  'formAction'    => (isset($item->id)) ? route('procurements.update', ['procurement' => $item->id]) : route('locations.store'),
+  'formAction'    => (isset($item->id)) ? route('procurements.update', ['procurement' => $item->id]) : route('procurements.store'),
 ])
 
 @section('inputFields')
