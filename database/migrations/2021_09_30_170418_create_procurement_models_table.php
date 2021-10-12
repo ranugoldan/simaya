@@ -18,7 +18,7 @@ class CreateProcurementModelsTable extends Migration
             $table->integer('procurement_id')->unsigned();
             $table->integer('model_id')->unsigned();
             $table->integer('qty')->unsigned();
-            $table->decimal('purchase_cost', 0, 2);
+            $table->decimal('purchase_cost', 20, 2);
             $table->timestamps();
         });
     }
