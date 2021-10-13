@@ -21,14 +21,14 @@ class Procurement extends Model
     protected $rules = array(
         'procurement_tag'       => 'required|max:255|unique_undeleted',
         'status'                => 'max:255|nullable',
-        'model_id'              => 'required|exists:models.id',
-        'asset_id'              => 'exists:assets.id',
-        'supplier_id'           => 'exists:suppliers.id',
+        'model_id'              => 'required|exists:models,id',
+        'asset_id'              => 'exists:assets,id',
+        'supplier_id'           => 'exists:suppliers,id',
         'qty'                   => 'required',
         'purchase_cost'         => 'numeric',
-        'location_id'           => 'exists:locations.id',
-        'department_id'         => 'exists:departments.id',
-        'user_id'               => 'exists:users.id',
+        'location_id'           => 'exists:locations,id',
+        'department_id'         => 'exists:departments,id',
+        'user_id'               => 'exists:users,id',
     );
 
     protected $casts = [
