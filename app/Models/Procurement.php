@@ -82,17 +82,17 @@ class Procurement extends Model
 
     public function assets()
     {
-        return $this->belongsToMany('\App\Models\Asset', 'procurement_assets', 'procurement_id', 'asset_id');
+        return $this->belongsToMany('\App\Models\Asset', 'procurement_assets', 'procurement_id', 'asset_id')->withTimestamps();
     }
 
     public function locations()
     {
-        return $this->belongsToMany('\App\Models\Location', 'procurement_locations', 'procurement_id', 'location_id');
+        return $this->belongsToMany('\App\Models\Location', 'procurement_locations', 'procurement_id', 'location_id')->withTimestamps();
     }
 
     public function models()
     {
-        return $this->belongsToMany('App\Models\AssetModel', 'procurement_models', 'procurement_id', 'model_id');
+        return $this->belongsToMany('App\Models\AssetModel', 'procurement_models', 'procurement_id', 'model_id')->withTimestamps();
     }
 
     public function department()
