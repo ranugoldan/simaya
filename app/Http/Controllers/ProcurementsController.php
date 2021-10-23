@@ -38,28 +38,35 @@ class ProcurementsController extends Controller
         $procurement->department_id     = $request->input('department_id');
         $procurement->user_id           = $request->input('user_id');
         
-        $model_id                       = $request->input('model_id');
+        $model_ids                      = $request->input('model_id');
         $model_qty                      = $request->input('qty');
         $model_purchase_cost            = $request->input('purchase_cost');
 
-        $asset_id                       = $request->input('asset_id');
+        $model_payload                  = array();
+        
+        foreach($model_ids as $idx => $model_id) {
+            $model_payload[$model_id] = [
+                'qty' => $model_qty[$idx],
+                'purchase_cost' => $model_purchase_cost[$idx]
+            ];
+        }
+
+        // dd($model_payload);
+        // $asset_id                       = $request->input('asset_id');
 
         $location_id                    = $request->input('location_id');
 
         $procurement = $request->handleImages($procurement);
 
         if ($procurement->save()) {
-            $procurement->models()->attach($model_id, [
-                'qty' => $model_qty,
-                'purchase_cost' => $model_purchase_cost
-            ]);
-            $procurement->assets()->attach($asset_id);
-            $procurement->locations()->attach($location_id);
+            $procurement->models()->sync($model_payload);
+            // $procurement->assets()->attach($asset_id);
+            $procurement->locations()->sync($location_id);
             
             return redirect()->route("procurements.index")->with('success', trans('admin/procurements/message.create.success'));
         }
 
-        dd($procurement->getErrors());
+        // dd($procurement->getErrors());
         return redirect()->back()->withInput()->withErrors($procurement->getErrors());
     }
 }
