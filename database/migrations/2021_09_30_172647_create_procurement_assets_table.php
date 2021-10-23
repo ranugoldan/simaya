@@ -14,9 +14,9 @@ class CreateProcurementAssetsTable extends Migration
     public function up()
     {
         Schema::create('procurement_assets', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('procurement_id');
-            $table->integer('asset_id');
+            $table->increments('id');
+            $table->integer('procurement_id')->unsigned();
+            $table->integer('asset_id')->unsigned();
             $table->timestamps();
         });
     }
