@@ -51,7 +51,7 @@
     {{ Form::label('model_id', trans('admin/procurements/form.model'), array('class' => 'col-md-3 control-label')) }}
 
     <div class="col-md-7 required">
-      <select name="model_id" id="model_select_id" class="js-data-ajax" data-endpoint="models" data-placeholder="{{ trans('general.select_model') }}" style="width: 100%" aria-label="model_id" data-validation="required" multiple required>
+      <select name="model_id[1]" id="model_select_id" class="js-data-ajax" data-endpoint="models" data-placeholder="{{ trans('general.select_model') }}" style="width: 100%" aria-label="model_id" data-validation="required" required>
         @if ($model_id = old('model_id', ($item->model_id ?? request('model_id') ?? '')))
           <option value="{{ $model_id }}" selected="selected">
             {{ (\App\Models\AssetModel::find($model_id)) ? \App\Models\AssetModel::find($model_id)->name : '' }}
@@ -60,64 +60,58 @@
           <option value="" role="option">{{ trans('general.select_model') }}</option>
         @endif
       </select>
+      {!! $errors->first('model_id', '<div class="col-md-8 col-md-offset-3"><span class="alert-msg" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i> :message</span></div>') !!}
     </div>
-
-    <div class="col-md-1 col-sm-1 text-left">
-      @can('create', \App\Models\AssetModel::class)
-        <a href="{{ route('modal.show', 'model') }}" data-toggle="modal" data-target="#createModal" data-select="model_select_id" class="btn btn-sm btn-primary">New</a>
-        <span class="mac_spinner" style="padding-left: 10px; color: green; display: none; width: 30px;">
-          <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
-        </span>
-      @endcan
-    </div>
-
-    {{-- <div class="col-md-2 col-sm-12">
+    
+    <div class="col-md-2 col-sm-12">
       <button class="add_field_button btn btn-default btn-sm">
         <i class="fa fa-plus"></i>
       </button>
-    </div> --}}
-
-    {!! $errors->first('model_id', '<div class="col-md-8 col-md-offset-3"><span class="alert-msg" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i> :message</span></div>') !!}
+    </div>
   </div>
-
-  {{-- <div class="input_fields_wrap"></div> --}}
-
-  {{-- Assets --}}
-  <div id="asset_id" class="form-group {{ $errors->has('asset_id') ? 'has-error' : '' }}">
-    {{ Form::label('asset_id', trans('admin/procurements/form.asset'), array('class' => 'col-md-3 control-label')) }}
-
-    <div class="col-md-7">
-      <select name="asset_id" id="asset_id_select" class="js-data-ajax select2" data-endpoint="hardware" data-placeholder="{{ trans('general.select_asset') }}" aria-label="asset_id" style="width: 100%" data-asset-status-type="" multiple>
-        @if ((!isset($unselect)) && ($asset_id = old('asset_id', (isset($asset) ? $asset->id  : (isset($item) ? $item->asset_id : '')))))
-          <option value="{{ $asset_id }}" selected="selected" role="option" aria-selected="true">
-            {{ (\App\Models\Asset::find($asset_id)) ? \App\Models\Asset::find($asset_id)->present()->fullName : '' }}
-          </option>
-        @else
-          @if (!isset($multiple))
-            <option value="" role="option">{{ trans('general.select_asset') }}</option>
-          @endif
-        @endif
-      </select>
+    
+  {{-- QTY --}}
+  <div class="form-group {{ $errors->has('qty') ? ' has-error' : '' }}">
+    <label for="qty" class="col-md-3 control-label">{{ trans('general.quantity') }}</label>
+    <div class="col-md-7{{  (\App\Helpers\Helper::checkIfRequired($item, 'qty')) ? ' required' : '' }}">
+      <div class="col-md-2" style="padding-left:0px">
+        <input class="form-control" type="text" name="qty[1]" aria-label="qty" id="qty" value="{{ old('qty', $item->qty) }}" {!!  (\App\Helpers\Helper::checkIfRequired($item, 'qty')) ? ' data-validation="required" required' : '' !!}/>
+      </div>
+      {!! $errors->first('qty', '<span class="alert-msg" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i> :message</span>') !!}
     </div>
   </div>
 
-  {!! $errors->first('asset_id', '<div class="col-md-8 col-md-offset-3"><span class="alert-msg" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i> :message</span></div>') !!}
+  {{-- Purchase Cost --}}
+  <div class="form-group {{ $errors->has('purchase_cost') ? ' has-error' : '' }}">
+    <label for="purchase_cost" class="col-md-3 control-label">{{ trans('general.value') }}</label>
+    <div class="col-md-9">
+      <div class="input-group col-md-4" style="padding-left: 0px;">
+        <input class="form-control" type="text" name="purchase_cost[1]" aria-label="purchase_cost" id="purchase_cost" value="{{ old('purchase_cost', \App\Helpers\Helper::formatCurrencyOutput($item->purchase_cost)) }}" />
+        <span class="input-group-addon">
+          @if (isset($currency_type))
+            {{ $currency_type }}
+          @else
+            {{ $snipeSettings->default_currency }}
+          @endif
+        </span>
+      </div>
+      <div class="col-md-9" style="padding-left: 0px;">
+        {!! $errors->first('purchase_cost', '<span class="alert-msg" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i> :message</span>') !!}
+      </div>
+    </div>
+  </div>
+  
+  <div class="input_fields_wrap"></div>
 
   {{-- Supplier --}}
   @include('partials.forms.edit.supplier-select', ['translated_name' => trans('general.supplier'), 'fieldname' => 'supplier_id'])
-
-  {{-- QTY --}}
-  @include('partials.forms.edit.quantity')
-
-  {{-- Purchase Cost --}}
-  @include('partials.forms.edit.purchase_cost')
 
   {{-- Location --}}
   <div id="location_id" class="form-group {{ $errors->has('location_id') ? ' has-error' : '' }}">
     {{ Form::label('location_id', trans('general.location'), array('class' => 'col-md-3 control-label')) }}
 
     <div class="col-md-6">
-      <select name="location_id" id="location_id_location_select" class="js-data-ajax" data-endpoint="locations" data-placeholder="{{ trans('general.select_location') }}" style="width: 100%" aria-label="location_id" {!! ((isset($item)) && (\App\Helpers\Helper::checkIfRequired($item, 'location_id'))) ? 'data-validation="required" required' : '' !!}>
+      <select name="location_id[]" id="location_id_location_select" class="js-data-ajax" data-endpoint="locations" data-placeholder="{{ trans('general.select_location') }}" style="width: 100%" aria-label="location_id" {!! ((isset($item)) && (\App\Helpers\Helper::checkIfRequired($item, 'location_id'))) ? 'data-validation="required" required' : '' !!} multiple>
         @if ($location_id = old('location_id', (isset($item)) ? $item->location_id : ''))
           <option value="{{ $location_id }}" selected="selected" role="option" aria-hidden="true">
             {{ (\App\Models\Location::find($location_id)) ? \App\Models\Location::find($location_id)->name : '' }}
@@ -255,61 +249,125 @@
       var x               = 1; //initial text box count
 
 
+      $(add_button).click(function(e){ //on add input button click
+          e.preventDefault();
+          var box_html        = '';
 
+          // Check that we haven't exceeded the max number of asset fields
+          if (x < max_fields) {
+              x++; //text box increment
 
-      // $(add_button).click(function(e){ //on add input button click
+              box_html += '<span class="fields_wrapper">';
+              box_html += '<div class="form-group"><label for="model_id" class="col-md-3 control-label">{{ trans('admin/procurements/form.model') }} #' + x + '</label>';
+              box_html += '<div class="col-md-7 col-sm-12 required">';
+              box_html += '<select name="model_id[' + x + ']" class="js-data-ajax model-ids" data-endpoint="models" data-placeholder="{{ trans('general.select_model') }}" style="width: 100%" aria-label="model_id" data-validation="required" required>';
+              box_html += '<option value="" role="option"> {{ trans('general.select_model') }}';
+              box_html += '</option>';
+              box_html += '</select>';
+              box_html += '</div>';
+              box_html += '<div class="col-md-2 col-sm-12">';
+              box_html += '<a href="#" class="remove_field btn btn-default btn-sm"><i class="fa fa-minus"></i></a>';
+              box_html += '</div>';
+              box_html += '</div>';
+              box_html += '</div>';
+              box_html += '<div class="form-group"><label for="qty" class="col-md-3 control-label">{{ trans('general.quantity') }} #' + x + '</label>';
+              box_html += '<div class="col-md-7 col-sm-12">';
+              box_html += '<div class="col-md-2" style="padding-left:0px">';
+              box_html += '<input class="form-control" type="text" name="qty[' + x + ']" aria-label="qty">';
+              box_html += '</div>';
+              box_html += '</div>';
+              box_html += '</div>';
+              box_html += '<div class="form-group"><label for="purchase_cost" class="col-md-3 control-label">{{ trans('general.value') }} #' + x + '</label>';
+              box_html += '<div class="col-md-9">';
+              box_html += '<div class="input-group col-md-4" style="padding-left: 0px;">';
+              box_html += '<input class="form-control" type="text" name="purchase_cost[' + x + ']" aria-label="purchase_cost" >';
+              box_html += '<span class="input-group-addon">';
+              box_html += '@if(isset($currency_type)) {{ $currency_type }} @else {{ $snipeSettings->default_currency }} @endif';
+              box_html += '</span>';
+              box_html += '</div>';
+              box_html += '</div>';
+              box_html += '</div>';
+              box_html += '</span>';
+              $(wrapper).append(box_html);
 
-      //     e.preventDefault();
+              $(`select.js-data-ajax.model-ids:last`).select2({
+                ajax: {
+                  url: `${Ziggy.baseUrl}api/v1/models/selectlist`,
+                  dataType: 'json',
+                  delay: 250,
+                  headers: {
+                    "X-Requested-With": 'XMLHttpRequest',
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+                  },
+                  data: function(params) {
+                    var data = {
+                      search: params.term,
+                      page: params.page || 1,
+                    };
+                    return data;
+                  },
+                  processResults: function(data, params) {
+                    params.page = params.page || 1;
 
-      //     var auto_tag        = $("#asset_tag").val().replace(/[^\d]/g, '');
-      //     var box_html        = '';
+                    var answer = {
+                      results: data.items,
+                      pagination: {
+                        more: data.pagination.more
+                      }
+                    };
 
+                    return answer;
+                  },
+                  cache: true
+                },
+                escapeMarkup: function(markup) { return markup; },
+                templateResult: formatDatalist,
+                templateSelection: formatDataSelection
+              });
 
-      //     // Check that we haven't exceeded the max number of asset fields
-      //     if (x < max_fields) {
+          // We have reached the maximum number of extra asset fields, so disable the button
+          } else {
+              $(".add_field_button").attr('disabled');
+              $(".add_field_button").addClass('disabled');
+          }
+      });
 
-      //         if (auto_tag!='') {
-      //             auto_tag = parseInt(auto_tag) + parseInt(x);
-      //         } else {
-      //             auto_tag = '';
-      //         }
+      $(wrapper).on("click",".remove_field", function(e){ //user clicks on remove text
+          $(".add_field_button").removeAttr('disabled');
+          $(".add_field_button").removeClass('disabled');
+          e.preventDefault();
+          console.log(x);
 
-      //         x++; //text box increment
+          $(this).parent('div').parent('div').parent('span').remove();
+          x--;
+      })
 
-      //         box_html += '<span class="fields_wrapper">';
-      //         box_html += '<div class="form-group"><label for="asset_tag" class="col-md-3 control-label">{{ trans('admin/hardware/form.tag') }} ' + x + '</label>';
-      //         box_html += '<div class="col-md-7 col-sm-12 required">';
-      //         box_html += '<input type="text"  class="form-control" name="asset_tags[' + x + ']" value="{{ (($snipeSettings->auto_increment_prefix!='') && ($snipeSettings->auto_increment_assets=='1')) ? $snipeSettings->auto_increment_prefix : '' }}'+ auto_tag +'" data-validation="required">';
-      //         box_html += '</div>';
-      //         box_html += '<div class="col-md-2 col-sm-12">';
-      //         box_html += '<a href="#" class="remove_field btn btn-default btn-sm"><i class="fa fa-minus"></i></a>';
-      //         box_html += '</div>';
-      //         box_html += '</div>';
-      //         box_html += '</div>';
-      //         box_html += '<div class="form-group"><label for="serial" class="col-md-3 control-label">{{ trans('admin/hardware/form.serial') }} ' + x + '</label>';
-      //         box_html += '<div class="col-md-7 col-sm-12">';
-      //         box_html += '<input type="text"  class="form-control" name="serials[' + x + ']">';
-      //         box_html += '</div>';
-      //         box_html += '</div>';
-      //         box_html += '</span>';
-      //         $(wrapper).append(box_html);
+      function formatDatalist(datalist) {
+        var loading_markup = '<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> Loading...';
+        
+        if (datalist.loading) {
+          return loading_markup;
+        }
 
-      //     // We have reached the maximum number of extra asset fields, so disable the button
-      //     } else {
-      //         $(".add_field_button").attr('disabled');
-      //         $(".add_field_button").addClass('disabled');
-      //     }
-      // });
+        var markup = "<div class='clearfix'>" ;
+        markup +="<div class='pull-left' style='padding-right: 10px;'>";
+        if (datalist.image) {
+            markup += "<div style='width: 30px;'><img src='" + datalist.image + "' style='max-height: 20px; max-width: 30px;' alt='" +  datalist.text + "'></div>";
+        } else {
+            markup += "<div style='height: 20px; width: 30px;'></div>";
+        }
 
-      // $(wrapper).on("click",".remove_field", function(e){ //user clicks on remove text
-      //     $(".add_field_button").removeAttr('disabled');
-      //     $(".add_field_button").removeClass('disabled');
-      //     e.preventDefault();
-      //     console.log(x);
+        markup += "</div><div>" + datalist.text + "</div>";
+        markup += "</div>";
+        return markup;
+      }
 
-      //     $(this).parent('div').parent('div').parent('span').remove();
-      //     x--;
-      // })
+      function formatDataSelection(datalist) {
+        return datalist.text.replace(/>/g, '&gt;')
+          .replace(/</g, '&lt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
   });
 
 
