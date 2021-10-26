@@ -207,7 +207,7 @@
                 actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '" '
                     + ' class="btn btn-danger btn-sm delete-asset"  data-toggle="tooltip"  '
                     + ' data-toggle="modal" '
-                    + ' data-content="{{ trans('general.sure_to_delete') }} ' + row.name + '?" '
+                    + ' data-content="{{ trans('general.sure_to_delete') }} ' + (row.procurement_tag ? row.procurement_tag : row.name) + '?" '
                     + ' data-title="{{  trans('general.delete') }}" onClick="return false;">'
                     + '<i class="fa fa-trash" aria-hidden="true"></i><span class="sr-only">Delete</span></a>&nbsp;';
             } else {
