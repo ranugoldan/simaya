@@ -71,7 +71,7 @@
       </div><!-- /.box-body -->
       </div> <!--/.box-->
 
-        <div class="box box-default">
+        {{-- <div class="box box-default">
 
           <div class="box-header with-border">
             <div class="box-heading">
@@ -104,7 +104,7 @@
               </table>
             </div><!-- /.table-responsive -->
           </div><!-- /.box-body -->
-        </div> <!--/.box-->
+        </div> <!--/.box--> --}}
 
 
 
