@@ -30,54 +30,54 @@ class ProcurementPresenter extends Presenter
                 "title" => trans('general.status'),
                 "visible" => true
             ],
-            [
-                "field" => "model",
-                "searchable" => true,
-                "sortable" => true,
-                "title" => trans('general.asset_model'),
-                "visible" => true,
-                "formatter" => "modelsLinkObjFormatter"
-            ],
-            [
-                "field" => "asset",
-                "searchable" => true,
-                "sortable" => true,
-                "title" => trans('general.asset'),
-                "visible" => true,
-                "formatter" => "hardwareLinkFormatter"
-            ],
+            // [
+            //     "field" => "model",
+            //     "searchable" => true,
+            //     "sortable" => true,
+            //     "title" => trans('general.asset_model'),
+            //     "visible" => true,
+            //     "formatter" => "modelsLinkObjFormatter"
+            // ],
+            // [
+            //     "field" => "asset",
+            //     "searchable" => true,
+            //     "sortable" => true,
+            //     "title" => trans('general.asset'),
+            //     "visible" => true,
+            //     "formatter" => "hardwareLinkFormatter"
+            // ],
             [
                 "field" => "supplier",
                 "searchable" => true,
                 "sortable" => true,
                 "title" => trans('general.supplier'),
-                "visible" => false,
+                "visible" => true,
                 "formatter" => "suppliersLinkObjFormatter"
             ],
-            [
-                "field" => "qty",
-                "searchable" => false,
-                "sortable" => false,
-                "title" => trans('general.quantity'),
-                "visible" => true
-            ],
-            [
-                "field" => "purchase_cost",
-                "searchable" => true,
-                "sortable" => true,
-                "title" => trans('general.purchase_cost'),
-                "visible" => true,
-                "footerFormatter" => "sumFormatter"
-            ],
-            [
-                "field" => "location",
-                "searchable" => false,
-                "sortable" => true,
-                "switchable" => true,
-                "title" => trans('general.location'),
-                "visible" => true,
-                "formatter" => "locationsLinkObjFormatter"
-            ],
+            // [
+            //     "field" => "qty",
+            //     "searchable" => false,
+            //     "sortable" => false,
+            //     "title" => trans('general.quantity'),
+            //     "visible" => true
+            // ],
+            // [
+            //     "field" => "purchase_cost",
+            //     "searchable" => true,
+            //     "sortable" => true,
+            //     "title" => trans('general.purchase_cost'),
+            //     "visible" => true,
+            //     "footerFormatter" => "sumFormatter"
+            // ],
+            // [
+            //     "field" => "location",
+            //     "searchable" => false,
+            //     "sortable" => true,
+            //     "switchable" => true,
+            //     "title" => trans('general.location'),
+            //     "visible" => true,
+            //     "formatter" => "locationsLinkObjFormatter"
+            // ],
             [
                 "field" => "department",
                 "searchable" => true,
@@ -93,7 +93,7 @@ class ProcurementPresenter extends Presenter
                 "sortable" => true,
                 "title" => trans('general.user'),
                 "visible" => true,
-                "formatter" => "usersLinkFormatter"
+                "formatter" => "usersLinkObjFormatter"
             ],
             [
                 "field" => "created_at",
