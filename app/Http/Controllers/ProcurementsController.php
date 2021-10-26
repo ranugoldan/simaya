@@ -69,4 +69,38 @@ class ProcurementsController extends Controller
         // dd($procurement->getErrors());
         return redirect()->back()->withInput()->withErrors($procurement->getErrors());
     }
+
+    public function edit($procurementId = null)
+    {
+        $this->authorize('update', Procurement::class);
+
+        if (is_null($item = Procurement::find($procurementId))) {
+            return redirect()->route('procurements.index')->with('error', trans('admin/procurements/message.does_not_exist'));
+        }
+
+        return view('procurements/edit', compact('item'));
+    }
+
+    public function destroy($procurementId)
+    {
+        $this->authorize('delete', Procurement::class);
+        if (is_null($procurement = Procurement::find($procurementId))) {
+            return redirect()->to(route('procurements.index'))->with('error', trans('admin/procurements/message.does_not_exist'));
+        }
+
+        $procurement->delete();
+
+        return redirect()->to(route('procurements.index'))->with('success', trans('admin/procurements/message.delete.success'));
+    }
+
+    public function show($procurementId = null)
+    {
+        $procurement = Procurement::find($procurementId);
+
+        if (isset($procurement->id)) {
+            return view('procurements/view', compact('procurement'));
+        }
+
+        return redirect()->route('procurements.index')->with('error', trans('admin/procurements/message.does_not_exist'));
+    }
 }
