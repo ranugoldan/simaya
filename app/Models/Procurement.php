@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Http\Traits\UniqueUndeletedTrait;
 use App\Models\Traits\Searchable;
 use App\Presenters\Presentable;
+use Gate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Watson\Validating\ValidatingTrait;
@@ -92,22 +93,24 @@ class Procurement extends Model
 
     public function models()
     {
-        return $this->belongsToMany('App\Models\AssetModel', 'procurement_models', 'procurement_id', 'model_id')->withTimestamps();
+        return $this->belongsToMany('App\Models\AssetModel', 'procurement_models', 'procurement_id', 'model_id')
+            ->withTimestamps()
+            ->withPivot(['qty', 'purchase_cost']);
     }
 
     public function department()
     {
-        return $this->hasOne('App\Models\Department', 'department_id');
+        return $this->belongsTo('App\Models\Department', 'department_id');
     }
 
     public function supplier()
     {
-        return $this->hasOne('App\Models\Supplier', 'supplier_id');
+        return $this->belongsTo('App\Models\Supplier', 'supplier_id');
     }
 
     public function user()
     {
-        return $this->hasOne('App\Models\User', 'user_id');
+        return $this->belongsTo('App\Models\User', 'user_id');
     }
 
     public function scopeOrderAssets($query, $order)
@@ -152,7 +155,7 @@ class Procurement extends Model
     {
         return $query
             ->leftJoin('users', 'procurements.user_id', '=', 'users.id')
-            ->orderBy('users.name', $order);
+            ->orderBy('users.first_name', $order);
     }
 
     public static function autoincrement_procurement()
