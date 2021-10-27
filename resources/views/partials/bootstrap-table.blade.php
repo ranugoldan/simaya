@@ -200,7 +200,7 @@
             }
 
             if ((row.available_actions) && (row.available_actions.approve === true)) {
-                actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '/approve" class="btn btn-sm btn-info" data-tooltip="true" title="Approve Item"><i class="fa fa-check" aria-hidden="true"></i><span class="sr-only">Approve</span></a>&nbsp;';
+                actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '/approve" class="btn btn-sm btn-info" data-tooltip="true" title="Approve Item"><i class="fa fa-check" aria-hidden="true" style="color: white"></i><span class="sr-only">Approve</span></a>&nbsp;';
             }
 
             if ((row.available_actions) && (row.available_actions.update === true)) {
