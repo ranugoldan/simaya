@@ -199,6 +199,10 @@
                 actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '/clone" class="btn btn-sm btn-info" data-tooltip="true" title="Clone Item"><i class="fa fa-copy" aria-hidden="true"></i><span class="sr-only">Clone</span></a>&nbsp;';
             }
 
+            if ((row.available_actions) && (row.available_actions.approve === true)) {
+                actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '/approve" class="btn btn-sm btn-info" data-tooltip="true" title="Approve Item"><i class="fa fa-check" aria-hidden="true"></i><span class="sr-only">Approve</span></a>&nbsp;';
+            }
+
             if ((row.available_actions) && (row.available_actions.update === true)) {
                 actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '/edit" class="btn btn-sm btn-warning" data-tooltip="true" title="Update Item"><i class="fa fa-pencil" aria-hidden="true"></i><span class="sr-only">Update</span></a>&nbsp;';
             }
