@@ -7,28 +7,16 @@
   'formAction'    => (isset($item->id)) ? route('procurements.update', ['procurement' => $item->id]) : route('procurements.store'),
 ])
 
+@php
+  $x = 1;
+
+  if ($item->models) {
+    $x = $item->models->count();
+  }
+@endphp
+
 @section('inputFields')
   {{-- Procurement Tag --}}
-  {{-- <div class="form-group {{ $errors->has('procurement_tag') ? 'has-error' : '' }}">
-    <label for="procurement_tag" class="col-md-3 control-label">{{ trans('a') }}</label>
-
-    @if ($item->id) --}}
-      {{-- editing an existing procurement --}}
-      {{-- <div class="col-md-7 col-sm-12 {{ (\App\Helpers\Helper::checkIfRequired($item, 'procurement_tag')) ? 'required' : '' }}">
-        <input type="text" class="form-control" name="procurement_tags[1]" id="procurement_tag" value="{{ Request::old('procurement_tag', $item->procurement_tag) }}" data-validation="required">
-        {!! $errors->first('procurement_tags', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}
-        {!! $errors->first('procurement_tag', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}
-      </div>
-    @else --}}
-      {{-- creating a new procurement --}}
-      {{-- <div class="col-md-7 col-sm-12" {{ (\App\Helpers\Helper::checkIfRequired($item, 'procurement_tag')) ? ' required' : '' }}>
-        <input type="text" class="form-control" name="procurement_tags[1]" id="procurement_tag" value="{{ Request::old('procurement_tag', \App\Models\Procurement::autoincrement_procurement()) }}" data-validation="required">
-        {!! $errors->first('procurement_tags', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}
-        {!! $errors->first('procurement_tag', '<span class="alert-msg"><i class="fa fa-times"></i> :message</span>') !!}
-      </div>
-    @endif
-  </div> --}}
-
   <div class="form-group {{ $errors->has('procurement_tag') ? 'has-error' : '' }}">
     <label for="procurement_tag" class="col-md-3 control-label">{{ trans('admin/procurements/form.tag') }}</label>
     <div class="col-md-7 col-sm-12{{  (\App\Helpers\Helper::checkIfRequired($item, 'procurement_tag')) ? ' required' : '' }}">
@@ -52,7 +40,7 @@
 
     <div class="col-md-7 required">
       <select name="model_id[1]" id="model_select_id" class="js-data-ajax" data-endpoint="models" data-placeholder="{{ trans('general.select_model') }}" style="width: 100%" aria-label="model_id" data-validation="required" required>
-        @if ($model_id = old('model_id', ($item->model_id ?? request('model_id') ?? '')))
+        @if ($model_id = old('model_id', ($item->models[0]->id ?? request('model_id') ?? '')))
           <option value="{{ $model_id }}" selected="selected">
             {{ (\App\Models\AssetModel::find($model_id)) ? \App\Models\AssetModel::find($model_id)->name : '' }}
           </option>
@@ -75,7 +63,11 @@
     <label for="qty" class="col-md-3 control-label">{{ trans('general.quantity') }}</label>
     <div class="col-md-7{{  (\App\Helpers\Helper::checkIfRequired($item, 'qty')) ? ' required' : '' }}">
       <div class="col-md-2" style="padding-left:0px">
-        <input class="form-control" type="text" name="qty[1]" aria-label="qty" id="qty" value="{{ old('qty', $item->qty) }}" {!!  (\App\Helpers\Helper::checkIfRequired($item, 'qty')) ? ' data-validation="required" required' : '' !!}/>
+        @if ($qty = old('qty', ($item->models[0]->pivot->qty ?? request('qty') ?? '')))
+          <input class="form-control" type="text" name="qty[1]" aria-label="qty" id="qty" value="{{ old('qty', $item->models[0]->pivot->qty) }}" {!!  (\App\Helpers\Helper::checkIfRequired($item, 'qty')) ? ' data-validation="required" required' : '' !!}>
+        @else
+          <input type="text" class="form-control" name=qty[1] aria-label="qty" id="qty" value="" {!!  (\App\Helpers\Helper::checkIfRequired($item, 'qty')) ? ' data-validation="required" required' : '' !!}>
+        @endif
       </div>
       {!! $errors->first('qty', '<span class="alert-msg" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i> :message</span>') !!}
     </div>
@@ -86,7 +78,11 @@
     <label for="purchase_cost" class="col-md-3 control-label">{{ trans('general.value') }}</label>
     <div class="col-md-9">
       <div class="input-group col-md-4" style="padding-left: 0px;">
-        <input class="form-control" type="text" name="purchase_cost[1]" aria-label="purchase_cost" id="purchase_cost" value="{{ old('purchase_cost', \App\Helpers\Helper::formatCurrencyOutput($item->purchase_cost)) }}" />
+        @if ($purchase_cost = old('purchase_cost', ($item->models[0]->pivot->purchase_cost ?? request('purchase_cost') ?? '')))
+          <input class="form-control" type="text" name="purchase_cost[1]" aria-label="purchase_cost" id="purchase_cost" value="{{ old('purchase_cost', \App\Helpers\Helper::formatCurrencyOutput($item->models[0]->pivot->purchase_cost)) }}">
+        @else
+          <input type="text" class="form-control" name=purchase_cost[1] aria-label="purchase_cost" id="purchase_cost" value="">
+        @endif
         <span class="input-group-addon">
           @if (isset($currency_type))
             {{ $currency_type }}
@@ -101,7 +97,58 @@
     </div>
   </div>
   
-  <div class="input_fields_wrap"></div>
+  <div class="input_fields_wrap">
+    @foreach ($item->models as $model)
+      @if ($loop->index == 0)
+        @continue
+      @endif
+
+      <span class="fields_wrapper">
+
+        <div class="form-group">
+          <label for="model_id" class="col-md-3 control-label">{{ trans('admin/procurements/form.model') }} #{{ $loop->index + 1 }}</label>
+          <div class="col-md-7 col-sm-12" required>
+            <select name="model_id[{{ $loop->index + 1 }}]" class="js-data-ajax model-ids" data-endpoint="models" data-placeholder="{{ trans('general.select_model') }}" style="width: 100%" aria-label="model_id" data-validation="required" required>
+              <option value="{{ $model->id }}" selected="selected">
+                {{ (\App\Models\AssetModel::find($model->id)) ? \App\Models\AssetModel::find($model->id)->name : '' }}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-2 col-sm-12">
+            <a href="#" class="remove_field btn btn-default btn-sm">
+              <i class="fa fa-minus"></i>
+            </a>
+          </div>
+        </div>
+        {{-- </div> --}}
+
+        <div class="form-group">
+          <label for="qty" class="col-md-3 control-label">{{ trans('general.quantity') }} #{{ $loop->index + 1 }}</label>
+          <div class="col-md-7 col-sm-12">
+            <div class="col-md-2" style="padding-left: 0px">
+              <input type="text" class="form-control" name="qty[{{ $loop->index + 1 }}]" aria-label="qty" value="{{ $model->pivot->qty }}">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="purchase_cost" class="col-md-3 control-label">{{ trans('general.value') }} #{{ $loop->index + 1 }}</label>
+          <div class="col-md-9">
+            <div class="input-group col-md-4" style="padding-left: 0px">
+              <input type="text" class="form-control" name="purchase_cost[{{ $loop->index + 1 }}]" aria-label="purchase_cost" value="{{ $model->pivot->purchase_cost }}">
+              <span class="input-group-addon">
+                @if (isset($currency_type))
+                  {{ $currency_type }}
+                @else
+                  {{ $snipeSettings->default_currency }}
+                @endif
+              </span>
+            </div>
+          </div>
+        </div>
+      </span>
+    @endforeach
+  </div>
 
   {{-- Supplier --}}
   @include('partials.forms.edit.supplier-select', ['translated_name' => trans('general.supplier'), 'fieldname' => 'supplier_id'])
@@ -112,10 +159,17 @@
 
     <div class="col-md-6">
       <select name="location_id[]" id="location_id_location_select" class="js-data-ajax" data-endpoint="locations" data-placeholder="{{ trans('general.select_location') }}" style="width: 100%" aria-label="location_id" {!! ((isset($item)) && (\App\Helpers\Helper::checkIfRequired($item, 'location_id'))) ? 'data-validation="required" required' : '' !!} multiple>
-        @if ($location_id = old('location_id', (isset($item)) ? $item->location_id : ''))
-          <option value="{{ $location_id }}" selected="selected" role="option" aria-hidden="true">
-            {{ (\App\Models\Location::find($location_id)) ? \App\Models\Location::find($location_id)->name : '' }}
-          </option>
+        @php
+          $location_ids = old('location_id') ?? $item->locations->map(function($location) {
+            return $location->id;
+          });
+        @endphp
+        @if ($location_ids)
+          @foreach ($location_ids as $location_id)
+            <option value="{{ $location_id }}" selected="selected" role="option" aria-hidden="true">
+              {{ (\App\Models\Location::find($location_id)) ? \App\Models\Location::find($location_id)->name : '' }}
+            </option>
+          @endforeach
         @else
           <option value="" role="option">{{ trans('general.select_location') }}</option>
         @endif
@@ -246,7 +300,7 @@
       var max_fields      = 100; //maximum input boxes allowed
       var wrapper         = $(".input_fields_wrap"); //Fields wrapper
       var add_button      = $(".add_field_button"); //Add button ID
-      var x               = 1; //initial text box count
+      var x               = {{ $x }}; //initial text box count
 
 
       $(add_button).click(function(e){ //on add input button click
