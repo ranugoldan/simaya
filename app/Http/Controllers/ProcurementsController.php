@@ -81,6 +81,52 @@ class ProcurementsController extends Controller
         return view('procurements/edit', compact('item'));
     }
 
+    public function update(ImageUploadRequest $request, $procurementId = null)
+    {
+        $this->authorize('update', Procurement::class);
+
+        if (is_null($procurement = Procurement::find($procurementId))) {
+            return redirect()->route('procurements.index')->with('error', trans('admin/procurements/message.does_not_exist'));
+        }
+
+        $procurement->procurement_tag   = $request->input('procurement_tag');
+        $procurement->status            = $request->input('status');
+        // $procurement->model_id          = $request->input('model_id');
+        // $procurement->asset_id          = $request->input('asset_id');
+        $procurement->supplier_id       = $request->input('supplier_id');
+        // $procurement->qty               = $request->input('qty');
+        // $procurement->purchase_cost     = $request->input('purchase_cost');
+        // $procurement->location_id       = $request->input('location_id');
+        $procurement->department_id     = $request->input('department_id');
+        $procurement->user_id           = $request->input('user_id');
+        
+        $model_ids                      = $request->input('model_id');
+        $model_qty                      = $request->input('qty');
+        $model_purchase_cost            = $request->input('purchase_cost');
+
+        $model_payload                  = array();
+        
+        foreach($model_ids as $idx => $model_id) {
+            $model_payload[$model_id] = [
+                'qty' => $model_qty[$idx],
+                'purchase_cost' => $model_purchase_cost[$idx]
+            ];
+        }
+
+        $location_id                    = $request->input('location_id');
+
+        $procurement = $request->handleImages($procurement);
+
+        if ($procurement->save()) {
+            $procurement->models()->sync($model_payload);
+            $procurement->locations()->sync($location_id);
+            
+            return redirect()->route("procurements.index")->with('success', trans('admin/procurements/message.update.success'));
+        }
+
+        return redirect()->back()->withInput()->withErrors($procurement->getErrors());
+    }
+
     public function destroy($procurementId)
     {
         $this->authorize('delete', Procurement::class);

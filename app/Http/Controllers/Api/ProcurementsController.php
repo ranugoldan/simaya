@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AssetCheckoutRequest;
 use App\Http\Transformers\AssetsTransformer;
 use App\Http\Transformers\LicensesTransformer;
+use App\Http\Transformers\ProcurementsTransformer;
 use App\Http\Transformers\SelectlistTransformer;
 use App\Models\Asset;
 use App\Models\AssetModel;
@@ -56,12 +57,12 @@ class ProcurementsController extends Controller
                 'procurements.id',
                 'procurements.procurement_tag',
                 'procurements.status',
-                'procurement_models.model_id',
-                'procurement_assets.asset_id',
+                // 'procurement_models.model_id',
+                // 'procurement_assets.asset_id',
                 'procurements.supplier_id',
-                'procurement_models.qty',
-                'procurement_models.purchase_cost',
-                'procurement_locations.location_id',
+                // 'procurement_models.qty',
+                // 'procurement_models.purchase_cost',
+                // 'procurement_locations.location_id',
                 'procurements.department_id',
                 'procurements.user_id',
                 'procurements.created_at',
@@ -71,7 +72,9 @@ class ProcurementsController extends Controller
             $procurements = $procurements->TextSearch($request->input('search'));
         }
 
-        $offset = (($procurements) && (request('offset') > $procurements->count())) ? 0 : request('offset', 0);
+        $procurements_count = $procurements->count();
+
+        $offset = (($procurements) && (request('offset') > $procurements_count)) ? 0 : request('offset', 0);
 
         ((config('app.max_results') >= $request->input('limit')) && ($request->filled('limit'))) ? $limit = $request->input('limit') : $limit = config('app.max_results');
 
@@ -102,7 +105,7 @@ class ProcurementsController extends Controller
                 break;
         }
 
-        $total = $procurements->count();
+        $total = $procurements_count;
         $procurements = $procurements->skip($offset)->take($limit)->get();
         return (new ProcurementsTransformer)->transformProcurements($procurements, $total);
     }
@@ -361,17 +364,17 @@ class ProcurementsController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('delete', Asset::class);
+        $this->authorize('delete', Procurement::class);
 
-        if ($asset = Asset::find($id)) {
+        if ($procurement = Procurement::find($id)) {
 
-            $this->authorize('delete', $asset);
+            $this->authorize('delete', $procurement);
 
-            DB::table('assets')
-                ->where('id', $asset->id)
+            DB::table('procurements')
+                ->where('id', $procurement->id)
                 ->update(array('assigned_to' => null));
 
-            $asset->delete();
+            $procurement->delete();
 
             return response()->json(Helper::formatStandardApiResponse('success', null, trans('admin/hardware/message.delete.success')));
         }
