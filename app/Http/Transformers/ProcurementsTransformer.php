@@ -7,6 +7,7 @@ use App\Models\Procurement;
 use Gate;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ProcurementsTransformer
 {
@@ -53,6 +54,7 @@ class ProcurementsTransformer
         }
       }
 
+      // Log::debug($procurement->models->pivot->qty);
       $array = [
         'id'              => (int) $procurement->id,
         'procurement_tag' => ($procurement->procurement_tag) ? e($procurement->procurement_tag) : null,
@@ -63,8 +65,8 @@ class ProcurementsTransformer
                                                           'id'    => (int) $procurement->supplier->id,
                                                           'name'  => e($procurement->supplier->name)
                                                         ] : null,
-        'qty'             => ($procurement->models->qty) ? (int) $procurement->models->qty : null,
-        'purchase_cost'   => ($procurement->models->purchase_cost) ? Helper::formatCurrencyOutput($procurement->models->purchase_cost) : null,
+        'qty'             => ($procurement->models[0]->pivot->qty) ? (int) $procurement->models[0]->pivot->qty : null,
+        'purchase_cost'   => ($procurement->models[0]->pivot->purchase_cost) ? Helper::formatCurrencyOutput($procurement->models[0]->pivot->purchase_cost) : null,
         'locations'       => $locations_arr,
         'department'      => ($procurement->department) ? [
                                                             'id'    => (int) $procurement->department->id,
@@ -75,8 +77,9 @@ class ProcurementsTransformer
       ];
 
       $permissions_array['available_actions'] = [
-        'update' => Gate::allows('update', Procurement::class) ? true : false,
-        'delete' => $procurement->isDeletable(),
+        'approve' => Gate::allows('approve', Procurement::class) ? true : false,
+        'update'  => Gate::allows('update', Procurement::class) ? true : false,
+        'delete'  => $procurement->isDeletable(),
       ];
 
       $array += $permissions_array;
