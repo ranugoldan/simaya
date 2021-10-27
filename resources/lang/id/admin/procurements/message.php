@@ -8,6 +8,11 @@ return array(
     'success' 		=> 'Pengadaan berhasil dibuat. :)'
   ),
 
+  'update' => array(
+    'error'   => 'Pengadaan gagal diperbarui, silakan coba lagi.',
+    'success' => 'Pengadaan berhasil diperbarui.'
+  ),
+
   'delete' => array(
     'confirm'   	=> 'Apakah Anda yakin ingin menghapus pengadaan ini?',
     'error'       => 'Terdapat kesalahan pada saat penghapusan pengadaan ini. Silakan coba kembali.',
