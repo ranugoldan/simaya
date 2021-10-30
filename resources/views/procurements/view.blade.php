@@ -2,13 +2,15 @@
 
 {{-- Page title --}}
 @section('title')
-  {{ trans('admin/procurements/general.view') }} {{ $procurement->procurement_tag }}
+  {{ trans('admin/procurements/general.view') }}: {{ $procurement->procurement_tag }}
   @parent
 @stop
 
 {{-- Right header --}}
 @section('header_right')
-  {{-- Empty --}}
+  <a href="{{ URL::previous() }}" class="btn btn-primary pull-right">
+    {{ trans('general.back') }}
+  </a>
 @stop
 
 {{-- Page content --}}
@@ -59,7 +61,7 @@
                         <strong>{{ trans('general.status') }}</strong>
                       </div>
                       <div class="col-md-6">
-                        {{ $procurement->status }}
+                        {{ \App\Helpers\Helper::formatProcurementStatus($procurement->status) }}
                       </div>
                     </div>
                   @endif
@@ -82,7 +84,7 @@
                     </div>
                   @endif
 
-                  @if ($procurement->models)
+                  @if ($procurement->models->isNotEmpty())
                     @foreach ($procurement->models as $model)
                       {{-- Model --}}
                       <div class="row">
@@ -116,9 +118,27 @@
                           <strong>{{ trans('general.purchase_cost') }} #{{ $loop->index + 1}}</strong>
                         </div>
                         <div class="col-md-6">
-                          {{ $model->pivot->purchase_cost }}
+                          {{ \App\Helpers\Helper::formatCurrencyOutput($model->pivot->purchase_cost) }}
                         </div>
                       </div>
+
+                      {{-- Asset --}}
+                      @if ($procurement->assets->isNotEmpty())
+                        <div class="row">
+                          <div class="col-md-2">
+                            <strong>{{ trans('general.asset') }} #{{ $loop->index + 1 }}</strong>
+                          </div>
+                          <div class="col-md-6">
+                            @can('view', \App\Models\Asset::class)
+                              <a href="{{ route('hardware.show', $procurement->assets[$loop->index]->id) }}">
+                                {{ $procurement->assets[$loop->index]->name }}
+                              </a>
+                            @else
+                              {{ $procurement->assets[$loop->index]->name }}
+                            @endcan
+                          </div>
+                        </div>
+                      @endif
                     @endforeach
 
                     {{-- Total --}}
@@ -132,13 +152,13 @@
                             return $model->pivot->qty * $model->pivot->purchase_cost;
                           });
                         @endphp
-                        {{ $total_cost }}
+                        {{ \App\Helpers\Helper::formatCurrencyOutput($total_cost) }}
                       </div>
                     </div>
                   @endif
 
                   {{-- Locations --}}
-                  @if ($procurement->locations)
+                  @if ($procurement->locations->isNotEmpty())
                     <div class="row">
                       <div class="col-md-2">
                         <strong>{{ trans('general.locations') }}</strong>
@@ -226,6 +246,56 @@
                   @endif
 
                 </div>
+              </div>
+
+              {{-- Action buttons --}}
+              <div class="col-md-4">
+                @if ($procurement->procurement_form)
+                  <div class="col-md-12" style="margin-bottom: 5px;">
+                    <a href="{{ Storage::disk('public')->url(app('procurement_form_upload_path').e($procurement->procurement_form)) }}" target="_blank">
+                      <img src="{{ Storage::disk('public')->url(app('procurement_form_upload_path').e($procurement->procurement_form)) }}" class="img-responsive">
+                    </a>
+                  </div>
+                @endif
+                @if ($procurement->status == 1)
+                  @can('approve', $procurement)
+                    <div class="col-md-12">
+                      <a href="{{ route('procurements.view_approve', $procurement->id) }}" style="width: 100%;" class="btn btn-sm btn-primary hidden-print">{{ trans('admin/procurements/general.approve_procurement') }}</a>
+                    </div>
+                  @endcan
+                @else
+                  <div class="col-md-12">
+                    <a class="btn btn-sm btn-primary disabled hidden-print" style="width: 100%;">{{ trans('admin/procurements/general.approve_procurement') }}</a>
+                  </div>
+                @endif
+
+                @if ($procurement->status == 2)
+                  @can('assign', $procurement)
+                    <div class="col-md-12" style="margin-top: 5px;">
+                      <a href="{{ route('procurements.view_assign', $procurement->id) }}" style="width: 100%;" class="btn btn-sm btn-primary hidden-print">{{ trans('admin/procurements/general.assign_assets') }}</a>
+                    </div>
+                  @endcan
+                @else
+                  <div class="col-md-12" style="margin-top: 5px;">
+                    <a class="btn btn-sm btn-primary disabled hidden-print" style="width: 100%;">{{ trans('admin/procurements/general.assign_assets') }}</a>
+                  </div>
+                @endif
+
+                @can('update', $procurement)
+                  <div class="col-md-12" style="margin-top: 5px;">
+                    <a href="{{ route('procurements.edit', $procurement->id) }}" style="width: 100%;" class="btn btn-sm btn-warning hidden-print">{{ trans('admin/procurements/general.edit') }}</a>
+                  </div>
+                @endcan
+
+                @can('delete', $procurement)
+                  <div class="col-md-12" style="margin-top: 5px;">
+                    <form action="{{ route('procurements.destroy', $procurement->id) }}" method="POST">
+                      {{ csrf_field() }}
+                      {{ method_field("DELETE") }}
+                      <button style="width: 100%;" class="btn btn-sm btn-danger hidden-print">{{ trans('admin/procurements/general.delete') }}</button>
+                    </form>
+                  </div>
+                @endcan
               </div>
             </div>
           </div> {{-- Details tab content ends --}}
