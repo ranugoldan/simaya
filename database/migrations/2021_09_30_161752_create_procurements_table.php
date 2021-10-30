@@ -19,7 +19,7 @@ class CreateProcurementsTable extends Migration
             $table->integer('supplier_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->integer('department_id')->unsigned();
-            $table->string('status');
+            $table->tinyInteger('status')->unsigend();
             $table->softDeletes();
             $table->timestamps();
         });
