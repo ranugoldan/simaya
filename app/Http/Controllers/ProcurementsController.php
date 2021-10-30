@@ -23,18 +23,12 @@ class ProcurementsController extends Controller
 
     public function store(ImageUploadRequest $request)
     {
-        // dd($request);
         $this->authorize('create', Procurement::class);
         $procurement = new Procurement();
         $procurement->id                = null;
         $procurement->procurement_tag   = $request->input('procurement_tag');
-        $procurement->status            = $request->input('status');
-        // $procurement->model_id          = $request->input('model_id');
-        // $procurement->asset_id          = $request->input('asset_id');
+        $procurement->status            = 1;
         $procurement->supplier_id       = $request->input('supplier_id');
-        // $procurement->qty               = $request->input('qty');
-        // $procurement->purchase_cost     = $request->input('purchase_cost');
-        // $procurement->location_id       = $request->input('location_id');
         $procurement->department_id     = $request->input('department_id');
         $procurement->user_id           = $request->input('user_id');
         
@@ -51,22 +45,17 @@ class ProcurementsController extends Controller
             ];
         }
 
-        // dd($model_payload);
-        // $asset_id                       = $request->input('asset_id');
-
         $location_id                    = $request->input('location_id');
 
         $procurement = $request->handleImages($procurement);
 
         if ($procurement->save()) {
             $procurement->models()->sync($model_payload);
-            // $procurement->assets()->attach($asset_id);
             $procurement->locations()->sync($location_id);
             
             return redirect()->route("procurements.index")->with('success', trans('admin/procurements/message.create.success'));
         }
 
-        // dd($procurement->getErrors());
         return redirect()->back()->withInput()->withErrors($procurement->getErrors());
     }
 
@@ -90,13 +79,8 @@ class ProcurementsController extends Controller
         }
 
         $procurement->procurement_tag   = $request->input('procurement_tag');
-        $procurement->status            = $request->input('status');
-        // $procurement->model_id          = $request->input('model_id');
-        // $procurement->asset_id          = $request->input('asset_id');
+        $procurement->status            = $procurement->status;
         $procurement->supplier_id       = $request->input('supplier_id');
-        // $procurement->qty               = $request->input('qty');
-        // $procurement->purchase_cost     = $request->input('purchase_cost');
-        // $procurement->location_id       = $request->input('location_id');
         $procurement->department_id     = $request->input('department_id');
         $procurement->user_id           = $request->input('user_id');
         
@@ -148,5 +132,75 @@ class ProcurementsController extends Controller
         }
 
         return redirect()->route('procurements.index')->with('error', trans('admin/procurements/message.does_not_exist'));
+    }
+
+    public function view_approve($procurementId = null)
+    {
+        $this->authorize('approve', Procurement::class);
+
+        $procurement = Procurement::find($procurementId);
+
+        if (isset($procurement->id)) {
+            return view('procurements/approve', compact('procurement'));
+        }
+
+        return redirect()->route('procurements.index')->with('error', trans('admin/procurements/message.does_not_exist'));
+    }
+
+    public function update_approve(ImageUploadRequest $request, $procurementId = null)
+    {
+        $this->authorize('approve', Procurement::class);
+        
+        if (is_null($procurement = Procurement::find($procurementId))) {
+            return redirect()->route('procurements.index')->with('error', trans('admin/procurements/message.does_not_exist'));
+        }
+
+        $procurement = $request->handleImages($procurement, 600, 'procurement_form', 'procurement_form', 'procurement_form');
+
+        if (isset($procurement->procurement_form)) {
+            $procurement->status = 2;
+        }
+
+        if ($procurement->save()) {
+            return redirect()->route("procurements.index")->with('success', trans('admin/procurements/message.approve.success'));
+        }
+
+        return redirect()->back()->withInput()->withErrors($procurement->getErrors());
+    }
+
+    public function view_assign($procurementId = null)
+    {
+        $this->authorize('assign', Procurement::class);
+
+        $procurement = Procurement::find($procurementId);
+
+        if (isset($procurement->id)) {
+            return view('procurements/assign', compact('procurement'));
+        }
+
+        return redirect()->route('procurements.index')->with('error', trans('admin/procurements/message.does_not_exist'));
+    }
+
+    public function update_assign(ImageUploadRequest $request, $procurementId = null)
+    {
+        $this->authorize('assign', Procurement::class);
+        
+        if (is_null($procurement = Procurement::find($procurementId))) {
+            return redirect()->route('procurements.index')->with('error', trans('admin/procurements/message.does_not_exist'));
+        }
+
+        $asset_ids = collect($request->asset_id);
+
+        if (($procurement->models->count()) == $asset_ids->count()) {
+            $procurement->status = 3;
+        }
+
+        if ($procurement->save()) {
+            $procurement->assets()->sync($asset_ids);
+
+            return redirect()->route("procurements.index")->with('success', trans('admin/procurements/message.assign.success'));
+        }
+
+        return redirect()->back()->withInput()->withErrors($procurement->getErrors());
     }
 }
