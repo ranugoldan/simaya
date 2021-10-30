@@ -54,19 +54,18 @@ class ProcurementsTransformer
         }
       }
 
-      // Log::debug($procurement->models->pivot->qty);
       $array = [
         'id'              => (int) $procurement->id,
         'procurement_tag' => ($procurement->procurement_tag) ? e($procurement->procurement_tag) : null,
-        'status'          => ($procurement->status) ? e($procurement->status) : null,
+        'status'          => ($procurement->status) ? Helper::formatProcurementStatus($procurement->status) : null,
         'models'          => $models_arr,
         'assets'          => $assets_arr,
         'supplier'        => ($procurement->supplier) ? [
                                                           'id'    => (int) $procurement->supplier->id,
                                                           'name'  => e($procurement->supplier->name)
                                                         ] : null,
-        'qty'             => ($procurement->models[0]->pivot->qty) ? (int) $procurement->models[0]->pivot->qty : null,
-        'purchase_cost'   => ($procurement->models[0]->pivot->purchase_cost) ? Helper::formatCurrencyOutput($procurement->models[0]->pivot->purchase_cost) : null,
+        'qty'             => ($procurement->models->isNotEmpty()) ? (int) $procurement->models[0]->pivot->qty : null,
+        'purchase_cost'   => ($procurement->models->isNotEmpty()) ? Helper::formatCurrencyOutput($procurement->models[0]->pivot->purchase_cost) : null,
         'locations'       => $locations_arr,
         'department'      => ($procurement->department) ? [
                                                             'id'    => (int) $procurement->department->id,
@@ -77,7 +76,8 @@ class ProcurementsTransformer
       ];
 
       $permissions_array['available_actions'] = [
-        'approve' => Gate::allows('approve', Procurement::class) ? true : false,
+        'approve' => $procurement->isApprovable(),
+        'assign'  => $procurement->isAssignable(),
         'update'  => Gate::allows('update', Procurement::class) ? true : false,
         'delete'  => $procurement->isDeletable(),
       ];
