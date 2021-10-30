@@ -201,6 +201,14 @@
 
             if ((row.available_actions) && (row.available_actions.approve === true)) {
                 actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '/approve" class="btn btn-sm btn-info" data-tooltip="true" title="Approve Item"><i class="fa fa-check" aria-hidden="true" style="color: white"></i><span class="sr-only">Approve</span></a>&nbsp;';
+            } else if (row.available_actions.approve === false) {
+                actions += '<a class="btn btn-info btn-sm disabled" onClick="return false;"><i class="fa fa-check"></i></a>&nbsp;';
+            }
+
+            if ((row.available_actions) && (row.available_actions.assign === true)) {
+                actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '/assign" class="btn btn-sm btn-info" data-tooltip="true" title="Assign to Item"><i class="fa fa-barcode" aria-hidden="true" style="color: white"></i><span class="sr-only">Assign</span></a>&nbsp;';
+            } else if (row.available_actions.assign === false) {
+                actions += '<a class="btn btn-info btn-sm disabled" onClick="return false;"><i class="fa fa-barcode"></i></a>&nbsp;';
             }
 
             if ((row.available_actions) && (row.available_actions.update === true)) {
