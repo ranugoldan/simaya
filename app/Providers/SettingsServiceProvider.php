@@ -148,6 +148,15 @@ class SettingsServiceProvider extends ServiceProvider
         });
 
 
+        // Procurement form paths and URLs
+        \App::singleton('procurement_form_upload_path', function() {
+            return 'procurement_form/';
+        });
+
+        \App::singleton('procurement_form_upload_url', function() {
+            return 'procurement_form/';
+        });
+
 
         // Set the monetary locale to the configured locale to make helper::parseFloat work.
         setlocale(LC_MONETARY, config('app.locale'));
