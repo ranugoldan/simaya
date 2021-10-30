@@ -21,11 +21,11 @@ class Procurement extends Model
     
     protected $rules = array(
         'procurement_tag'       => 'required|max:255|unique_undeleted',
-        'status'                => 'max:255|nullable',
+        'status'                => 'numeric',
         'model_id'              => 'exists:models,id',
         'asset_id'              => 'exists:assets,id',
         'supplier_id'           => 'exists:suppliers,id',
-        // 'qty'                   => 'required',
+        'qty'                   => 'numeric',
         'purchase_cost'         => 'numeric',
         'location_id'           => 'exists:locations,id',
         'department_id'         => 'exists:departments,id',
@@ -79,6 +79,16 @@ class Procurement extends Model
     public function isDeletable()
     {
         return Gate::allows('delete', $this);
+    }
+
+    public function isApprovable()
+    {
+        return Gate::allows('approve', $this) && ($this->status===1);
+    }
+
+    public function isAssignable()
+    {
+        return Gate::allows('assign', $this) && ($this->status===2);
     }
 
     public function assets()
