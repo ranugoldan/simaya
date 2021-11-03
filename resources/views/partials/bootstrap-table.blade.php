@@ -199,6 +199,12 @@
                 actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '/clone" class="btn btn-sm btn-info" data-tooltip="true" title="Clone Item"><i class="fa fa-copy" aria-hidden="true"></i><span class="sr-only">Clone</span></a>&nbsp;';
             }
 
+            if ((row.available_actions) && (row.available_actions.print === true)) {
+                actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '/print" class="btn btn-sm btn-info" data-tooltip="true" title="Print Item"><i class="fa fa-file" aria-hidden="true" style="color: white"></i><span class="sr-only">Print</span></a>&nbsp;';
+            } else if (row.available_actions.print === false) {
+                actions += '<a class="btn btn-info btn-sm disabled" onClick="return false;"><i class="fa fa-file"></i></a>&nbsp;';
+            }
+
             if ((row.available_actions) && (row.available_actions.approve === true)) {
                 actions += '<a href="{{ url('/') }}/' + dest + '/' + row.id + '/approve" class="btn btn-sm btn-info" data-tooltip="true" title="Approve Item"><i class="fa fa-check" aria-hidden="true" style="color: white"></i><span class="sr-only">Approve</span></a>&nbsp;';
             } else if (row.available_actions.approve === false) {
