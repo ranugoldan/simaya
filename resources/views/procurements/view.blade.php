@@ -245,6 +245,65 @@
                     </div>
                   @endif
 
+                  {{-- Approved by --}}
+                  @if ($procurement->approved_by)
+                    <div class="row">
+                      <div class="col-md-2">
+                        <strong>{{ trans('admin/procurements/general.approved_by') }}</strong>
+                      </div>
+                      <div class="col-md-6">
+                        @can('superuser')
+                          <a href="{{ route('users.show', $procurement->approved_by) }}">
+                            {{ $procurement->user->first_name }} {{ $procurement->user->last_name }}
+                          </a>
+                        @else
+                          {{ $procurement->user->first_name }} {{ $procurement->user->last_name }}
+                        @endcan
+                      </div>
+                    </div>
+                  @endif
+
+                  {{-- Approved at --}}
+                  @if ($procurement->approved_at != '')
+                    <div class="row">
+                      <div class="col-md-2">
+                        <strong>{{ trans('admin/procurements/general.approved_at') }}</strong>
+                      </div>
+                      <div class="col-md-6">
+                        {{ \App\Helpers\Helper::getFormattedDateObject($procurement->approved_at, 'datetime', false) }}
+                      </div>
+                    </div>
+                  @endif
+
+                  {{-- Assigned by --}}
+                  @if ($procurement->assigned_by)
+                    <div class="row">
+                      <div class="col-md-2">
+                        <strong>{{ trans('admin/procurements/general.assigned_by') }}</strong>
+                      </div>
+                      <div class="col-md-6">
+                        @can('superuser')
+                          <a href="{{ route('users.show', $procurement->assigned_by) }}">
+                            {{ $procurement->user->first_name }} {{ $procurement->user->last_name }}
+                          </a>
+                        @else
+                          {{ $procurement->user->first_name }} {{ $procurement->user->last_name }}
+                        @endcan
+                      </div>
+                    </div>
+                  @endif
+
+                  {{-- Assigned at --}}
+                  @if ($procurement->assigned_at != '')
+                    <div class="row">
+                      <div class="col-md-2">
+                        <strong>{{ trans('admin/procurements/general.assigned_at') }}</strong>
+                      </div>
+                      <div class="col-md-6">
+                        {{ \App\Helpers\Helper::getFormattedDateObject($procurement->assigned_at, 'datetime', false) }}
+                      </div>
+                    </div>
+                  @endif
                 </div>
               </div>
 
@@ -257,29 +316,34 @@
                     </a>
                   </div>
                 @endif
-                @if ($procurement->status == 1)
-                  @can('approve', $procurement)
-                    <div class="col-md-12">
+
+                <div class="col-md-12">
+                  <a href="{{ route('procurements.print', $procurement->id) }}" style="width: 100%;" class="btn btn-sm btn-primary hidden-print">{{ trans('admin/procurements/general.print') }}</a>
+                </div>
+
+                @can('approve', $procurement)
+                  @if ($procurement->status == 1)
+                    <div class="col-md-12" style="margin-top: 5px;">
                       <a href="{{ route('procurements.view_approve', $procurement->id) }}" style="width: 100%;" class="btn btn-sm btn-primary hidden-print">{{ trans('admin/procurements/general.approve_procurement') }}</a>
                     </div>
-                  @endcan
-                @else
-                  <div class="col-md-12">
-                    <a class="btn btn-sm btn-primary disabled hidden-print" style="width: 100%;">{{ trans('admin/procurements/general.approve_procurement') }}</a>
-                  </div>
-                @endif
-
-                @if ($procurement->status == 2)
-                  @can('assign', $procurement)
+                  @else
+                    <div class="col-md-12" style="margin-top: 5px;">
+                      <a class="btn btn-sm btn-primary disabled hidden-print" style="width: 100%;">{{ trans('admin/procurements/general.approve_procurement') }}</a>
+                    </div>
+                  @endif
+                @endcan
+                    
+                @can('assign', $procurement)
+                  @if ($procurement->status == 2)
                     <div class="col-md-12" style="margin-top: 5px;">
                       <a href="{{ route('procurements.view_assign', $procurement->id) }}" style="width: 100%;" class="btn btn-sm btn-primary hidden-print">{{ trans('admin/procurements/general.assign_assets') }}</a>
                     </div>
-                  @endcan
-                @else
-                  <div class="col-md-12" style="margin-top: 5px;">
-                    <a class="btn btn-sm btn-primary disabled hidden-print" style="width: 100%;">{{ trans('admin/procurements/general.assign_assets') }}</a>
-                  </div>
-                @endif
+                  @else
+                    <div class="col-md-12" style="margin-top: 5px;">
+                      <a class="btn btn-sm btn-primary disabled hidden-print" style="width: 100%;">{{ trans('admin/procurements/general.assign_assets') }}</a>
+                    </div>
+                  @endif
+                @endcan
 
                 @can('update', $procurement)
                   <div class="col-md-12" style="margin-top: 5px;">
