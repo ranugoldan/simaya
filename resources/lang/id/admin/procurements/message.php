@@ -1,7 +1,9 @@
 <?php
 
 return array(
-  'does_not_exist' => 'Pengadaan tidak ditemukan.',
+  'approval_not_uploaded' => 'Form persetujuan belum diunggah.',
+  'approval_uploaded'     => 'Form persetujuan telah diunggah.',
+  'does_not_exist'        => 'Pengadaan tidak ditemukan.',
 
   'approve' => array(
     'error'   		=> 'Form persetujuan gagal diunggah, silakan coba lagi.',

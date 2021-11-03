@@ -1,7 +1,9 @@
 <?php
 
 return array(
-  'does_not_exist' => 'Procurement does not exist.',
+  'approval_not_uploaded' => 'Approval form has not been uploaded.',
+  'approval_uploaded'     => 'Approval form has been uploaded.',
+  'does_not_exist'        => 'Procurement does not exist.',
 
   'approve' => array(
     'error'   		=> 'Approval form was not uploaded, please try again.',
