@@ -52,20 +52,19 @@ class ProcurementsController extends Controller
             'created_at',
         ];
 
-        $procurements = Procurement::with('models', 'assets', 'supplier', 'locations', 'department', 'user')
+        $procurements = Procurement::with('supplier', 'department', 'user')
             ->select([
                 'procurements.id',
                 'procurements.procurement_tag',
                 'procurements.status',
-                // 'procurement_models.model_id',
-                // 'procurement_assets.asset_id',
                 'procurements.supplier_id',
-                // 'procurement_models.qty',
-                // 'procurement_models.purchase_cost',
-                // 'procurement_locations.location_id',
                 'procurements.department_id',
                 'procurements.user_id',
                 'procurements.created_at',
+                'procurements.approved_by',
+                'procurements.approved_at',
+                'procurements.assigned_by',
+                'procurements.assigned_at',
             ]);
         
         if ($request->filled('search')) {
