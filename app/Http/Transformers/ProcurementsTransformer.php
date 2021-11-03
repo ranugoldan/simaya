@@ -73,9 +73,14 @@ class ProcurementsTransformer
                                                           ] : null,
         'user'            => ($procurement->user) ? (new UsersTransformer)->transformUser($procurement->user) : null,
         'created_at'      => Helper::getFormattedDateObject($procurement->created_at, 'datetime'),
+        'approved_by'     => ($procurement->approved_by) ? (new UsersTransformer)->transformUser(\App\Models\User::find($procurement->approved_by)) : null,
+        'approved_at'     => Helper::getFormattedDateObject($procurement->approved_at, 'datetime'),
+        'assigned_by'     => ($procurement->assigned_by) ? (new UsersTransformer)->transformUser(\App\Models\User::find($procurement->assigned_by)) : null,
+        'assigned_at'     => Helper::getFormattedDateObject($procurement->assigned_at, 'datetime'),
       ];
 
       $permissions_array['available_actions'] = [
+        'print'   => Gate::allows('view', Procurement::class) ? true : false,
         'approve' => $procurement->isApprovable(),
         'assign'  => $procurement->isAssignable(),
         'update'  => Gate::allows('update', Procurement::class) ? true : false,
