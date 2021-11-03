@@ -87,6 +87,27 @@
       </div>
     </div>
   </div>
+
+  {{-- Asset --}}
+  @if (isset($item->id) && ($item->status == 3))
+    @can('assign', \App\Models\Procurement::class)
+      <div class="form-group{{ $errors->has('asset_id') ? ' has-error' : '' }}">
+        <label for="asset_id" class="col-md-3 control-label">{{ trans('admin/procurements/form.asset') }}</label>
+        <div class="col-md-7">
+          <select name="asset_id[1]" id="asset_select_id" class="js-data-ajax" data-endpoint="hardware" data-placeholder="{{ trans('general.select_asset') }}" style="width: 100%" aria-label="asset_id">
+            @if ($asset_id = old('asset_id[1]', ($item->assets[0]->id ?? request('asset_id') ?? '')))
+              <option value="{{ $asset_id }}" selected="selected">
+                {{ (\App\Models\Asset::find($asset_id)) ? \App\Models\Asset::find($asset_id)->name : '' }}
+              </option>
+            @else
+              <option value="" role="option">{{ trans('general.select_asset') }}</option>
+            @endif
+          </select>
+          {!! $errors->first('asset_id', '<div class="col-md-8 col-md-offset-3"><span class="alert-msg" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i> :message</span></div>') !!}
+        </div>
+      </div>
+    @endcan
+  @endif
   
   <div class="input_fields_wrap">
     @foreach ($item->models as $model)
@@ -136,6 +157,21 @@
             </div>
           </div>
         </div>
+
+        @if (isset($item->id) && ($item->status == 3))
+          @can('assign', \App\Models\Procurement::class)
+            <div class="form-group">
+              <label for="asset_id" class="col-md-3 control-label">{{ trans('admin/procurements/form.asset') }} #{{ $loop->index + 1 }}</label>
+              <div class="col-md-7 col-sm-12">
+                <select name="asset_id[{{ $loop->index + 1 }}]" class="js-data-ajax" data-endpoint="hardware" data-placeholder="{{ trans('general.select_asset') }}" style="width: 100%" aria-label="asset_id">
+                  <option value="{{ $item->assets[$loop->index] }}" selected="selected">
+                    {{ ($item->assets[$loop->index]) ? ($item->assets[$loop->index]->name) : '' }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          @endcan
+        @endif
       </span>
     @endforeach
   </div>
@@ -188,6 +224,25 @@
 
   {{-- User --}}
   @include('partials.forms.edit.user-select', ['translated_name' => trans('general.user'), 'fieldname' => 'user_id', 'required' => true])
+
+  {{-- Procurement form --}}
+  @if ($item->status == 2 || $item->status == 3)
+    @if ($item->procurement_form && $item->procurement_form!='')
+      <div class="form-group">
+        <label for="procurement_form_delete" class="col-md-3 control-label">{{ trans('admin/procurements/form.delete_form') }}</label>
+        <div class="col-md-9">
+          <label for="procurement_form_delete">
+            {{ Form::checkbox('procurement_form_delete', '1', old('procurement_form_delete'), array('class' => 'minimal', 'aria-label' => 'required')) }}
+          </label>
+          <br>
+          <img src="{{ url('/') }}/uploads/procurement_form/{{ $item->procurement_form }}" alt="Procurement for for {{ $item->procurement_tag }}" class="img-responsive">
+          {!! $errors->first('procurement_form_delete', '<span class="alert-msg" aria-hidden="true"><br>:message</span>') !!}
+        </div>
+      </div>
+    @endif
+
+    @include ('partials.forms.edit.image-upload', ['fieldname' => 'procurement_form', 'label' => trans('admin/procurements/general.procurement_form')])
+  @endif
 @stop
 
 @section('moar_scripts')
@@ -268,23 +323,6 @@
       }
   }
 
-
-  // $(function () {
-  //     //grab custom fields for this model whenever model changes.
-  //     $('#model_select_id').on("change", fetchCustomFields);
-
-  //     //initialize assigned user/loc/asset based on statuslabel's statustype
-  //     user_add($(".status_id option:selected").val());
-
-  //     //whenever statuslabel changes, update assigned user/loc/asset
-  //     $(".status_id").on("change", function () {
-  //         user_add($(".status_id").val());
-  //     });
-
-  // });
-
-
-  // Add another asset tag + serial combination if the plus sign is clicked
   $(document).ready(function() {
 
       var max_fields      = 100; //maximum input boxes allowed
