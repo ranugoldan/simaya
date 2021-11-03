@@ -86,6 +86,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/{procurementId}/assign',
             [\App\Http\Controllers\ProcurementsController::class, 'update_assign']
         )->name('procurements.update_assign');
+
+        Route::get('/{procurementId}/print',
+            [\App\Http\Controllers\ProcurementsController::class, 'print']
+        )->name('procurements.print');
     });
 });
 
