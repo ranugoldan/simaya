@@ -117,7 +117,7 @@ class ProcurementsController extends Controller
             }
         }
 
-        $procurement = $request->handleImages($procurement, 600, 'procurement_form', 'procurement_form', 'procurement_form');
+        $procurement = $request->handleImages($procurement, 1200, 'procurement_form', 'procurement_form', 'procurement_form');
 
         if ($procurement->save()) {
             $procurement->models()->sync($model_payload);
@@ -188,7 +188,7 @@ class ProcurementsController extends Controller
             return redirect()->route('procurements.index')->with('error', trans('admin/procurements/message.does_not_exist'));
         }
 
-        $procurement = $request->handleImages($procurement, 600, 'procurement_form', 'procurement_form', 'procurement_form');
+        $procurement = $request->handleImages($procurement, 1200, 'procurement_form', 'procurement_form', 'procurement_form');
 
         if (isset($procurement->procurement_form) && $procurement->status != 3) {
             $procurement->status = 2;
