@@ -597,7 +597,44 @@ return array(
         ),
     ),
 
-
+    'Procurements' => array(
+        array(
+            'permission'    => 'procurements.view',
+            'label'         => 'View ',
+            'note'          => '',
+            'display'       => true,
+        ),
+        array(
+            'permission'    => 'procurements.create',
+            'label'         => 'Create ',
+            'note'          => '',
+            'display'       => true,
+        ),
+        array(
+            'permission'    => 'procurements.edit',
+            'label'         => 'Edit ',
+            'note'          => '',
+            'display'       => true,
+        ),
+        array(
+            'permission'    => 'procurements.delete',
+            'label'         => 'Delete ',
+            'note'          => '',
+            'display'       => true,
+        ),
+        array(
+            'permission'    => 'procurements.approve',
+            'label'         => 'Approve ',
+            'note'          => '',
+            'display'       => true,
+        ),
+        array(
+            'permission'    => 'procurements.assign',
+            'label'         => 'Assign ',
+            'note'          => '',
+            'display'       => true,
+        ),
+    ),
 
 
     'Self' => array(
