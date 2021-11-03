@@ -30,22 +30,6 @@ class ProcurementPresenter extends Presenter
                 "title" => trans('general.status'),
                 "visible" => true
             ],
-            // [
-            //     "field" => "model",
-            //     "searchable" => true,
-            //     "sortable" => true,
-            //     "title" => trans('general.asset_model'),
-            //     "visible" => true,
-            //     "formatter" => "modelsLinkObjFormatter"
-            // ],
-            // [
-            //     "field" => "asset",
-            //     "searchable" => true,
-            //     "sortable" => true,
-            //     "title" => trans('general.asset'),
-            //     "visible" => true,
-            //     "formatter" => "hardwareLinkFormatter"
-            // ],
             [
                 "field" => "supplier",
                 "searchable" => true,
@@ -54,30 +38,6 @@ class ProcurementPresenter extends Presenter
                 "visible" => true,
                 "formatter" => "suppliersLinkObjFormatter"
             ],
-            // [
-            //     "field" => "qty",
-            //     "searchable" => false,
-            //     "sortable" => false,
-            //     "title" => trans('general.quantity'),
-            //     "visible" => true
-            // ],
-            // [
-            //     "field" => "purchase_cost",
-            //     "searchable" => true,
-            //     "sortable" => true,
-            //     "title" => trans('general.purchase_cost'),
-            //     "visible" => true,
-            //     "footerFormatter" => "sumFormatter"
-            // ],
-            // [
-            //     "field" => "location",
-            //     "searchable" => false,
-            //     "sortable" => true,
-            //     "switchable" => true,
-            //     "title" => trans('general.location'),
-            //     "visible" => true,
-            //     "formatter" => "locationsLinkObjFormatter"
-            // ],
             [
                 "field" => "department",
                 "searchable" => true,
@@ -105,6 +65,40 @@ class ProcurementPresenter extends Presenter
                 'formatter' => 'dateDisplayFormatter'
             ],
             [
+                "field" => "approved_by",
+                "searchable" => true,
+                "sortable" => true,
+                "title" => trans('admin/procurements/table.approved_by'),
+                "visible" => true,
+                "formatter" => "usersLinkObjFormatter"
+            ],
+            [
+                "field" => "approved_at",
+                "searchable" => true,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('admin/procurements/table.approved_at'),
+                "visible" => true,
+                'formatter' => 'dateDisplayFormatter'
+            ],
+            [
+                "field" => "assigned_by",
+                "searchable" => true,
+                "sortable" => true,
+                "title" => trans('admin/procurements/table.assigned_by'),
+                "visible" => true,
+                "formatter" => "usersLinkObjFormatter"
+            ],
+            [
+                "field" => "assigned_at",
+                "searchable" => true,
+                "sortable" => true,
+                "switchable" => true,
+                "title" => trans('admin/procurements/table.assigned_at'),
+                "visible" => true,
+                'formatter' => 'dateDisplayFormatter'
+            ],
+            [
                 "field" => "actions",
                 "searchable" => false,
                 "sortable" => false,
@@ -117,42 +111,4 @@ class ProcurementPresenter extends Presenter
 
         return json_encode($layout);
     }
-
-
-
-    // /**
-    //  * Link to this locations name
-    //  * @return string
-    //  */
-    // public function nameUrl()
-    // {
-    //     return (string)link_to_route('locations.show', $this->name, $this->id);
-    // }
-
-    // /**
-    //  * Getter for Polymorphism.
-    //  * @return mixed
-    //  */
-    // public function name()
-    // {
-    //     return $this->model->name;
-    // }
-
-    // /**
-    //  * Url to view this item.
-    //  * @return string
-    //  */
-    // public function viewUrl()
-    // {
-    //     return route('locations.show', $this->id);
-    // }
-
-    // public function glyph()
-    // {
-    //     return '<i class="fa fa-map-marker" aria-hidden="true"></i>';
-    // }
-    
-    // public function fullName() {
-    //     return $this->name;
-    // }
 }
