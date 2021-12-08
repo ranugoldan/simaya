@@ -749,6 +749,14 @@
             </li>
             @endcan
 
+            @can('view', \App\Models\Procurement::class)
+            <li{!! (Request::is('procurements*') ? ' class="active"' : '') !!}>
+                <a href="{{ route('procurements.index') }}">
+                  <i class="fa fa-shopping-cart"></i>
+                  <span>{{ trans('general.procurements') }}</span>
+                </a>
+            </li>
+            @endcan
 
           </ul>
         </section>

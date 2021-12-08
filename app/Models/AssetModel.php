@@ -137,6 +137,13 @@ class AssetModel extends SnipeModel
         return $this->belongsTo('\App\Models\Manufacturer', 'manufacturer_id');
     }
 
+
+    public function procurements()
+    {
+        return $this->belongsToMany('\App\Models\Procurement', 'procurement_models', 'model_id', 'procurement_id');
+    }
+
+
     /**
      * Establishes the model -> fieldset relationship
      *

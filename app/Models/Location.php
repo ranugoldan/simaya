@@ -172,6 +172,11 @@ class Location extends SnipeModel
             ->with('children');
     }
 
+    public function procurements()
+    {
+        return $this->belongsToMany('\App\Models\Procurement', 'procurement_locations', 'location_id', 'procurement_id');
+    }
+
     // I don't think we need this anymore since we de-normed location_id in assets?
     public function assignedAssets()
     {

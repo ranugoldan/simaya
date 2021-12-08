@@ -65,6 +65,32 @@ Route::group(['middleware' => 'auth'], function () {
         'parameters' => ['department' => 'department_id']
     ]);
 
+    /**
+     * Procurements
+     */
+    Route::resource('procurements', 'ProcurementsController', [
+        'parameters' => ['procurement' => 'procurement_id']
+    ]);
+
+    Route::prefix('procurements')->group(function() {
+        Route::get('/{procurementId}/approve',
+            [\App\Http\Controllers\ProcurementsController::class, 'view_approve']
+        )->name('procurements.view_approve');
+        Route::put('/{procurementId}/approve',
+            [\App\Http\Controllers\ProcurementsController::class, 'update_approve']
+        )->name('procurements.update_approve');
+
+        Route::get('/{procurementId}/assign',
+            [\App\Http\Controllers\ProcurementsController::class, 'view_assign']
+        )->name('procurements.view_assign');
+        Route::put('/{procurementId}/assign',
+            [\App\Http\Controllers\ProcurementsController::class, 'update_assign']
+        )->name('procurements.update_assign');
+
+        Route::get('/{procurementId}/print',
+            [\App\Http\Controllers\ProcurementsController::class, 'print']
+        )->name('procurements.print');
+    });
 });
 
 

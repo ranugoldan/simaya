@@ -16,6 +16,7 @@ use App\Models\Depreciation;
 use App\Models\License;
 use App\Models\Location;
 use App\Models\Manufacturer;
+use App\Models\Procurement;
 use App\Models\Statuslabel;
 use App\Models\Supplier;
 use App\Models\User;
@@ -33,6 +34,7 @@ use App\Policies\DepreciationPolicy;
 use App\Policies\LicensePolicy;
 use App\Policies\LocationPolicy;
 use App\Policies\ManufacturerPolicy;
+use App\Policies\ProcurementPolicy;
 use App\Policies\StatuslabelPolicy;
 use App\Policies\SupplierPolicy;
 use App\Policies\UserPolicy;
@@ -68,6 +70,7 @@ class AuthServiceProvider extends ServiceProvider
         User::class => UserPolicy::class,
         Manufacturer::class => ManufacturerPolicy::class,
         Company::class => CompanyPolicy::class,
+        Procurement::class => ProcurementPolicy::class,
     ];
 
     /**

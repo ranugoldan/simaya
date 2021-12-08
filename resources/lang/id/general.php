@@ -167,6 +167,7 @@
     'per_page'				=> 'Hasil per halaman',
     'previous'				=> 'Sebelumnya',
     'processing'			=> 'Pengolahan',
+    'procurements'          => 'Pengadaan',
     'profile'				=> 'Profil anda',
     'purchase_cost'                              => 'Biaya Pembelian',
     'value'                 => 'Nilai',

@@ -1018,4 +1018,21 @@ class Helper
         return false;
     }
 
+    public static function formatProcurementStatus($status_number)
+    {
+        switch ($status_number) {
+            case 1:
+                return trans('admin/procurements/general.status.requested');
+                break;
+            case 2:
+                return trans('admin/procurements/general.status.approved');
+                break;
+            case 3:
+                return trans('admin/procurements/general.status.procured');
+                break;
+            default:
+                return trans('admin/procurements/general.status.requested');
+                break;
+        }
+    }
 }

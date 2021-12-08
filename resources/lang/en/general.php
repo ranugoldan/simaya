@@ -167,6 +167,7 @@
     'per_page'				=> 'Results Per Page',
     'previous'				=> 'Previous',
     'processing'			=> 'Processing',
+    'procurements'          => 'Procurements',
     'profile'				=> 'Your profile',
     'purchase_cost'                              => 'Purchase Cost',
     'value'                 => 'Value',
