@@ -33,6 +33,7 @@
               data-url="{{ route('api.procurements.index') }}"
               data-export-options='{
                 "fileName": "export-procurements-{{ date('Y-m-d') }}",
+                "ignoreColumn": ["actions"]
               }'>
             </table>
           </div>
